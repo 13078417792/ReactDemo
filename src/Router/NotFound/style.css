@@ -1,0 +1,15 @@
+.not-found {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.not-found .font {
+  user-select: none;
+  font-size: 10em;
+  transform: translateY(-100%);
+  color: #b39ddb;
+}
+/*# sourceMappingURL=style.css.map */

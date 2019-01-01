@@ -3,6 +3,10 @@ import './style.less'
 import { Theme as UWPThemeProvider, getTheme } from "react-uwp/Theme"
 import { BrowserRouter as Router,Switch, Route, Link } from "react-router-dom"
 
+import AsyncComponent from './components/AsyncComponent'
+// 路由组件
+const Home = AsyncComponent(()=>import('./Router/Home/Home'))
+
 class App extends Component {
   render() {
     return (
@@ -17,6 +21,14 @@ class App extends Component {
       >
           <div className="App">
 
+              <Router>
+
+                  <Switch>
+                      <Route path="/" component={Home} />
+                  </Switch>
+
+
+              </Router>
           </div>
 
       </UWPThemeProvider>

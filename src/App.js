@@ -1,40 +1,56 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import './style.less'
-import { Theme as UWPThemeProvider, getTheme } from "react-uwp/Theme"
-import { BrowserRouter as Router,Switch, Route, Link } from "react-router-dom"
+import {Theme as UWPThemeProvider, getTheme} from "react-uwp/Theme"
+import {BrowserRouter as Router, Switch, Route} from "react-router-dom"
 
 import AsyncComponent from './components/AsyncComponent'
 // 路由组件
-const Home = AsyncComponent(()=>import('./Router/Home/Home'))
+const Home = AsyncComponent(() => import('./Router/Home/Home'))
+const NotFound = AsyncComponent(() => import('./Router/NotFound/NotFound'))
+
+function getDark(){
+    return getTheme({
+        themeName: "dark", // set custom theme
+        accent: "#0078D7", // set accent color
+        useFluentDesign: true, // sure you want use new fluent design.
+        desktopBackgroundImage: "/pic/uwp-bg-2.jpg" // set global desktop background image
+    })
+}
+
+function getLight(){
+    return getTheme({
+        themeName: "light", // set custom theme
+        accent: "#0078D7", // set accent color
+        useFluentDesign: true, // sure you want use new fluent design.
+        desktopBackgroundImage: "/pic/uwp-bg-2.jpg" // set global desktop background image
+    })
+}
 
 class App extends Component {
-  render() {
-    return (
+    render() {
+        return (
 
-      <UWPThemeProvider
-        theme={getTheme({
-            themeName: "dark", // set custom theme
-            accent: "#0078D7", // set accent color
-            useFluentDesign: true, // sure you want use new fluent design.
-            desktopBackgroundImage: "/pic/uwp-bg-1.jpg" // set global desktop background image
-        })}
-      >
-          <div className="App">
+            <UWPThemeProvider
+                theme={getDark()}
+            >
+                <div className="App">
 
-              <Router>
+                    <Router>
 
-                  <Switch>
-                      <Route path="/" component={Home} />
-                  </Switch>
+                        <Switch>
+                            <Route exact path="/" component={Home}/>
+
+                            <Route component={NotFound} />
+                        </Switch>
 
 
-              </Router>
-          </div>
+                    </Router>
+                </div>
 
-      </UWPThemeProvider>
+            </UWPThemeProvider>
 
-    );
-  }
+        );
+    }
 }
 
 export default App;

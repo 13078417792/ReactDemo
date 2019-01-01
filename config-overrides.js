@@ -5,7 +5,7 @@ module.exports = function override(config, env) {
 
     config = rewireLess(config, env)
     process.env.HOST = '192.168.1.9'
-    process.env.PORT = 8888
+    process.env.PORT = 8889
     // process.env.OPEN = true
     return config
   }

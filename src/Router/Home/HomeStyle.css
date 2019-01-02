@@ -1,0 +1,37 @@
+.w1200 {
+  width: 1200px;
+  margin: 0 auto;
+}
+@media screen and (max-width: 1024px) {
+  .autow1200 {
+    width: 100% !important;
+  }
+}
+@media screen and (min-width: 1025px) {
+  .autow1200 {
+    width: 1200px;
+    margin: 0 auto;
+  }
+}
+@media screen and (max-width: 1024px) {
+  .Home {
+    width: 100% !important;
+  }
+}
+@media screen and (min-width: 1025px) {
+  .Home {
+    width: 1200px;
+    margin: 0 auto;
+  }
+}
+.Home .tools-list {
+  width: 100%;
+  padding: 10px 3em;
+  box-sizing: border-box;
+  display: flex;
+}
+.Home .tools-list .tool-item {
+  width: 9.375em;
+  height: 9.375em;
+}
+/*# sourceMappingURL=HomeStyle.css.map */

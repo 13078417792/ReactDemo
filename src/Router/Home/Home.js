@@ -1,6 +1,7 @@
 import React,{Component} from 'react'
 import PropTypes from 'prop-types'
 import {withRouter} from 'react-router'
+import './HomeStyle.less'
 
 class Home extends Component{
 
@@ -12,7 +13,7 @@ class Home extends Component{
 
     render(){
         return (
-            <div>
+            <div className="Home">
                 Home
             </div>
         )

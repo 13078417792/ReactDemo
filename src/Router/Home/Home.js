@@ -23,7 +23,7 @@ class Home extends Component{
     }
 
     componentDidMount(){
-        alert(`${document.body.clientWidth},${document.body.clientHeight}`)
+        // alert(`${document.body.clientWidth},${document.body.clientHeight}`)
     }
 
     render(){

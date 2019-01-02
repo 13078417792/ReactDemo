@@ -13,7 +13,7 @@ function getDark(){
         themeName: "dark", // set custom theme
         accent: "#0078D7", // set accent color
         useFluentDesign: true, // sure you want use new fluent design.
-        desktopBackgroundImage: "/pic/uwp-bg-3.jpg" // set global desktop background image
+        desktopBackgroundImage: "/pic/uwp-bg-6.jpg" // set global desktop background image
     })
 }
 
@@ -22,7 +22,7 @@ function getLight(){
         themeName: "light", // set custom theme
         accent: "#0078D7", // set accent color
         useFluentDesign: true, // sure you want use new fluent design.
-        desktopBackgroundImage: "/pic/uwp-bg-3.jpg" // set global desktop background image
+        desktopBackgroundImage: "/pic/uwp-bg-6.jpg" // set global desktop background image
     })
 }
 
@@ -33,7 +33,6 @@ class App extends Component {
     }
 
     render() {
-
         return (
 
             <UWPThemeProvider

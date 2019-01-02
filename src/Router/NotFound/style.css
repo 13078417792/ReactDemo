@@ -6,10 +6,17 @@
   justify-content: center;
   align-items: center;
 }
+@media screen and (max-width: 1024px) {
+  .not-found .font {
+    font-size: 3em !important;
+  }
+}
 .not-found .font {
   user-select: none;
   font-size: 10em;
   transform: translateY(-100%);
   color: #b39ddb;
+  width: 100%;
+  text-align: center;
 }
 /*# sourceMappingURL=style.css.map */

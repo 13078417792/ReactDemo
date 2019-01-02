@@ -5,14 +5,68 @@
 
   .tools-list{
     width:100%;
-    padding:10px 3em;
+    padding:10px 1.5em;
+    position:relative;
     box-sizing:border-box;
-    display:flex;
+    overflow:hidden;
 
-    @size:150/16em;
-    .tool-item{
-      width:@size;
-      height:@size;
+
+
+    .tools-list-wrap{
+      margin-right:-2em;
+
+      @media screen and (max-width:1024px){
+
+        .tool-item{
+          width:calc( 50% - 2em);
+        }
+      }
+
+      @media screen and (min-width:1025px){
+
+        .tool-item{
+          width:calc( (100% / 5) - 2em);
+          //width:13em;
+        }
+      }
+
+      .tool-item{
+        text-decoration:none;
+        color:inherit;
+
+        display:inline-block;
+        margin-right:2em;
+        margin-bottom:2em;
+        float:left;
+
+        .pic{
+          width:100%;
+          padding-bottom:100%;
+          position:relative;
+
+          img{
+            position:absolute;
+            width:100%;
+            max-height:100%;
+            top:0;
+            left:0;
+            right:0;
+            bottom:0;
+            margin:auto;
+          }
+        }
+
+        .tool-name{
+          //margin:0 0 0 50%;
+          //transform:translateX(-50%);
+          margin:0 0 1em 0;
+          width:100%;
+          text-align:center;
+
+        }
+      }
     }
+
+
   }
 }

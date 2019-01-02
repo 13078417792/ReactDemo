@@ -27,7 +27,13 @@ function getLight(){
 }
 
 class App extends Component {
+
+    constructor(props){
+        super(props)
+    }
+
     render() {
+        console.log(this.props)
         return (
 
             <UWPThemeProvider

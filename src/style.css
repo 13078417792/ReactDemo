@@ -1,4 +1,18 @@
-.App {
-  background-color: #fff;
+body {
+  position: relative;
+}
+body #root {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+body #root .App {
+  width: 100vw;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 /*# sourceMappingURL=style.css.map */

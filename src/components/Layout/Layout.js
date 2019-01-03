@@ -21,6 +21,12 @@ export default class Layout extends Component{
         this.setState(state => ({mobileLeftSide:!state.mobileLeftSide}) )
     }
 
+    handleContentTouchStart(){
+        if(this.state.mobileLeftSide===true){
+            this.toggleMobileLeftSide()
+        }
+    }
+
     render(){
         const {theme} = this.context
         console.log(this.context,theme.acrylicTexture40.background)
@@ -66,7 +72,7 @@ export default class Layout extends Component{
                 </div>
 
 
-                <div id="content">
+                <div id="content" onTouchStart={this.handleContentTouchStart.bind(this)}>
 
 
                     {/*PC默认显示 移动端默认隐藏*/}

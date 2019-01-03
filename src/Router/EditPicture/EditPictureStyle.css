@@ -1,0 +1,14 @@
+.tool-edit-picture .editor-wrapper {
+  width: 100%;
+}
+.tool-edit-picture .editor-wrapper .tool-bar {
+  list-style: none;
+}
+.tool-edit-picture .editor-wrapper .tool-bar .item-tool {
+  float: left;
+  width: 2em;
+  height: 2em;
+  line-height: 2em;
+  text-align: center;
+}
+/*# sourceMappingURL=EditPictureStyle.css.map */

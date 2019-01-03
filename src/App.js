@@ -14,6 +14,7 @@ const Home = AsyncComponent(() => import('./Router/Home/Home'))
 const NotFound = AsyncComponent(() => import('./Router/NotFound/NotFound'))
 // const PicToBase = AsyncComponent(() => import('./Router/PicToBase/PicToBase'))
 const PicToBase = getRoute('PicToBase')
+const EditPicture = getRoute('EditPicture')
 
 function getDark(){
     return getTheme({
@@ -52,6 +53,8 @@ class App extends Component {
                         <Switch>
                             <Route exact path="/" component={Home}/>
                             <Route exact path="/pic-to-base64" component={PicToBase} />
+                            <Route exact path="/edit-picture" component={EditPicture} />
+
 
                             <Route component={NotFound} />
                         </Switch>

@@ -15,7 +15,6 @@ class Home extends Component{
         history: PropTypes.object.isRequired
     }
 
-    // static
     static contextTypes = { theme: PropTypes.object }
 
     constructor(props){
@@ -67,6 +66,12 @@ class Home extends Component{
             {
                 pic:'/pic/uwp-bg-2.jpg',
                 name:'简易网盘',
+                tag:'network-disk',
+                url:'/network-disk'
+            },
+            {
+                pic:'/pic/uwp-bg-2.jpg',
+                name:'必应每日壁纸',
                 tag:'network-disk',
                 url:'/network-disk'
             },

@@ -4,9 +4,16 @@ import {Theme as UWPThemeProvider, getTheme} from "react-uwp/Theme"
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom"
 
 import AsyncComponent from './components/AsyncComponent'
+
+function getRoute(name){
+    return AsyncComponent(() => import(`./Router/${name}/${name}`))
+}
+
 // 路由组件
 const Home = AsyncComponent(() => import('./Router/Home/Home'))
 const NotFound = AsyncComponent(() => import('./Router/NotFound/NotFound'))
+// const PicToBase = AsyncComponent(() => import('./Router/PicToBase/PicToBase'))
+const PicToBase = getRoute('PicToBase')
 
 function getDark(){
     return getTheme({
@@ -44,6 +51,7 @@ class App extends Component {
 
                         <Switch>
                             <Route exact path="/" component={Home}/>
+                            <Route exact path="/pic-to-base64" component={PicToBase} />
 
                             <Route component={NotFound} />
                         </Switch>

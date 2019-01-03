@@ -21,9 +21,12 @@ export default class Layout extends Component{
         this.setState(state => ({mobileLeftSide:!state.mobileLeftSide}) )
     }
 
-    handleContentTouchStart(){
+    handleContentTouchStart(e){
+        // console.log(e)
         if(this.state.mobileLeftSide===true){
+            e.stopPropagation()
             this.toggleMobileLeftSide()
+
         }
     }
 
@@ -72,7 +75,7 @@ export default class Layout extends Component{
                 </div>
 
 
-                <div id="content" onTouchStart={this.handleContentTouchStart.bind(this)}>
+                <div id="content">
 
 
                     {/*PC默认显示 移动端默认隐藏*/}
@@ -82,7 +85,7 @@ export default class Layout extends Component{
 
                     </div>
 
-                    <div id="right-content-wrap">
+                    <div id="right-content-wrap" onTouchStart={this.handleContentTouchStart.bind(this)}>
                         <div className="right-content">
                             {this.props.children}
                         </div>

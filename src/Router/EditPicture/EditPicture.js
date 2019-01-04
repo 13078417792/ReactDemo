@@ -20,6 +20,10 @@ export default withRouter(class EditPicture extends Component{
 
     fileInputEl = document.createElement('input')
 
+    bufferImageEl = document.createElement('img')
+
+
+
     constructor(props){
         super(props)
         this.state = {
@@ -37,18 +41,22 @@ export default withRouter(class EditPicture extends Component{
             currentEditTool:'move',
 
             tools:[{title:'打开',
-                    icon:'xuanzetupian',
-                    handle:this.handleToolAddPicture.bind(this)
-                }
-                // ,{title:'指针',
-                //     icon:'zhizhen',
-                //     // handle:this.handleRect.bind(this)
-                // }
-                ,{title:'矩形',
+                icon:'xuanzetupian',
+                handle:this.handleToolAddPicture.bind(this)
+            },{title:'画笔',
+                icon:'pen',
+                // handle:this.handleCut.bind(this)
+            },{title:'画笔粗细',
+                icon:'thickness',
+                // handle:this.handleCut.bind(this)
+            },{title:'矩形',
                 icon:'square',
                 handle:this.handleRect.bind(this)
             },{title:'三角形',
                 icon:'triangle',
+                // handle:this.handleCut.bind(this)
+            },{title:'圆圈',
+                icon:'draw-circle',
                 // handle:this.handleCut.bind(this)
             },{title:'裁剪',
                 icon:'cut',
@@ -65,15 +73,58 @@ export default withRouter(class EditPicture extends Component{
             },{title:'油桶',
                 icon:'youqitong',
                 // handle:this.handleCut.bind(this)
+            },{title:'文字颜色',
+                icon:'font-color',
+                // handle:this.handleCut.bind(this)
+            },{title:'文字底色',
+                icon:'font-background',
+                // handle:this.handleCut.bind(this)
+            },{title:'文字',
+                icon:'font',
+                // handle:this.handleCut.bind(this)
+            },{title:'加大文字尺寸',
+                icon:'font-scale-up',
+                // handle:this.handleCut.bind(this)
+            },{title:'缩小文字尺寸',
+                icon:'font-scale-down',
+                // handle:this.handleCut.bind(this)
+            },{title:'旋转',
+                icon:'rotate',
+                // handle:this.handleCut.bind(this)
+            },{title:'放大',
+                icon:'scale-up',
+                // handle:this.handleCut.bind(this)
+            },{title:'缩小',
+                icon:'scale-down',
+                // handle:this.handleCut.bind(this)
+            },{title:'模糊',
+                icon:'blur',
+                // handle:this.handleCut.bind(this)
+            },{title:'保存',
+                icon:'save',
+                // handle:this.handleCut.bind(this)
+            },{title:'预览',
+                icon:'preview',
+                // handle:this.handleCut.bind(this)
             }]
         }
 
     }
 
     componentDidMount(){
+        window.addEventListener('resize',this.onResize)
         this.resizeEditCanvasContainer()
-        // setTimeout(this.resizeEditCanvasContainer.bind(this),0)
+        setTimeout(this.resizeEditCanvasContainer.bind(this),0)
         this.initEditorAddPictureToolInputElement()
+    }
+
+    componentWillUnmount(){
+        window.removeEventListener('resize',this.onResize)
+    }
+
+
+    onResize = e => {
+        this.resizeEditCanvasContainer()
     }
 
     initEditorAddPictureToolInputElement(){
@@ -98,29 +149,31 @@ export default withRouter(class EditPicture extends Component{
         console.log(file)
         file.toBase64().then(base=>{
             console.log(base)
-            const img = document.createElement('img')
-            img.onload = ()=>{
-                const ctx = this.getContext()
-                console.log(img.width,img.height)
-                console.log(img)
-                ctx.clearRect(0,0,this.state.editCanvasContainerWidth,this.state.editCanvasContainerHeight)
+            // const img = document.createElement('img')
+            const img = this.bufferImageEl
+            const self = this
+            img.onload = function(){
+                console.log(this)
+                const ctx = self.getContext()
+                console.log('open picture width:',this.width,'height:',this.height)
+                ctx.clearRect(0,0,self.state.editCanvasContainerWidth,self.state.editCanvasContainerHeight)
                 let position = [0,0]
 
                 // 图片尺寸比编辑框尺寸小->居中显示
-                if(img.width<this.state.editCanvasContainerWidth){
-                    let translate = (this.state.editCanvasContainerWidth - img.width) / 2
+                if(img.width<self.state.editCanvasContainerWidth){
+                    let translate = (self.state.editCanvasContainerWidth - img.width) / 2
                     position[0] = translate
                 }
 
-                if(img.height<this.state.editCanvasContainerHeight){
-                    let translate = (this.state.editCanvasContainerHeight - img.height) / 2
+                if(img.height<self.state.editCanvasContainerHeight){
+                    let translate = (self.state.editCanvasContainerHeight - img.height) / 2
                     position[1] = translate
                 }
-                this.setState({
+                self.setState({
                     picture_position:{x:position[0],y:position[1]}
                 })
-                ctx.drawImage(img,...position)
-                this.setState({
+                ctx.drawImage(img,...position,img.width,img.height)
+                self.setState({
                     status:true
                 })
                 // ctx.drawImage(img,...Object.values(this.state.picture_position))
@@ -134,6 +187,7 @@ export default withRouter(class EditPicture extends Component{
             })
         })
     }
+
 
     async fullScreen(){
         const el = this.refs.editor
@@ -197,7 +251,7 @@ export default withRouter(class EditPicture extends Component{
             <Layout>
                 <div className="tool-edit-picture">
                     <p>
-                        在线图片编辑
+                        简易图片编辑
                     </p>
 
                     <div className="editor-wrapper" ref="editor">

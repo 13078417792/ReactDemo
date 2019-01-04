@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import {withRouter} from 'react-router'
 import cs from 'classnames'
 import Layout from '../../components/Layout/Layout'
+import FileHelper from '../../util/File'
 
 import '../../css/iconfont.less'
 import './EditPictureStyle.less'
@@ -43,8 +44,40 @@ export default withRouter(class EditPicture extends Component{
         }else{
             el = this.fileInputEl
         }
+        el.removeEventListener('change',this.drawPictureToCanvas.bind(this))
+        el.addEventListener('change',this.drawPictureToCanvas.bind(this))
         el.type = 'file'
         el.accept = 'image/*'
+    }
+
+    drawPictureToCanvas(event){
+        const target = event.target
+        if(target.files.length===0) return;
+        const file = target.files[0]
+        console.log(file)
+        file.toBase64().then(base=>{
+            console.log(base)
+            const img = document.createElement('img')
+            img.onload = ()=>{
+                const ctx = this.getContext()
+                console.log(img.width,img.height)
+                console.log(img)
+                ctx.clearRect(0,0,this.state.editCanvasContainerWidth,this.state.editCanvasContainerHeight)
+                let params = []
+                if(img.width>this.state.editCanvasContainerWidth){
+                    params[0] = this.state.editCanvasContainerWidth
+                    params[1] = img.width / img.height * this.state.editCanvasContainerWidth
+                }else if(img.height>this.state.editCanvasContainerHeight){
+                    params[0] = img.height / img.width * this.state.editCanvasContainerHeight
+                    params[1] = this.state.editCanvasContainerHeight
+                }
+                ctx.drawImage(img,0,0,...params)
+            }
+            img.src = base
+
+        }).catch(err=>{
+            console.error(err)
+        })
     }
 
     async fullScreen(){
@@ -68,11 +101,6 @@ export default withRouter(class EditPicture extends Component{
         console.log(el)
         return el.getContext('2d')
     }
-
-    /**
-     * 裁剪、水印、文字、透明度、图片叠加
-     * @returns {*}
-     */
 
     handleCut(){
 

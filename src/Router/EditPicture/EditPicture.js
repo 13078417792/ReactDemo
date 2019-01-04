@@ -25,7 +25,47 @@ export default withRouter(class EditPicture extends Component{
         this.state = {
 
             editCanvasContainerWidth: 0,
-            editCanvasContainerHeight:200
+            editCanvasContainerHeight:200,
+
+            status:false,
+
+            picture_position:{
+                x:0,
+                y:0
+            },
+
+            currentEditTool:'move',
+
+            tools:[{title:'打开',
+                    icon:'xuanzetupian',
+                    handle:this.handleToolAddPicture.bind(this)
+                }
+                // ,{title:'指针',
+                //     icon:'zhizhen',
+                //     // handle:this.handleRect.bind(this)
+                // }
+                ,{title:'矩形',
+                icon:'square',
+                handle:this.handleRect.bind(this)
+            },{title:'三角形',
+                icon:'triangle',
+                // handle:this.handleCut.bind(this)
+            },{title:'裁剪',
+                icon:'cut',
+                handle:this.handleCut.bind(this)
+            },{title:'直线',
+                icon:'line',
+                // handle:this.handleCut.bind(this)
+            },{title:'曲线',
+                icon:'curve',
+                // handle:this.handleCut.bind(this)
+            },{title:'移动',
+                icon:'move',
+                // handle:this.handleCut.bind(this)
+            },{title:'油桶',
+                icon:'youqitong',
+                // handle:this.handleCut.bind(this)
+            }]
         }
 
     }
@@ -44,13 +84,14 @@ export default withRouter(class EditPicture extends Component{
         }else{
             el = this.fileInputEl
         }
-        el.removeEventListener('change',this.drawPictureToCanvas.bind(this))
-        el.addEventListener('change',this.drawPictureToCanvas.bind(this))
+        el.removeEventListener('change',this.openPicture.bind(this))
+        el.addEventListener('change',this.openPicture.bind(this))
         el.type = 'file'
         el.accept = 'image/*'
     }
 
-    drawPictureToCanvas(event){
+    // 打开
+    openPicture(event){
         const target = event.target
         if(target.files.length===0) return;
         const file = target.files[0]
@@ -63,20 +104,34 @@ export default withRouter(class EditPicture extends Component{
                 console.log(img.width,img.height)
                 console.log(img)
                 ctx.clearRect(0,0,this.state.editCanvasContainerWidth,this.state.editCanvasContainerHeight)
-                let params = []
-                if(img.width>this.state.editCanvasContainerWidth){
-                    params[0] = this.state.editCanvasContainerWidth
-                    params[1] = img.width / img.height * this.state.editCanvasContainerWidth
-                }else if(img.height>this.state.editCanvasContainerHeight){
-                    params[0] = img.height / img.width * this.state.editCanvasContainerHeight
-                    params[1] = this.state.editCanvasContainerHeight
+                let position = [0,0]
+
+                // 图片尺寸比编辑框尺寸小->居中显示
+                if(img.width<this.state.editCanvasContainerWidth){
+                    let translate = (this.state.editCanvasContainerWidth - img.width) / 2
+                    position[0] = translate
                 }
-                ctx.drawImage(img,0,0,...params)
+
+                if(img.height<this.state.editCanvasContainerHeight){
+                    let translate = (this.state.editCanvasContainerHeight - img.height) / 2
+                    position[1] = translate
+                }
+                this.setState({
+                    picture_position:{x:position[0],y:position[1]}
+                })
+                ctx.drawImage(img,...position)
+                this.setState({
+                    status:true
+                })
+                // ctx.drawImage(img,...Object.values(this.state.picture_position))
             }
             img.src = base
 
         }).catch(err=>{
             console.error(err)
+            this.setState({
+                status:false
+            })
         })
     }
 
@@ -107,7 +162,7 @@ export default withRouter(class EditPicture extends Component{
     }
 
     handleRect(){
-
+        // this.toggleCurrentTool()
     }
 
     handleToolAddPicture(){
@@ -116,36 +171,27 @@ export default withRouter(class EditPicture extends Component{
         el.click()
     }
 
-    render(){
+    // 白名单工具
+    whiteTool = [
+        'xuanzetupian'
+    ]
 
-        const tools = [{title:'指针',
-                icon:'zhizhen',
-                // handle:this.handleRect.bind(this)
-            },{title:'矩形',
-                icon:'square',
-                handle:this.handleRect.bind(this)
-            },{title:'三角形',
-                icon:'triangle',
-                // handle:this.handleCut.bind(this)
-            },{title:'裁剪',
-                icon:'jietu-copy',
-                handle:this.handleCut.bind(this)
-            },{title:'直线',
-                icon:'line',
-                // handle:this.handleCut.bind(this)
-            },{title:'曲线',
-                icon:'curve',
-                // handle:this.handleCut.bind(this)
-            },{title:'移动',
-                icon:'move',
-                // handle:this.handleCut.bind(this)
-            },{title:'油桶',
-                icon:'youqitong',
-                // handle:this.handleCut.bind(this)
-            },{title:'添加图片',
-                icon:'xuanzetupian',
-                handle:this.handleToolAddPicture.bind(this)
-            }]
+    toolDisabled(toolName){
+        return !this.whiteTool.includes(toolName) && !this.state.status
+    }
+
+    toggleCurrentTool(toolName){
+        for(let index=0;index<this.state.tools.length;index++){
+            if(this.state.tools[index].icon===toolName){
+                this.setState({
+                    currentEditTool:toolName
+                })
+                return;
+            }
+        }
+    }
+
+    render(){
 
         return (
             <Layout>
@@ -160,9 +206,14 @@ export default withRouter(class EditPicture extends Component{
 
                             <ul className="tool-bar cl">
                                 {
-                                    tools.map((el,key)=>{
+                                    this.state.tools.map((el,key)=>{
                                         return (
-                                            <li key={key} className={cs('item-tool','iconfont',`icon-${el.icon}`)} title={el.title} onClick={el.handle || function(){}}>
+                                            <li key={key} className={cs('item-tool','iconfont',`icon-${el.icon}`,{
+                                                disabled:this.toolDisabled(el.icon),
+                                                on:this.state.currentEditTool===el.icon && !this.toolDisabled(el.icon)
+                                            })} title={el.title}
+                                                onClick={!this.toolDisabled(el.icon) && !!el.handle?el.handle:function(){}}
+                                            >
 
                                             </li>
                                         )

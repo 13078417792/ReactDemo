@@ -35,6 +35,19 @@
             background-color:rgba(255,255,255,.7);
           }
         }
+
+        .item-tool.disabled{
+          color:#c2c2c2;
+          cursor:not-allowed;
+
+          &:hover{
+            background-color:rgba(255,255,255,.4);
+          }
+        }
+
+        .item-tool.on{
+          background-color:rgba(255,255,255,1);
+        }
       }
     }
 
@@ -42,7 +55,7 @@
 
     .edit{
       width:100%;
-      height:500px;
+      min-height:80vh;
       background-color:rgba(255,255,255,.3);
       position:relative;
       z-index:0;

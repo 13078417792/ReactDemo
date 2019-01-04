@@ -28,9 +28,19 @@
 .tool-edit-picture .editor-wrapper .tool-bar-wrapper .tool-bar .item-tool:hover {
   background-color: rgba(255, 255, 255, 0.7);
 }
+.tool-edit-picture .editor-wrapper .tool-bar-wrapper .tool-bar .item-tool.disabled {
+  color: #c2c2c2;
+  cursor: not-allowed;
+}
+.tool-edit-picture .editor-wrapper .tool-bar-wrapper .tool-bar .item-tool.disabled:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+.tool-edit-picture .editor-wrapper .tool-bar-wrapper .tool-bar .item-tool.on {
+  background-color: #ffffff;
+}
 .tool-edit-picture .editor-wrapper .edit {
   width: 100%;
-  height: 500px;
+  min-height: 80vh;
   background-color: rgba(255, 255, 255, 0.3);
   position: relative;
   z-index: 0;

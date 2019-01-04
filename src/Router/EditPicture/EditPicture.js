@@ -26,6 +26,7 @@ export default withRouter(class EditPicture extends Component{
 
     constructor(props){
         super(props)
+
         this.state = {
 
             editCanvasContainerWidth: 0,
@@ -33,16 +34,26 @@ export default withRouter(class EditPicture extends Component{
 
             status:false,
 
+            resizeTimeoutIndex:null,
+
             picture_position:{
                 x:0,
                 y:0
             },
+
+            scale:1,
 
             currentEditTool:'move',
 
             tools:[{title:'打开',
                 icon:'xuanzetupian',
                 handle:this.handleToolAddPicture.bind(this)
+            },{title:'保存',
+                icon:'save',
+                // handle:this.handleCut.bind(this)
+            },{title:'预览',
+                icon:'preview',
+                // handle:this.handleCut.bind(this)
             },{title:'画笔',
                 icon:'pen',
                 // handle:this.handleCut.bind(this)
@@ -100,31 +111,56 @@ export default withRouter(class EditPicture extends Component{
             },{title:'模糊',
                 icon:'blur',
                 // handle:this.handleCut.bind(this)
-            },{title:'保存',
-                icon:'save',
-                // handle:this.handleCut.bind(this)
-            },{title:'预览',
-                icon:'preview',
-                // handle:this.handleCut.bind(this)
-            }]
+            }],
+
+            // 操作记录
+            record:[
+
+            ],
+
+            // 记录指针
+            recordPoint:null
         }
 
     }
 
     componentDidMount(){
+        document.addEventListener('keydown',this.preventCtrlS)
+
         window.addEventListener('resize',this.onResize)
-        this.resizeEditCanvasContainer()
+        // this.resizeEditCanvasContainer()
         setTimeout(this.resizeEditCanvasContainer.bind(this),0)
         this.initEditorAddPictureToolInputElement()
+
+        this.bufferImageEl.addEventListener('load',this.showPicture)
     }
 
     componentWillUnmount(){
         window.removeEventListener('resize',this.onResize)
+        document.removeEventListener('keydown',this.preventCtrlS)
+        this.bufferImageEl.removeEventListener('load',this.showPicture)
+    }
+
+    // 屏蔽保存事件
+    preventCtrlS = e => {
+        const {keyCode,ctrlKey} = e
+        if(keyCode===83 && ctrlKey){
+            e.preventDefault()
+            console.log('保存')
+        }
     }
 
 
     onResize = e => {
-        this.resizeEditCanvasContainer()
+        // this.backupCanvas()
+        clearTimeout(this.resizeTimeoutIndex)
+        this.resizeTimeoutIndex = setTimeout(()=>{
+            this.resizeEditCanvasContainer()
+            this.showPicture(this.bufferImageEl)
+            // this.restoreCanvasBackup()
+        },300)
+
+
     }
 
     initEditorAddPictureToolInputElement(){
@@ -135,49 +171,34 @@ export default withRouter(class EditPicture extends Component{
         }else{
             el = this.fileInputEl
         }
-        el.removeEventListener('change',this.openPicture.bind(this))
-        el.addEventListener('change',this.openPicture.bind(this))
+        el.removeEventListener('change',this.openPicture)
+        el.addEventListener('change',this.openPicture)
         el.type = 'file'
         el.accept = 'image/*'
     }
 
+    // 添加操作记录
+    recording(data){
+        this.setState(({record})=>{
+            // let newVal = new Array(record)
+            let newVal = [...record,data]
+            // newVal.push(data)
+            return {
+                record:newVal,
+                recordPoint:newVal.length-1
+            }
+        })
+    }
+
     // 打开
-    openPicture(event){
+    openPicture = event => {
         const target = event.target
         if(target.files.length===0) return;
         const file = target.files[0]
         console.log(file)
         file.toBase64().then(base=>{
             console.log(base)
-            // const img = document.createElement('img')
             const img = this.bufferImageEl
-            const self = this
-            img.onload = function(){
-                console.log(this)
-                const ctx = self.getContext()
-                console.log('open picture width:',this.width,'height:',this.height)
-                ctx.clearRect(0,0,self.state.editCanvasContainerWidth,self.state.editCanvasContainerHeight)
-                let position = [0,0]
-
-                // 图片尺寸比编辑框尺寸小->居中显示
-                if(img.width<self.state.editCanvasContainerWidth){
-                    let translate = (self.state.editCanvasContainerWidth - img.width) / 2
-                    position[0] = translate
-                }
-
-                if(img.height<self.state.editCanvasContainerHeight){
-                    let translate = (self.state.editCanvasContainerHeight - img.height) / 2
-                    position[1] = translate
-                }
-                self.setState({
-                    picture_position:{x:position[0],y:position[1]}
-                })
-                ctx.drawImage(img,...position,img.width,img.height)
-                self.setState({
-                    status:true
-                })
-                // ctx.drawImage(img,...Object.values(this.state.picture_position))
-            }
             img.src = base
 
         }).catch(err=>{
@@ -187,6 +208,64 @@ export default withRouter(class EditPicture extends Component{
             })
         })
     }
+
+    /**
+     * 显示图片
+     * @param target img onload 对象 || img元素对象 || Canvas元素对象
+     */
+    showPicture = event => {
+        let img,recording = true
+        if(event instanceof Event){
+            img = event.target
+        }else if(event instanceof HTMLImageElement || event instanceof HTMLCanvasElement){
+            img = event
+            recording = false
+        }else{
+            throw new Error('无效数据')
+            return;
+        }
+
+        const ctx = this.getContext()
+        const vaildSize = {
+            width:this.state.editCanvasContainerWidth * 0.9,
+            height:this.state.editCanvasContainerHeight * 0.9
+        }
+
+        let drawSize = {
+            width:img.width,
+            height:img.height
+        }
+
+        const sizeScale = img.width / img.height
+
+        if(img.width > vaildSize.width){
+            drawSize.width = vaildSize.width
+            drawSize.height = drawSize.width / sizeScale
+        }else if(img.height > vaildSize.height){
+            drawSize.height = vaildSize.height
+            drawSize.width = drawSize.height * sizeScale
+        }
+
+        let position = {
+            x:(this.state.editCanvasContainerWidth - drawSize.width) / 2,
+            y:(this.state.editCanvasContainerHeight - drawSize.height) / 2
+        }
+
+        ctx.clearRect(0,0,this.state.editCanvasContainerWidth,this.state.editCanvasContainerHeight)
+        ctx.drawImage(img,...Object.values(position),...Object.values(drawSize))
+        if(recording){
+            this.recording({
+                position:[...Object.values(position)],
+                size:[...Object.values(drawSize)],
+                imageData:ctx.getImageData(...Object.values(position),...Object.values(drawSize))
+            })
+        }
+        this.setState({
+            status:true
+        })
+
+    }
+
 
 
     async fullScreen(){
@@ -240,8 +319,36 @@ export default withRouter(class EditPicture extends Component{
                 this.setState({
                     currentEditTool:toolName
                 })
-                return;
+                break;
             }
+        }
+    }
+
+    // 处理缩放
+    handleEditWrapperWheel(e){
+        console.log(e)
+        const {nativeEvent,deltaY} = e
+        console.log(deltaY)
+        if(deltaY<0){
+            this.setState(({scale})=>{
+                let newScale = scale
+                if(scale<3){
+                    newScale = scale+.1
+                }
+                return {
+                    scale:newScale
+                }
+            })
+        }else{
+            this.setState(({scale})=>{
+                let newScale = scale
+                if(scale>0.2){
+                    newScale = scale-.1
+                }
+                return {
+                    scale:newScale
+                }
+            })
         }
     }
 
@@ -254,7 +361,7 @@ export default withRouter(class EditPicture extends Component{
                         简易图片编辑
                     </p>
 
-                    <div className="editor-wrapper" ref="editor">
+                    <div className="editor-wrapper" ref="editor" >
 
                         <div className="tool-bar-wrapper">
 

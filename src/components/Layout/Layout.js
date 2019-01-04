@@ -32,7 +32,7 @@ export default class Layout extends Component{
 
     render(){
         const {theme} = this.context
-        console.log(this.context,theme.acrylicTexture40.background)
+        // console.log(this.context,theme.acrylicTexture40.background)
         const buttonStyle = {
             height:'3em',
             width:'3em',

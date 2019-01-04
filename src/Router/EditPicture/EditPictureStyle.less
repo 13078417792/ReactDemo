@@ -3,19 +3,47 @@
 
   .editor-wrapper{
     width:100%;
+    margin-top:2em;
+    box-shadow:0 0 20px 1px rgba(0,0,0,.1);
+    //background-color:rgba(255,255,255,1);
 
+    @tool-item-margin:.3em;
+    .tool-bar-wrapper{
+      width:100%;
+      overflow:hidden;
 
-    .tool-bar{
-      list-style:none;
+      .tool-bar{
+        list-style:none;
+        background-color:rgba(255,255,255,.2);
+        padding:@tool-item-margin;
+        margin:0 -@tool-item-margin -@tool-item-margin 0;
 
-      @size:2em;
-      .item-tool{
-        float:left;
-        width:@size;
-        height:@size;
-        line-height:@size;
-        text-align:center;
+        @size:2em;
+        .item-tool{
+          float:left;
+          width:@size;
+          height:@size;
+          line-height:@size;
+          text-align:center;
+          cursor:pointer;
+          margin:0 @tool-item-margin @tool-item-margin 0;
+          border-radius:5px;
+          background-color:rgba(255,255,255,.4);
+          transition:background-color .3s;
+
+          &:hover{
+            background-color:rgba(255,255,255,.7);
+          }
+        }
       }
+    }
+
+
+
+    .edit{
+      width:100%;
+      height:500px;
+      background-color:rgba(255,255,255,.3);
     }
   }
 }

@@ -1,14 +1,36 @@
 .tool-edit-picture .editor-wrapper {
   width: 100%;
+  margin-top: 2em;
+  box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.1);
 }
-.tool-edit-picture .editor-wrapper .tool-bar {
+.tool-edit-picture .editor-wrapper .tool-bar-wrapper {
+  width: 100%;
+  overflow: hidden;
+}
+.tool-edit-picture .editor-wrapper .tool-bar-wrapper .tool-bar {
   list-style: none;
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 0.3em;
+  margin: 0 -0.3em -0.3em 0;
 }
-.tool-edit-picture .editor-wrapper .tool-bar .item-tool {
+.tool-edit-picture .editor-wrapper .tool-bar-wrapper .tool-bar .item-tool {
   float: left;
   width: 2em;
   height: 2em;
   line-height: 2em;
   text-align: center;
+  cursor: pointer;
+  margin: 0 0.3em 0.3em 0;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.4);
+  transition: background-color 0.3s;
+}
+.tool-edit-picture .editor-wrapper .tool-bar-wrapper .tool-bar .item-tool:hover {
+  background-color: rgba(255, 255, 255, 0.7);
+}
+.tool-edit-picture .editor-wrapper .edit {
+  width: 100%;
+  height: 500px;
+  background-color: rgba(255, 255, 255, 0.3);
 }
 /*# sourceMappingURL=EditPictureStyle.css.map */

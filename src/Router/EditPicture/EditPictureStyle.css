@@ -38,6 +38,11 @@
 .tool-edit-picture .editor-wrapper .tool-bar-wrapper .tool-bar .item-tool.on {
   background-color: #ffffff;
 }
+@media screen and (max-width: 1024px) {
+  .tool-edit-picture .editor-wrapper .edit {
+    height: 65vh !important;
+  }
+}
 .tool-edit-picture .editor-wrapper .edit {
   width: 100%;
   height: 80vh;

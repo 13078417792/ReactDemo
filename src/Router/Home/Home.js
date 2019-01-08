@@ -33,12 +33,12 @@ class Home extends Component{
                 tag:'pic-to-base64',
                 url:'/pic-to-base64'
             },
-            {
-                pic:'/pic/uwp-bg-2.jpg',
-                name:'图片编辑',
-                tag:'edit-picture',
-                url:'/edit-picture'
-            },
+            // {
+            //     pic:'/pic/uwp-bg-2.jpg',
+            //     name:'图片编辑',
+            //     tag:'edit-picture',
+            //     url:'/edit-picture'
+            // },
             {
                 pic:'/pic/uwp-bg-2.jpg',
                 name:'MD5加密',
@@ -60,10 +60,9 @@ class Home extends Component{
             {
                 pic:'/pic/uwp-bg-2.jpg',
                 name:'查看文件格式',
-                tag:'view-file-fmt',
-                url:'/view-file-fmt'
-            },
-            {
+                tag:'check-format',
+                url:'/check-format'
+            },{
                 pic:'/pic/uwp-bg-2.jpg',
                 name:'简易网盘',
                 tag:'network-disk',

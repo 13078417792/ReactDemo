@@ -26,7 +26,7 @@ export default withRouter(class CheckFormat extends Component{
             fileName:null,
             fileSize:0,
             fileType:null,
-            headerList:FileHeader
+            headerList:[]
         }
         this.getFileExtInfo()
 

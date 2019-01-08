@@ -41,6 +41,11 @@ export default withRouter(class EditPicture extends Component{
                 y:0
             },
 
+            drawSize:{
+                width:0,
+                height:0
+            },
+
             scale:1,
 
             currentEditTool:'move',
@@ -245,6 +250,7 @@ export default withRouter(class EditPicture extends Component{
             drawSize.height = vaildSize.height
             drawSize.width = drawSize.height * sizeScale
         }
+        this.setState({drawSize})
 
         let position = {
             x:(this.state.editCanvasContainerWidth - drawSize.width) / 2,

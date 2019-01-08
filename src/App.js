@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import './style.less'
 import {Theme as UWPThemeProvider, getTheme} from "react-uwp/Theme"
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom"
+import 'antd/dist/antd.css'
 
 import AsyncComponent from './components/AsyncComponent'
 
@@ -14,7 +15,8 @@ const Home = AsyncComponent(() => import('./Router/Home/Home'))
 const NotFound = AsyncComponent(() => import('./Router/NotFound/NotFound'))
 // const PicToBase = AsyncComponent(() => import('./Router/PicToBase/PicToBase'))
 const PicToBase = getRoute('PicToBase')
-const EditPicture = getRoute('EditPicture')
+// const EditPicture = getRoute('EditPicture')
+const CheckFormat = getRoute('CheckFormat')
 
 function getDark(){
     return getTheme({
@@ -53,7 +55,9 @@ class App extends Component {
                         <Switch>
                             <Route exact path="/" component={Home}/>
                             <Route exact path="/pic-to-base64" component={PicToBase} />
-                            <Route exact path="/edit-picture" component={EditPicture} />
+                            <Route exact path="/check-format" component={CheckFormat} />
+                            {/*<Route exact path="/edit-picture" component={EditPicture} />*/}
+
 
 
                             <Route component={NotFound} />

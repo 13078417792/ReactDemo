@@ -1,0 +1,84 @@
+@import "../layui-icon/layui-icon.css";
+.overflow {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+@keyframes layer-close {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+.dialog--drag-layer--mask {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.3);
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+.dialog--drag-layer--mask.close-animation,
+.dialog--drag-layer.close-animation {
+  animation: layer-close 0.35s;
+  animation-iteration-count: 1;
+}
+.dialog--drag-layer {
+  display: block;
+  border: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  min-width: 250px;
+  min-height: 130px;
+  max-width: 80vw;
+  max-height: 80vh;
+  overflow: hidden;
+  z-index: 1;
+}
+.dialog--drag-layer .dialog-layer-title {
+  height: 2.3em;
+  line-height: 1.3em;
+  padding: 0.5em 3em 0.5em 1em;
+  color: #fff;
+  user-select: none;
+  cursor: move;
+  width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  position: relative;
+}
+.dialog--drag-layer .dialog-layer-title .button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  z-index: 2;
+}
+.dialog--drag-layer .dialog-layer-title .button span.layui-icon {
+  cursor: pointer;
+  height: 100%;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 0.5em;
+}
+.dialog--drag-layer .dialog-layer-title .button span.layui-icon:hover {
+  background-color: #E81123;
+}
+.dialog--drag-layer .dialog-layer-content {
+  min-width: 250px;
+  min-height: 130px;
+  max-width: 80vw;
+  max-height: 80vh;
+  overflow: hidden;
+}
+/*# sourceMappingURL=DragLayerStyle.css.map */

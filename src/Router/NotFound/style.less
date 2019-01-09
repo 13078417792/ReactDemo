@@ -3,8 +3,9 @@
   height:100vh;
   overflow:hidden;
   display:flex;
-  justify-content:center;
+  justify-content:flex-start;
   align-items:center;
+  flex-direction: column;
 
 
   @media screen and (max-width:1024px){
@@ -16,7 +17,9 @@
   .font{
     user-select:none;
     font-size:10em;
-    transform:translateY(-100%);
+    //transform:translateY(-100%);
+    position:relative;
+    top:1.5em;
     color:#b39ddb;
     width:100%;
     text-align:center;

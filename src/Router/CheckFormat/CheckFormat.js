@@ -34,14 +34,12 @@ export default withRouter(class CheckFormat extends Component{
 
     async getFileExtInfo(){
         try{
-            var {data} = await http.post('/tool/file_format/getInfo')
+            var data = await http.post('/tool/file_format/getInfo')
         }catch(e){
             console.error('获取数据失败',e)
             return
         }
         const {info} = data
-        console.log(info)
-
         this.setState({
             headerList:info
         })

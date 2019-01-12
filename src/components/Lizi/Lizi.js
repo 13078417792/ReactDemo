@@ -16,24 +16,33 @@ export default class Lizi extends Component{
         color:PropTypes.string,
 
         // 背景颜色
-        bgcolor:PropTypes.string
+        bgcolor:PropTypes.string,
+
+        zIndex:PropTypes.number
     }
 
     static defaultProps = {
         count:50,
         color:'#01AAED',
-        bgcolor:'#f0f0f0'
+        bgcolor:'#f0f0f0',
+        zIndex:-1
     }
 
-    // canvas = React.createRef()
     animationIndex = null
     resizeTimeoutIndex = null
+
     constructor(props){
         super(props)
         this.canvas = React.createRef()
+
+        let maxCount = 80
+        if(document.body.clientWidth<1024){
+            maxCount = 20
+        }
+
         this.state = {
             config:{
-                count:props.count>80?80:props.count,
+                count:props.count>maxCount?maxCount:props.count,
                 color:props.color,
                 bgcolor:props.bgcolor,
                 size:2,
@@ -217,13 +226,13 @@ export default class Lizi extends Component{
     }
 
     render(){
-        const {state} = this
+        const {state,props} = this
         return (
             <canvas ref={this.canvas} width={state.canvasWidth} height={state.canvasHeight} style={{
                 position:'fixed',
                 top:0,
                 left:0,
-                zIndex:-1,
+                zIndex:props.zIndex,
                 backgroundColor:state.config.bgcolor
             }}>
 

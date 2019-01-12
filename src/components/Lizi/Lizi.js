@@ -85,6 +85,7 @@ export default class Lizi extends Component{
     }
 
     componentWillUnmount(){
+        cancelAnimationFrame(this.animationIndex)
         window.removeEventListener('resize',this.computedCanvasSize)
     }
 

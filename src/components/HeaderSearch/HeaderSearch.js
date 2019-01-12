@@ -1,6 +1,7 @@
 import React,{Component} from 'react'
 import './HeaderSearchStyle.less'
-import {AutoSuggestBox} from 'react-uwp'
+import { Input } from 'antd'
+const Search = Input.Search
 
 
 export default class HeaderSearch extends Component{
@@ -9,12 +10,8 @@ export default class HeaderSearch extends Component{
         // console.log(TextBox)
         return (
             <div className="header-search">
-                <AutoSuggestBox style={{
-                    transform:'translateX(-50%)',
-                    marginLeft:'50%'
-                }} focusStyle={{
-                    backgroundColor:'rgba(0,0,0,0)'
-                }} />
+
+                <Search />
             </div>
         )
     }

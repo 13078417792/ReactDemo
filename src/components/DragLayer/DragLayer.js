@@ -18,6 +18,7 @@ export default class DragLayer extends Component {
         onClose: PropTypes.func,
         width: PropTypes.string,
         height: PropTypes.string,
+        title:PropTypes.string
     }
 
     static defaultProps = {
@@ -26,6 +27,7 @@ export default class DragLayer extends Component {
         maskOpacity: .3,
         width: '250px',
         height: '130px',
+        title:'新建窗口',
         onClose: function () {
         },
     }
@@ -280,7 +282,7 @@ export default class DragLayer extends Component {
                      onMouseDown={this.onMouseDown}
                      onTouchStart={this.handleDragTouchStart}
                 >
-                    <span>测试窗口</span>
+                    <span>{props.title}</span>
                     <div className="button">
                         <span className="layui-icon layui-icon-close"
                               onClick={this.stopButtonEvent}

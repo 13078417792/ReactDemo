@@ -261,7 +261,7 @@ export default class DragLayer extends Component {
         let style = {
             border: `1px solid ${secColor}`,
             borderTop: 0,
-            transform: `translate3d(${this.state.position.x}px,${this.state.position.y}px,0)`,
+            transform: `translate(${this.state.position.x}px,${this.state.position.y}px)`,
             zIndex:this.state.dialog_zIndex
         }
 

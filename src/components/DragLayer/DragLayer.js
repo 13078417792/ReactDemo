@@ -87,7 +87,7 @@ export default class DragLayer extends Component {
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.initState)
-        console.log('销毁dialog！')
+        // console.log('销毁dialog！')
     }
 
     initState = event => {
@@ -310,7 +310,7 @@ export default class DragLayer extends Component {
         if(event instanceof Event){
             event.stopPropagation()
         }
-        console.log('add zindex')
+        // console.log('add zindex')
         if(CommonData.dialog.gt_zIndex(this.state.dialog_zIndex)){
             this.setState({
                 mask_zIndex:CommonData.dialog.add_zIndex(),

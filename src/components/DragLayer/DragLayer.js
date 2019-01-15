@@ -43,11 +43,11 @@ export default class DragLayer extends Component {
 
     emitClose = event => {
         event.stopPropagation()
-
+        this.props.onClose()
         // onClose(event)
-        this.setState({
-            closeAnimation:true
-        })
+        // this.setState({
+        //     closeAnimation:true
+        // })
     }
 
     stopButtonEvent(event) {
@@ -87,6 +87,7 @@ export default class DragLayer extends Component {
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.initState)
+        console.log('销毁dialog！')
     }
 
     initState = event => {
@@ -259,7 +260,7 @@ export default class DragLayer extends Component {
 
     dialog = () => {
         const {props} = this
-        console.log(this.state.closeAnimation,props)
+        // console.log(this.state.closeAnimation,props)
         let style = {
             border: `1px solid ${secColor}`,
             borderTop: 0,
@@ -271,8 +272,6 @@ export default class DragLayer extends Component {
             <dialog className={cs('dialog--drag-layer',{"close-animation":this.state.closeAnimation && !props.mask})} style={style}
 
                     onMouseDown={this.handle_zIndexAdd}
-                    onAnimationEnd={this.closeAnimationEnd}
-
             >
 
 
@@ -322,7 +321,7 @@ export default class DragLayer extends Component {
 
     render() {
         const {props} = this
-        if (!props.open) return null
+        // if (!props.open) return null
         const Dialog = this.dialog
 
         let View

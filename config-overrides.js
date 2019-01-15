@@ -2,6 +2,9 @@ const rewireLess = require('react-app-rewire-less');
 const {injectBabelPlugin,getLoader} = require('react-app-rewired')
 const rewired = require('react-app-rewired')
 
+
+const path = require('path')
+
 module.exports = function override(config, env) {
     //do stuff with the webpack config...
 
@@ -23,6 +26,16 @@ module.exports = function override(config, env) {
         return rule
     })
     config.output.globalObject = 'this'
+
+    console.log(config.resolve)
+    config.resolve.alias['@src'] = path.resolve('src')
+    config.resolve.alias['@components'] = path.resolve('src/components')
+    config.resolve.alias['@store'] = path.resolve('src/Store')
+    config.resolve.alias['@util'] = path.resolve('src/util')
+    config.resolve.alias['@workers'] = path.resolve('src/workers')
+    config.resolve.alias['@router'] = path.resolve('src/Router')
+    config.resolve.alias['@drawer'] = path.resolve('src/Drawer')
+
     // throw 123;
     // process.env.OPEN = true
     return config

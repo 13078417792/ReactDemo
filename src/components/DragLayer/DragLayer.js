@@ -18,7 +18,10 @@ export default class DragLayer extends Component {
         onClose: PropTypes.func,
         width: PropTypes.string,
         height: PropTypes.string,
-        title:PropTypes.string
+        title:PropTypes.string,
+        disableScrollX:PropTypes.bool,
+        disableScrollY:PropTypes.bool
+
     }
 
     static defaultProps = {
@@ -30,6 +33,8 @@ export default class DragLayer extends Component {
         title:'新建窗口',
         onClose: function () {
         },
+        disableScrollX:true,
+        disableScrollY:true
     }
 
     // 关闭窗口的动画结束事件
@@ -298,7 +303,9 @@ export default class DragLayer extends Component {
                 </div>
                 <div className="dialog-layer-content" style={{
                     width: props.width,
-                    height: props.height
+                    height: props.height,
+                    overflowX:props.disableScrollX?'hidden':'auto',
+                    overflowY:props.disableScrollY?'hidden':'auto'
                 }}>
                     {props.children}
                 </div>

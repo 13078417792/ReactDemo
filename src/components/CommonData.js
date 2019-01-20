@@ -1,9 +1,8 @@
 export default {
 
     dialog:{
-        initZIndex:1500,
+        initZIndex:500,
         currentZIndex:0,
-
 
         get_zIndex(){
             if(this.currentZIndex<this.initZIndex){

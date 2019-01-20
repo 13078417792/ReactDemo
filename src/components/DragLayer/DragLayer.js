@@ -21,7 +21,7 @@ export default class DragLayer extends Component {
         title:PropTypes.string,
         disableScrollX:PropTypes.bool,
         disableScrollY:PropTypes.bool,
-        zIndex:PropTypes.number,
+        // zIndex:PropTypes.number,
     }
 
     static defaultProps = {
@@ -35,7 +35,7 @@ export default class DragLayer extends Component {
         },
         disableScrollX:true,
         disableScrollY:true,
-        zIndex:CommonData.dialog.add_zIndex()
+        // zIndex:CommonData.dialog.get_zIndex()
     }
 
     // 关闭窗口的动画结束事件
@@ -80,12 +80,13 @@ export default class DragLayer extends Component {
                 top: null
             },
             dialogEl:null,
-            // mask_zIndex:CommonData.dialog.add_zIndex(),
-            // dialog_zIndex:CommonData.dialog.add_zIndex(),
-            mask_zIndex:props.zIndex,
-            dialog_zIndex:props.zIndex+1,
+            mask_zIndex:CommonData.dialog.add_zIndex(),
+            dialog_zIndex:CommonData.dialog.add_zIndex(),
+            // mask_zIndex:props.zIndex,
+            // dialog_zIndex:props.zIndex+1,
             closeAnimation:false
         }
+        // CommonData.dialog.setCurrentZIndex(this.state.dialog_zIndex)
 
     }
 

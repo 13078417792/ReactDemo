@@ -9,8 +9,8 @@ class Loading extends Component{
         this.container = React.createRef()
         this.parent = React.createRef()
         this.child = React.createRef()
-        const size = 100
-        const border = 5
+        const size = 50
+        const border = 3
         this.state = {
             width:0,
             height:0,
@@ -50,7 +50,7 @@ class Loading extends Component{
         const ctx = child.getContext('2d')
         ctx.beginPath()
         ctx.strokeStyle = '#b0b0b0'
-        ctx.lineWidth = 5
+        ctx.lineWidth = border
         ctx.arc(radius,radius,size/2,Math.PI/180*-20,Math.PI/180*-90,true)
         ctx.stroke()
         ctx.closePath()

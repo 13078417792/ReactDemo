@@ -45,20 +45,6 @@ export default class Layout extends Component{
                         <div className="menu-rt-btn-scroll-container" style={{
                             transform:`translateX(${this.state.mobileLeftSide?'-100%':0})`
                         }}>
-                            {/*<IconButton style={buttonStyle} hoverStyle={{*/}
-                                {/*backgroundColor:'rgba(0,0,0,0)'*/}
-                            {/*}} activeStyle={{*/}
-                                {/*backgroundColor:'rgba(0,0,0,0)'*/}
-                            {/*}} onClick={this.toggleMobileLeftSide.bind(this)}>*/}
-                                {/*GlobalNavButton*/}
-                            {/*</IconButton>*/}
-                            {/*<IconButton style={buttonStyle} hoverStyle={{*/}
-                                {/*backgroundColor:'transparent'*/}
-                            {/*}} activeStyle={{*/}
-                                {/*backgroundColor:'transparent'*/}
-                            {/*}} onClick={this.toggleMobileLeftSide.bind(this)}>*/}
-                                {/*BackBttnArrow42Legacy*/}
-                            {/*</IconButton>*/}
 
                         </div>
                     </div>

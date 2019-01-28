@@ -1,4 +1,4 @@
-import React,{Component,Fragment,createRef,cloneElement} from 'react'
+import React,{Component,Fragment} from 'react'
 import cs from 'classnames'
 import {isEmpty,isFunction,isNumber} from 'lodash'
 import PropTypes from 'prop-types'
@@ -18,7 +18,8 @@ export default class ContextMenuItem extends Component {
         level:PropTypes.number,
         // onClick:PropTypes.func,
         parentOffsetTop:PropTypes.number,
-        styleValue:PropTypes.object
+        styleValue:PropTypes.object,
+        MenuGlobalArgs:PropTypes.array
     }
 
     static defaultProps = {
@@ -28,7 +29,8 @@ export default class ContextMenuItem extends Component {
         positionY:0,
         level:1,
         parentOffsetTop:0,
-        styleValue:{}
+        styleValue:{},
+        MenuGlobalArgs:[]
     }
 
     constructor(props){
@@ -60,10 +62,12 @@ export default class ContextMenuItem extends Component {
     onClick = e => {
         let stopClose = true
         const {props} = this
+        const {MenuGlobalArgs} = props
+        console.log(e,...MenuGlobalArgs)
         if(isEmpty(props.child)){
             if(isFunction(props.handler)){
                 const args = Array.isArray(props.args)?[...props.args]:[]
-                props.handler(e,...args)
+                props.handler(...MenuGlobalArgs,...args,e)
             }
             stopClose = false
         }
@@ -127,6 +131,7 @@ export default class ContextMenuItem extends Component {
                                 positionY={props.positionY}
                                 initOffsetTop={state.offsetTop}
                                 verticalReverse={state.verticalReverse}
+                                args={props.MenuGlobalArgs}
                             />
 
                             <Icon className="right-arrow" size="small" type="caret-right" />

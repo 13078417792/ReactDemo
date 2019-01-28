@@ -59,15 +59,14 @@ export default class ContextMenuItem extends Component {
         }
     }
 
-    onClick = e => {
+    onClick = () => {
         let stopClose = true
         const {props} = this
         const {MenuGlobalArgs} = props
-        console.log(e,...MenuGlobalArgs)
         if(isEmpty(props.child)){
             if(isFunction(props.handler)){
                 const args = Array.isArray(props.args)?[...props.args]:[]
-                props.handler(...MenuGlobalArgs,...args,e)
+                props.handler(...MenuGlobalArgs,...args)
             }
             stopClose = false
         }

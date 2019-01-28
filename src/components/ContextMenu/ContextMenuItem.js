@@ -59,7 +59,7 @@ export default class ContextMenuItem extends Component {
         }
     }
 
-    onClick = () => {
+    onClick = e => {
         let stopClose = true
         const {props} = this
         const {MenuGlobalArgs} = props

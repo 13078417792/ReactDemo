@@ -15,6 +15,7 @@ class ContextMenuWrapper extends Component{
         zIndex:PropTypes.number,
         menu:PropTypes.array,
         sub:PropTypes.bool,
+        args:PropTypes.array,
         // onClose:PropTypes.func
     }
 
@@ -22,6 +23,7 @@ class ContextMenuWrapper extends Component{
         zIndex:50,
         sub:false,
         // onClose:function(){},
+        args:[],
         menu:[],
         // menu:[{
         //     label:'删除',
@@ -134,9 +136,10 @@ class ContextMenuWrapper extends Component{
                                             menu={props.menu}
                                             sub={props.sub}
                                             zIndex={props.zIndex}
-                                            show={state.show}
+                                            // show={state.show}
                                             positionX={state.position.x}
                                             positionY={state.position.y}
+                                            args={props.args}
                                 />:null
                 }
             </Fragment>

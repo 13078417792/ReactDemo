@@ -107,6 +107,7 @@ export default class ContextMenu extends Component{
         let data = {}
         const {positionX,positionY} = this.props
         const {state} = this
+        console.log(this.props)
 
         // 第一层菜单的水平边界超出处理
 
@@ -194,6 +195,7 @@ export default class ContextMenu extends Component{
                                 level={props.level}
                                 parentOffsetTop={props.initOffsetTop}
                                 styleValue={state.styleValue}
+                                MenuGlobalArgs={props.args}
                             />
                         )
                     })

@@ -3,7 +3,6 @@ self.addEventListener('message',({data})=>{
 
     try{
         var {file,size} = data
-        console.log(file,size)
         if(file.size<size) size = file.size
         const chunk_count = Math.ceil(file.size / size)
         var chunks = []

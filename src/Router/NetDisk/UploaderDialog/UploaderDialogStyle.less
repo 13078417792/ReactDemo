@@ -1,0 +1,93 @@
+@import '../../../css/common';
+
+.uploader-dialog{
+  width:100%;
+
+  .upload-task-list{
+    width:100%;
+    padding:0;
+    margin:0;
+    list-style:none;
+
+
+    .task-item{
+      @task-item-height:2em;
+      height:@task-item-height;
+      line-height:@task-item-height;
+      padding:.5em 1em 1em;
+      box-sizing:content-box;
+      //cursor:pointer;
+      border-bottom:1px solid #f0f0f0;
+      position:relative;
+
+      .file-name{
+        width:50%;
+      }
+
+      .info{
+        font-size:.8em;
+        display:inline-block;
+        float:left;
+      }
+
+      .file-size{
+        width:15%;
+        min-width:60px;
+        margin-left:1em;
+      }
+
+      .upload-action{
+        float:right;
+
+        i{
+          cursor:pointer;
+          transform:scale(1.5);
+        }
+        //color:#333;
+      }
+
+      @bg:#e2eeff;
+      .progress{
+        max-width:100%;
+        width:0;
+        height:100%;
+        position:absolute;
+        top:0;
+        left:0;
+        z-index:-2;
+        background-color:@bg;
+      }
+
+      @keyframes waiting-run{
+        from {
+          left:0;
+        }
+
+        to{
+          left:100%;
+        }
+      }
+
+      .waiting{
+        width:20px;
+        height:100%;
+        position:absolute;
+        top:0;
+        left:0;
+        z-index:-2;
+        animation:waiting-run 2s linear infinite;
+        animation-direction: alternate;
+        background-color:@bg;
+      }
+
+      .status{
+        position:absolute;
+        z-index:-1;
+        color:red;
+        font-size:.5em;
+        bottom:-.5em;
+        left:1em;
+      }
+    }
+  }
+}

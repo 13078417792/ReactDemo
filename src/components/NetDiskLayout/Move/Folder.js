@@ -72,17 +72,14 @@ class Folder extends Component {
                 let index = folders.findIndex(el=>{
                     return el.id===props.currentCheckFolderId
                 })
-                console.log(index)
                 if(index!==-1){
                     let currentFolderData = folders[index]
-                    console.log(!currentFolderData.has_child)
                     if(!currentFolderData.has_child){
                         currentFolderData = Object.assign({},currentFolderData,this.getChildNodeInitStatusData(),{
                             expand : true,
                             init : false,
                             has_child:true
                         })
-                        console.log(currentFolderData)
 
                     }else{
                         currentFolderData = Object.assign({},currentFolderData,{

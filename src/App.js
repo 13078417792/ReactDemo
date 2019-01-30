@@ -1,13 +1,15 @@
 import React, {Component} from 'react'
 import './style.less'
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom"
+import {withRouter} from 'react-router'
 import 'antd/dist/antd.css'
-import Auth from './util/Auth'
 import {observer,inject} from 'mobx-react'
-import {computed,autorun,reaction} from 'mobx'
-import Helper from './util/Helper'
+import Lizi from './components/Lizi/Lizi'
+import Loading from '@components/Loading/Loading'
 
 import AsyncComponent from './components/AsyncComponent'
+import PropTypes from "prop-types"
+// import { TransitionGroup, CSSTransition } from "react-transition-group"
 
 function getRoute(name){
     return AsyncComponent(() => import(`./Router/${name}/${name}`))
@@ -22,11 +24,18 @@ const routerTable = [
     {
         name:'PicToBase',
         path:'/pic-to-base64',
-        component:getRoute('PicToBase')
+        component:getRoute('PicToBase'),
+        needAuth : false
     },{
         name:'CheckFormat',
         path:'/check-format',
-        component:getRoute('CheckFormat')
+        component:getRoute('CheckFormat'),
+        needAuth : false
+    },{
+        name:'NetDisk',
+        path:'/network-disk/:folder_id?',
+        component:getRoute('NetDisk'),
+        needAuth : true
     }
 ]
 
@@ -34,75 +43,62 @@ const routerTable = [
 @inject('stores') @observer
 class App extends Component {
 
+    static propTypes = {
+        match: PropTypes.object.isRequired,
+        location: PropTypes.object.isRequired,
+        history: PropTypes.object.isRequired
+    }
 
     constructor(props){
         super(props)
 
-        const {stores} = props
-        const {AccountStatusStore} = stores
+        const {stores,location,} = props
+        const {AccountStatusStore,UIStore} = stores
+
 
         this.state = {
-            routerTable:routerTable.map(el=>{
-                el.loadable = true
-                return el
-            })
+            routerTable
         }
 
-        reaction(()=>AccountStatusStore.isLogin,isLogin=>{
-            const NetDiskRoute = {
-                name:'NetDisk',
-                path:'/network-disk',
-                component:getRoute('NetDisk'),
-                loadable:isLogin
-            }
-            if(isLogin){
-                this.setState(({routerTable})=>{
-                    // console.log(routerTable.concat(NetDiskRoute))
-                    return {
-                        routerTable:routerTable.concat(NetDiskRoute)
-                    }
-                })
-            }else{
-                this.setState(({routerTable})=>{
-                    routerTable.slice(routerTable.indexOf(NetDiskRoute),1)
-                    return {
-                        routerTable:routerTable
-                    }
-                })
-            }
+    }
 
-        })
+    isLoadLizi = () => {
+        // return this.props.location.pathname!=='/network-disk'
+        return !/^\/network-disk.*$/.test(this.props.location.pathname)
     }
 
     render() {
-        console.log(Helper.config('backgroundImage'))
+        const {props:{stores:{AccountStatusStore}}} = this
         return (
 
-            <div className="App" style={{
-                backgroundImage:`url(${Helper.config('backgroundImage')})`
-            }}>
-                <Router>
+            <div className="App">
+                {
+                    this.isLoadLizi()?<Lizi count={80} color={"#b1b1b1"} />:null
+                }
 
-                    <Switch>
-                        <Route exact path="/" component={Home} />
-                        {
-                            this.state.routerTable.map((el,key)=>{
-                                console.log(el.path,el.loadable)
-                                return el.loadable?<Route exact path={el.path} component={el.component} key={key} />:null
-                            })
-                        }
+                <Switch>
+                    <Route exact path="/" component={Home} />
+                    {
+                        this.state.routerTable.map((el,key)=>{
+                            if(!!el.needAuth===false){
+                                return <Route exact path={el.path} component={el.component} key={key} />
+                            }
+                            if(AccountStatusStore.initCheckingLogin){
+                                return <Loading/>
+                            }
+                            return AccountStatusStore.isLogin?<Route exact path={el.path} component={el.component} key={key} />:null
+                        })
+                    }
 
 
 
-                        <Route component={NotFound} />
-                    </Switch>
+                    <Route component={NotFound} />
+                </Switch>
 
-
-                </Router>
             </div>
 
         );
     }
 }
 
-export default App;
+export default withRouter(App);

@@ -38,14 +38,6 @@ export default class DragLayer extends Component {
         // zIndex:CommonData.dialog.get_zIndex()
     }
 
-    // 关闭窗口的动画结束事件
-    closeAnimationEnd = event => {
-        const {onClose} = this.props
-        this.setState({
-            closeAnimation:false
-        },onClose.bind(null,event))
-
-    }
 
     emitClose = event => {
         event.stopPropagation()
@@ -143,8 +135,6 @@ export default class DragLayer extends Component {
                  onTouchMove={stop}
                  onTouchEnd={stop}
                  onClick={stop}
-
-                 onAnimationEnd={this.closeAnimationEnd}
             >
                 {props.children}
             </div>
@@ -300,7 +290,8 @@ export default class DragLayer extends Component {
                               onMouseDown={this.emitClose}
                               // onMouseDown={this.stopButtonEvent}
                               onMouseMove={this.stopButtonEvent}
-                              onMouseUp={this.stopButtonEvent}>
+                              onMouseUp={this.stopButtonEvent}
+                        >
 
                         </span>
                     </div>

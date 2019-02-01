@@ -26,6 +26,7 @@ class Folder extends Component {
         onCreateFolderSuccess:PropTypes.func,
         onCreateFolderFail:PropTypes.func,
         createFormEnabled:PropTypes.bool,
+        ignore:PropTypes.array,
     }
 
     static defaultProps = {
@@ -40,7 +41,8 @@ class Folder extends Component {
         createFormEnabled:false,
         onCloseCreateForm:function(){},
         onCreateFolderSuccess:function(){},
-        onCreateFolderFail:function(){}
+        onCreateFolderFail:function(){},
+        ignore:[]
 
     }
 
@@ -235,6 +237,9 @@ class Folder extends Component {
             }}>
                 {
                     state.folders.map((el,index)=>{
+                        if(props.ignore.includes(el.id)){
+                            return null
+                        }
                         return (
                             <li className={cs('sub',{check:state.currentCheckFolderId===el.id || el.id===state.toggleSubPid})} key={index} onClick={e=>{
                                 this.check(el.id)

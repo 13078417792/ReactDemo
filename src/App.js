@@ -84,7 +84,7 @@ class App extends Component {
                                 return <Route exact path={el.path} component={el.component} key={key} />
                             }
                             if(AccountStatusStore.initCheckingLogin){
-                                return <Loading/>
+                                return <Loading key={key}/>
                             }
                             return AccountStatusStore.isLogin?<Route exact path={el.path} component={el.component} key={key} />:null
                         })

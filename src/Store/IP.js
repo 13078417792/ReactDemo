@@ -10,8 +10,28 @@ export default class IP {
     @observable home:string = '';
     part = ['home'];
 
+    constructor(){
+        this.update()
+        this.autoUpdate(60000)
+    }
+
+    update(){
+        this.part.forEach(el=>{
+            this.updateIP(el)
+        })
+    }
+
+    autoUpdate(time:number){
+        if(isEmpty(time)) time = 60*1000*2
+        setInterval(()=>{
+            this.part.forEach(el=>{
+                this.updateIP(el)
+            })
+        },time)
+    }
+
     @action async updateIP(part:string){
-        if(isEmpty(part) || !this.part.includes(part)) return Promise.reject('服务器不存在')
+        if(isEmpty(part) || !this.part.includes(part)) return Promise.reject(`${part}服务器不存在`)
 
         try{
             var result = await http.get(Url.ServiceIP,{
@@ -24,12 +44,12 @@ export default class IP {
         }
 
         if(!result.success){
-            return Promise.reject('获取服务器IP失败')
+            return Promise.reject(`${part}获取服务器IP失败`)
         }
         const {server_ip:ip} = result
         const setResult = this.setIP(part,ip)
-
-        return setResult?Promise.resolve(result.server_ip):Promise.reject('获取数据成功，但设置服务器IP时出现错误')
+        console.log(`${part}服务器IP:${ip}`)
+        return setResult?Promise.resolve(result.server_ip):Promise.reject(`获取${part}服务器IP成功(${ip})，但设置服务器IP时出现错误`)
     }
 
     @action setIP(part:string,ip:string){

@@ -54,5 +54,8 @@ export default {
     NetDiskFolderUpdate:'/tool/disk_folder/update',
 
     // 文件重命名
-    NetDiskFileRename:'/tool/disk/rename'
+    NetDiskFileRename:'/tool/disk/rename',
+
+    // 服务器IP
+    ServiceIP:'/tool/service_part/getIP'
 }

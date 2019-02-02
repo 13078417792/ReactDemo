@@ -4,40 +4,16 @@ import {BrowserRouter as Router, Switch, Route} from "react-router-dom"
 import {withRouter} from 'react-router'
 import 'antd/dist/antd.css'
 import {observer,inject} from 'mobx-react'
+import {toJS,computed} from 'mobx'
 import Lizi from './components/Lizi/Lizi'
 import Loading from '@components/Loading/Loading'
-
 import AsyncComponent from './components/AsyncComponent'
 import PropTypes from "prop-types"
-// import { TransitionGroup, CSSTransition } from "react-transition-group"
 
-function getRoute(name){
-    return AsyncComponent(() => import(`./Router/${name}/${name}`))
-}
 
 // 路由组件
 const Home = AsyncComponent(() => import('./Router/Home/Home'))
 const NotFound = AsyncComponent(() => import('./Router/NotFound/NotFound'))
-
-// 路由表
-const routerTable = [
-    {
-        name:'PicToBase',
-        path:'/pic-to-base64',
-        component:getRoute('PicToBase'),
-        needAuth : false
-    },{
-        name:'CheckFormat',
-        path:'/check-format',
-        component:getRoute('CheckFormat'),
-        needAuth : false
-    },{
-        name:'NetDisk',
-        path:'/network-disk/:folder_id?',
-        component:getRoute('NetDisk'),
-        needAuth : true
-    }
-]
 
 
 @inject('stores') @observer
@@ -52,14 +28,15 @@ class App extends Component {
     constructor(props){
         super(props)
 
-        const {stores,location,} = props
-        const {AccountStatusStore,UIStore} = stores
+        const {stores:{AccountStatusStore:{isLogin,initCheckingLogin}}} = props
 
+        this.state = {}
 
-        this.state = {
-            routerTable
-        }
+    }
 
+    @computed get router(){
+        const {RouterStore} = this.props.stores
+        return Object.values(toJS(RouterStore.list))
     }
 
     isLoadLizi = () => {
@@ -68,7 +45,7 @@ class App extends Component {
     }
 
     render() {
-        const {props:{stores:{AccountStatusStore}}} = this
+        const {props:{stores:{AccountStatusStore,RouterStore}}} = this
         return (
 
             <div className="App">
@@ -79,7 +56,7 @@ class App extends Component {
                 <Switch>
                     <Route exact path="/" component={Home} />
                     {
-                        this.state.routerTable.map((el,key)=>{
+                        this.router.map((el,key)=>{
                             if(!!el.needAuth===false){
                                 return <Route exact path={el.path} component={el.component} key={key} />
                             }

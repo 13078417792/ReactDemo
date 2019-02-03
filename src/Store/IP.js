@@ -7,8 +7,12 @@ import http from '@util/http'
 
 export default class IP {
 
-    @observable home:string = '';
+    @observable home:object = {
+        ip:'',
+        port:''
+    };
     part = ['home'];
+
 
     constructor(){
         this.update()
@@ -46,16 +50,18 @@ export default class IP {
         if(!result.success){
             return Promise.reject(`${part}获取服务器IP失败`)
         }
-        const {server_ip:ip} = result
-        const setResult = this.setIP(part,ip)
-        console.log(`${part}服务器IP:${ip}`)
+        const {server_ip:ip,port} = result
+        const setResult = this.setIP(part,ip,port)
+        console.log(`${part}服务器IP:${ip},端口:${port}`)
         return setResult?Promise.resolve(result.server_ip):Promise.reject(`获取${part}服务器IP成功(${ip})，但设置服务器IP时出现错误`)
     }
 
-    @action setIP(part:string,ip:string){
+    @action setIP(part:string,ip:string,port:number){
         if(isEmpty(part) || !this.part.includes(part)) return false
         if(isEmpty(ip)) return false
-        this[part] = ip
+        this[part] = {
+            ip,port
+        }
         return true
     }
 

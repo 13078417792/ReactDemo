@@ -2,6 +2,7 @@ import React,{Component} from 'react'
 import './FileBreadStyle.less'
 import {observer,inject} from 'mobx-react'
 import {Link} from 'react-router-dom'
+import {toJS} from 'mobx'
 
 @inject("stores")
 @observer
@@ -44,13 +45,14 @@ class FileBread extends Component{
         const {props} = this
         const {stores:{DiskStore}} = props
         const Path = this.path.bind(this)
+        const folderPath = toJS(DiskStore.path)
         return (
             <div className="file-bread">
 
                 {
-                    DiskStore.path>0?(
+                    folderPath.length>0?(
                         <div className="inlb goback">
-                            <Link to={`/disk/content/${DiskStore.path.length-2>=0?`/${DiskStore.path[DiskStore.path.length-2].id}`:''}`}>
+                            <Link to={`/disk/content${folderPath.length-2>=0?`/${folderPath[folderPath.length-2].id}`:''}`}>
                                 返回上一层
                             </Link>
                         </div>

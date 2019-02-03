@@ -41,7 +41,7 @@ class App extends Component {
 
     isLoadLizi = () => {
         // return this.props.location.pathname!=='/network-disk'
-        return !/^\/network-disk.*$/.test(this.props.location.pathname)
+        return !/^\/disk.*$/.test(this.props.location.pathname)
     }
 
     render() {

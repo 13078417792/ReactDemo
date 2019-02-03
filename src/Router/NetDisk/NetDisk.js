@@ -1,12 +1,12 @@
-import React,{Component} from 'react'
+import React,{Component,createRef,createClass} from 'react'
+import {findDOMNode} from 'react-dom'
 import PropTypes from 'prop-types'
 import NetDiskLayout from '../../components/NetDiskLayout/NetDiskLayout'
 import {withRouter} from 'react-router'
 import './NetDiskStyle.less'
 import {observer,inject} from 'mobx-react'
-import {reaction} from 'mobx'
 import {isNumber,isBoolean,isEmpty} from 'lodash'
-import {message,Icon,Input,Button,Form,Modal} from 'antd'
+import {message,Icon,Input,Button,Form,Modal,Checkbox} from 'antd'
 import MineIcon from '@components/MineIcon'
 import cs from 'classnames'
 import filesize from 'filesize'
@@ -14,10 +14,10 @@ import dayjs from 'dayjs'
 import http from '@util/http'
 import Url from '@util/Url'
 import CreateFolderForm from '../../components/NetDiskLayout/CreateFolderForm'
-// import ContextMenu from '@components/ContextMenu2/ContextMenu2'
 import ContextMenuWrapper from '@components/ContextMenu/ContextMenuWrapper'
 import DragLayer from '@components/DragLayer/DragLayer'
 import Move from '../../components/NetDiskLayout/Move/Move'
+import NameForm from '@components/NetDiskLayout/NameForm/NameForm'
 
 
 @inject("stores")
@@ -30,7 +30,12 @@ class NetDisk extends Component{
         history: PropTypes.object.isRequired
     }
 
+    folderReName = createRef()
+    fileRename = createRef()
+
     state = {
+        folderRename:{},
+        fileRename:{},
         mkdir:false,
         mkdiring:false,
         column:{
@@ -69,9 +74,26 @@ class NetDisk extends Component{
                     })
                 }
             },{
-                label:'重命名'
+                label:'重命名',
+                handler:id=>{
+                    this.setState(({folderRename})=>{
+                        for(let i in folderRename){
+                            folderRename[i] = false
+                        }
+                        folderRename[id] = true
+
+                        return {folderRename}
+                    })
+                }
             },{
-                label:'移动到...'
+                label:'移动到...',
+                handler:(id)=>{
+                    this.setState({
+                        openMove:true,
+                        moveLayerId:id,
+                        moveLayerIsFile:false
+                    })
+                }
             }
         ],
         fileContextMenuData:[{
@@ -92,7 +114,17 @@ class NetDisk extends Component{
                 })
             }
         },{
-            label:'重命名'
+            label:'重命名',
+            handler:id=>{
+                this.setState(({fileRename})=>{
+                    for(let i in fileRename){
+                        fileRename[i] = false
+                    }
+                    fileRename[id] = true
+
+                    return {fileRename}
+                })
+            }
         },{
             label:'移动到...',
             handler:id=>{
@@ -105,53 +137,67 @@ class NetDisk extends Component{
         }],
         openMove:false,
         moveLayerId:0,
-        moveLayerIsFile:false
+        moveLayerIsFile:false,
+        fileCheckbox:[],
+        folderCheckbox:[]
     }
 
-    constructor(props){
+    constructor(props) {
         super(props)
-        const {stores:{DiskStore},match,location} = props
+        // this.currentFolderID = this.props.stores.DiskStore.folderId
+        const {stores: {DiskStore}, match, location} = props
 
-        if(match.params.folder_id && !isNaN(match.params.folder_id)){
+        if (match.params.folder_id && !isNaN(match.params.folder_id)) {
             DiskStore.setFolder(match.params.folder_id)
         }
 
-        reaction(()=>props.stores.DiskStore.paths,path=>{
-            console.log(path)
-        })
-
-        this.updateCurrentFolderContent(DiskStore.folderId).then(content=>{
-            // console.log('获取网盘列表成功')
-        }).catch(err=>{
-            message.error(err)
-            // console.error(DiskStore.folderId)
-        })
-
-
-
-    }
-
-    componentDidMount(){
-        const {props} = this
-        const {stores:{DiskStore},match,location} = props
-        reaction(()=>props.stores.DiskStore.folderId,id=>{
-            this.updateCurrentFolderContent(id).then(content=>{
-                // console.log('获取网盘列表成功')
-            }).catch(err=>{
-                message.error(err)
-            })
+        console.time('初始化网盘列表')
+        this.updateCurrentFolderContent(DiskStore.folderId).then(content => {
+            console.timeEnd('初始化网盘列表')
+            console.log('初始化网盘列表成功')
+            this.updateRenameData(content.files, content.folders)
+        }).catch(err => {
+            message.error('初始化网盘列表失败',err)
+            console.timeEnd('初始化网盘列表')
         })
     }
 
+
+
+    updateRenameData(files,folders){
+        const fileRename = {}
+        folders.forEach(el=>{
+            fileRename[el.id] = false
+        })
+        const folderRename = {}
+        folders.map(el=>{
+            folderRename[el.id] = false
+        })
+        this.setState({
+            fileRename,
+            folderRename
+        })
+    }
 
     componentWillReceiveProps(props){
         // console.log(props)
-        const {stores:{DiskStore},match:{params:{folder_id}},location} = props
+        const {stores:{DiskStore},match:{params:{folder_id}}} = props
+
         if(folder_id && !isNaN(folder_id)){
             DiskStore.setFolder(folder_id)
         }else{
             DiskStore.setFolder(0)
         }
+
+        this.updateCurrentFolderContent(DiskStore.folderId).then(content=>{
+            this.setState({
+                folderCheckbox:[],
+                fileCheckbox:[]
+            })
+            this.updateRenameData(content.files,content.folders)
+        }).catch(err=>{
+            message.error(err)
+        })
     }
 
     async deleteFile(id){
@@ -197,7 +243,7 @@ class NetDisk extends Component{
             return;
         }
 
-        if(result.has_child){
+        if(result.has_child || result.has_child_file){
             await (()=>{
                 return new Promise((resolve,reject)=>{
                     const modal = Modal.confirm({
@@ -215,9 +261,6 @@ class NetDisk extends Component{
             })()
         }
 
-        // console.log(123)
-        //
-        // return;
         const {delKey:del_key} = result
         try{
             result = await http.post(Url.NetDiskDeleteFolder,{
@@ -266,12 +309,21 @@ class NetDisk extends Component{
     }
 
     FolderFileName(props){
-        const {state:{column}} = this
+        const {state:{column,folderCheckbox,fileCheckbox}} = this
         const buttons = props.button || []
+        const {id,isFolder} = props
+        const checked = isFolder?folderCheckbox.includes(id):fileCheckbox.includes(id)
         return (
             <div className={cs("part",'part-1','part-folder',props.className || '')} style={{
                 width:column.folder.width
             }}>
+                <div className="check-on" onClick={e=>{
+                    e.stopPropagation()
+                    this.toggleContent(id,isFolder)
+                }} >
+                    <Checkbox checked={checked}/>
+                </div>
+
                 <span className="type-icon">
                     {
                         props.mine?<MineIcon type={props.type} />:(<Icon type={props.type}/>)
@@ -362,38 +414,79 @@ class NetDisk extends Component{
         const {state} = this
         if(state.opening) return;
         const {history} = this.props
-        history.push(`/network-disk/${id}`)
-
-        return;
-        const {props:{stores:{DiskStore}}} = this
-        DiskStore.setFolder(id)
+        history.push(`/disk/content/${id}`)
+        // this.setState({
+        //     folderCheckbox:[],
+        //     fileCheckbox:[]
+        // })
         // this.updateCurrentFolderContent(id)
-    }
-
-    renameFolder(){
-
-    }
-
-    moveFolder(){
-
-    }
-
-    renameFile(){
-
-    }
-
-    moveFile(id){
-
     }
 
     updateContent = () => {
         const {props:{stores:{DiskStore}}} = this
-        DiskStore.getContent(DiskStore.folderId,true)
+        DiskStore.getContent(DiskStore.folderId,true).then(()=>{
+            this.setState({
+                folderCheckbox:[],
+                fileCheckbox:[]
+            })
+        })
+    }
+
+    closeFolderRename = id => {
+        this.setState(({folderRename})=>({
+            folderRename:(function(data,id){
+                data[id] = false
+                return data
+            })(folderRename,id)
+
+        }))
+    }
+
+    closeFileRename = id => {
+        this.setState(({fileRename})=>({
+            fileRename:(function(data,id){
+                data[id] = false
+                return data
+            })(fileRename,id)
+
+        }))
+    }
+
+    toggleContent = (id,isFolder) => {
+        // if()
+        this.setState(({folderCheckbox,fileCheckbox})=>{
+            let checkbox = isFolder?folderCheckbox:fileCheckbox
+            if(checkbox.includes(id)){
+                checkbox.splice(checkbox.indexOf(id),1)
+            }else{
+                checkbox.push(id)
+            }
+            return isFolder?{
+                folderCheckbox:checkbox
+            }:{
+                fileCheckbox:checkbox
+            }
+        })
+    }
+
+    batch_delete= () => {
+        const {fileCheckbox:file,folderCheckbox:folder} = this.state
+        if(isEmpty(file) && isEmpty(folder)){
+            message.error('操作失败，没有选择任何文件/文件夹')
+            return;
+        }
+        Modal.confirm({
+            title:'批量删除',
+            content:'是否确认删除当前选中的文件夹/文件,不可恢复',
+            onOk:()=>{
+
+            }
+        })
     }
 
     render(){
-        const {state,state:{column,mkdir}} = this
-        const {props:{stores:{DiskStore:{folders,files}}}} = this
+        const {state,state:{column,mkdir,fileCheckbox,folderCheckbox}} = this
+        const {props:{stores:{DiskStore:{folders,files,folderId}}}} = this
         const {props:{stores}} = this
 
         const FolderFileName = this.FolderFileName.bind(this)
@@ -403,7 +496,12 @@ class NetDisk extends Component{
 
 
         return (
-            <NetDiskLayout className={"wd"} onToggleCreateFolderInput={this.handleToggleCreateFolderInput.bind(this)}>
+            <NetDiskLayout
+                className={"wd"}
+                onToggleCreateFolderInput={this.handleToggleCreateFolderInput.bind(this)}
+                showDel={!!(fileCheckbox.length || folderCheckbox.length)}
+                onDelete={this.batch_delete}
+            >
                 <div className="dir-file-wrapper cl">
 
                     <div className="field-column">
@@ -414,6 +512,11 @@ class NetDisk extends Component{
                                     <div className="column-item" key={index} style={{
                                         width:el.width
                                     }}>
+                                        {
+                                            index===0?(
+                                                <Checkbox className={'toggle-check-all'} />
+                                            ):null
+                                        }
                                         <span>
                                             {el.label}
                                         </span>
@@ -454,9 +557,42 @@ class NetDisk extends Component{
                             folders.map((el,index)=>{
                                 return (
                                     <ContextMenuWrapper  key={index} menu={state.folderContextMenuData} args={[el.id]}>
-                                        <li className="item"  onDoubleClick={this.openFolder.bind(this,el.id)}>
-                                            <FolderFileName mine={true} type="icon-folder">
-                                                {el.name}
+                                        <li className={cs('item',{check:state.folderCheckbox.includes(el.id)})} onDoubleClick={e=>{
+                                            let ref = this.folderReName.current
+                                            if(ref){
+                                                if(!(ref instanceof Element)){
+                                                    ref = findDOMNode(ref)
+                                                }
+                                                if(e.nativeEvent.path.includes(ref)){
+                                                    return;
+                                                }
+                                            }
+                                            this.openFolder.call(this,el.id)
+                                        }}>
+                                            <FolderFileName isFolder={true} mine={true} type="icon-folder" id={el.id}>
+
+
+                                                {
+                                                    state.folderRename[el.id]?(
+                                                        <NameForm
+                                                            ref={this.folderReName}
+                                                            initialValue={el.name}
+                                                            show={!!state.folderRename[el.id]}
+                                                            api={Url.NetDiskFolderUpdate}
+                                                            params={{id:el.id}}
+                                                            onClose={()=>{
+                                                                this.closeFolderRename(el.id)
+                                                            }}
+                                                            onSuccess={()=>{
+                                                                this.closeFolderRename(el.id)
+                                                                this.updateCurrentFolderContent(folderId)
+                                                            }}
+                                                            onFail={err=>{
+                                                                message.error(err.message || err)
+                                                            }}
+                                                        />
+                                                    ):el.name
+                                                }
                                             </FolderFileName>
 
                                             <FolderFileSize />
@@ -475,8 +611,8 @@ class NetDisk extends Component{
                                 return el.is_merge?
                                     (
                                         <ContextMenuWrapper  key={index} menu={state.fileContextMenuData} args={[el.id,el.download]}>
-                                            <li className="item" key={index}>
-                                                <FolderFileName mine={false} type="file" button={[
+                                            <li className={cs('item',{check:state.fileCheckbox.includes(el.id)})} key={index}>
+                                                <FolderFileName isFolder={false} id={el.id} mine={false} type="file" button={[
                                                     {
                                                         icon:'download',
                                                         title:'下载',
@@ -485,8 +621,28 @@ class NetDisk extends Component{
                                                         },
                                                         args:[el.id]
                                                     }
-                                                ]} >
-                                                    {el.name}
+                                                ]}>
+                                                    {
+                                                        state.fileRename[el.id]?(
+                                                            <NameForm
+                                                                initialValue={el.name}
+                                                                show={!!state.fileRename[el.id]}
+                                                                api={Url.NetDiskFileRename}
+                                                                params={{id:el.id}}
+                                                                onClose={()=>{
+                                                                    this.closeFileRename(el.id)
+                                                                }}
+                                                                onSuccess={()=>{
+                                                                    this.closeFileRename(el.id)
+                                                                    this.updateCurrentFolderContent(folderId)
+                                                                }}
+                                                                onFail={err=>{
+                                                                    message.error(err.message || err)
+                                                                }}
+                                                            />
+
+                                                        ):el.name
+                                                    }
                                                 </FolderFileName>
 
                                                 <FolderFileSize>

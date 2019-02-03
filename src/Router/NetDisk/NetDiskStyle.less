@@ -6,6 +6,9 @@
 
 @field-height:1.5em;
 @field-padding:.7em;
+@checkbox-size:@field-height;
+@indent:1em;
+@item-padding:10px;
 .dir-file-wrapper{
   width:100%;
   height:100%;
@@ -25,16 +28,24 @@
       padding:@field-padding 0;
       height:@field-height;
       line-height:@field-height;
-      text-indent:1em;
+      text-indent:@indent;
       box-sizing:content-box;
       color:#666;
 
-      span{
+      >span{
         font-size:.8em;
+        display:inline-block;
       }
 
       &:first-child{
         min-width:500px;
+        //position:relative;
+
+        .toggle-check-all{
+          position:absolute;
+          text-indent:0;
+          left:@item-padding;
+        }
       }
 
       &:hover{
@@ -56,8 +67,14 @@
     padding:0;
 
     @height:4em;
+
+    .item.check{
+      border-color:#daebfe;
+      background-color:#f2f6fd;
+      z-index:7;
+    }
     .item{
-      padding:0 10px;
+      padding:0 @item-padding;
       height:@height;
       user-select:none;
       cursor:pointer;
@@ -99,6 +116,12 @@
 
       .part-1{
         position:relative;
+        padding-left:@checkbox-size*1.4;
+
+        .check-on{
+          position:absolute;
+          left:0;
+        }
 
         &:hover{
           .button-group{

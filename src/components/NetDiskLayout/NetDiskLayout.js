@@ -28,12 +28,16 @@ class NetDiskLayout extends Component{
         onToggleCreateFolderInput:PropTypes.func,
         match: PropTypes.object.isRequired,
         location: PropTypes.object.isRequired,
-        history: PropTypes.object.isRequired
+        history: PropTypes.object.isRequired,
+        onDelete:PropTypes.func,
+        showDel:PropTypes.bool
     }
 
     static defaultProps = {
         className:'',
-        onToggleCreateFolderInput:function(){}
+        onToggleCreateFolderInput:function(){},
+        onDelete:function(){},
+        showDel:false
     }
 
     constructor(props){
@@ -160,7 +164,11 @@ class NetDiskLayout extends Component{
                         <div className="main">
 
                             <div className="action-container">
-                                <ToolBar onToggleCreateFolderInput={this.handleToggleCreateFolderInput.bind(this)} />
+                                <ToolBar
+                                    onToggleCreateFolderInput={this.handleToggleCreateFolderInput.bind(this)}
+                                    onDelete={props.onDelete}
+                                    del={props.showDel}
+                                />
 
                                 <FileBread />
                             </div>

@@ -22,11 +22,13 @@ import {toJS} from 'mobx'
 class ToolBar extends Component{
 
     static propTypes = {
-        onToggleCreateFolderInput:PropTypes.func
+        onToggleCreateFolderInput:PropTypes.func,
+        onDelete:PropTypes.func
     }
 
     static defaultProps = {
-        onToggleCreateFolderInput:function(){}
+        onToggleCreateFolderInput:function(){},
+        onDelete:function(){}
     }
 
     FileChunkHandler = []
@@ -70,10 +72,6 @@ class ToolBar extends Component{
         // console.log(this.uploadInputEl)
     }
 
-    componentWillUnmount(){
-
-
-    }
 
     getChunkSize(){
         // let chunkItemSize = Cookie.get('disk_chunk_size') || null
@@ -113,29 +111,6 @@ class ToolBar extends Component{
         const {uploadInputEl:{current:uploadInputEl}} = this
         uploadInputEl.click()
     }
-
-    // computedFileMd5(index){
-    //     return new Promise(async (resolve,reject)=>{
-    //         const {state} = this
-    //         const info = this.getUploadTaskItem.call(this,index)
-    //         if(info===false) {
-    //             reject('校验失败')
-    //             return;
-    //         }
-    //         let result
-    //         try{
-    //             console.time(`校验文件${info.name}`)
-    //             result = await FileHelper.chunk(info.file,state.chunkItemSize)
-    //             console.timeEnd(`校验文件${info.name}`)
-    //         }catch(err){
-    //             reject(err.message || err)
-    //             return;
-    //         }
-    //         resolve(result)
-    //         // console.log(result)
-    //
-    //     })
-    // }
 
     getUploadTaskItem(index){
         const {state:{uploadTask}} = this
@@ -488,6 +463,14 @@ class ToolBar extends Component{
                         transform:`scale(1.5)`
                     }} /> 新建文件夹
                 </Button>
+
+                {
+                    this.props.del?(
+                        <Button icon="delete" type="primary" onClick={this.props.onDelete}>
+                            删除
+                        </Button>
+                    ):null
+                }
 
                 {
                     this.state.uploadLayerVisible?(

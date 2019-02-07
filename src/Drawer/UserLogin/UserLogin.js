@@ -94,7 +94,7 @@ class UserLogin extends Component{
                             登录
                         </Button>
 
-                        <Link className="account-register-link" onClick={this.emitRegister}>去注册</Link>
+                        <Link to="" className="account-register-link" onClick={this.emitRegister}>去注册</Link>
                     </FormItem>
 
 

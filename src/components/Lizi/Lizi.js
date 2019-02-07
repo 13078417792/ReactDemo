@@ -59,15 +59,10 @@ export default class Lizi extends Component{
 
     }
 
-    convertColor(){
-        const {state} = this
-        const {config:{color}} = state
-        const hex = /^#[0-9a-z]/gi
-        const dec = /^(rgb|rgba)\(\d{3},\d{3},\d{3}(,0*\.*\d*)\)/
-    }
+
 
     componentDidMount(){
-        const {canvasWidth:width,canvasHeight:height} = this.state
+        // const {canvasWidth:width,canvasHeight:height} = this.state
         this.setState({
             load:true
         })

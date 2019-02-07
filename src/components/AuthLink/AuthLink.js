@@ -6,7 +6,7 @@ import Login from '@drawer/UserLogin/UserLogin'
 import Register from '@drawer/UserSignUp/UserSignUp'
 import {Drawer,message} from 'antd'
 import PropTypes from 'prop-types'
-import {isString,cloneDeep,isEmpty,isObject} from 'lodash'
+import {isString,isEmpty} from 'lodash'
 import cs from 'classnames'
 import './AuthLinkStyle.less'
 
@@ -147,7 +147,6 @@ class AuthLink extends Component{
                     }}
 
                        onSuccess={() => {
-                           let handlingPath = this.handleUrl(props.to)
                            this.setState({
                                signUpDraw: false,
                                signInDraw: false

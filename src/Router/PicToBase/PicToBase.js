@@ -1,14 +1,15 @@
 import React,{Component} from 'react'
 import PropTypes from 'prop-types'
 import {withRouter} from 'react-router'
-import {Link} from 'react-router-dom'
 import Layout from '../../components/Layout/Layout'
-import {TextBox,IconButton,Button} from 'react-uwp'
 import './PicConvertStyle.less'
 import '../../css/iconfont.less'
 import FileHelper from '../../util/File'
+import {observer,inject} from 'mobx-react'
 
-export default withRouter(class PicToBase extends Component{
+@inject("stores")
+@observer
+class PicToBase extends Component{
 
     static propTypes = {
         match: PropTypes.object.isRequired,
@@ -24,6 +25,7 @@ export default withRouter(class PicToBase extends Component{
         this.state = {
             picture_base:null
         }
+        // props.stores.UIStore.setLiziLoadable(true)
     }
 
     handleFileInputChange(e){
@@ -55,10 +57,9 @@ export default withRouter(class PicToBase extends Component{
                     </textarea>
 
                     <div className="copy">
-                        {/*<IconButton>CopyLegacy</IconButton>*/}
-                        <Button icon="CopyLegacy" className={"copy-button"}>
+                        <button icon="CopyLegacy" className={"copy-button"}>
                             复制
-                        </Button>
+                        </button>
                     </div>
 
 
@@ -93,4 +94,5 @@ export default withRouter(class PicToBase extends Component{
             </Layout>
         )
     }
-})
+}
+export default withRouter(PicToBase)

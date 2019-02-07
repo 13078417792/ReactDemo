@@ -2,7 +2,7 @@
 import http from '@util/http'
 import Url from '@util/Url'
 import {isEmpty} from 'lodash'
-const {observable,action,autorun,reaction} = require('mobx')
+const {observable,action} = require('mobx')
 
 export default class Disk {
 
@@ -12,23 +12,6 @@ export default class Disk {
     @observable path:array = [];
     @observable oldPath:array = [];
     @observable paths:array = [];
-
-    // @action async getContent(id:number){
-    //     if(isEmpty(id)){
-    //         id = this.folderId
-    //     }
-    //     let content
-    //     try{
-    //         content = await http.post(Url.NetDiskFolderContent,{
-    //             id
-    //         })
-    //     }catch(err){
-    //         return Promise.reject(err.message || err)
-    //     }
-    //     this.folders = content.folders
-    //     this.files = content.files
-    //     return Promise.resolve(content)
-    // }
 
     @action updateFolders(data:array){
         this.folders = data
@@ -47,7 +30,7 @@ export default class Disk {
         if((isEmpty(id) && id!==0) || id<0){
             return Promise.reject(`非法数据`)
         }
-        if(id==0){
+        if(id===0){
             return Promise.resolve({})
         }
 

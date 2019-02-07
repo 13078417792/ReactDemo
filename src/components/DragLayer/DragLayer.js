@@ -5,7 +5,6 @@ import cs from 'classnames'
 import './DragLayerStyle.less'
 import CommonData from '../CommonData'
 
-const mainColor = '#ccc'
 const secColor = '#0078D7'
 
 
@@ -215,7 +214,7 @@ export default class DragLayer extends Component {
 
     onMouseMove = event => {
         event.stopPropagation()
-        const {target, clientX, clientY} = event
+        const { clientX, clientY} = event
         this.move.call(this, clientX, clientY, event)
     }
 
@@ -244,7 +243,7 @@ export default class DragLayer extends Component {
 
     handleDragTouchMove = event => {
         event.stopPropagation()
-        const {target, touches} = event
+        const {touches} = event
         const touch = touches[0]
         const {clientX, clientY} = touch
         this.move(clientX, clientY, event)

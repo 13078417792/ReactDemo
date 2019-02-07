@@ -1,7 +1,5 @@
 import React,{Component} from 'react'
 import './LoadingStyle.less'
-import cs from 'classnames'
-
 class Loading extends Component{
 
     constructor(props){
@@ -33,7 +31,7 @@ class Loading extends Component{
 
     // 外圆
     drawOuterCircle(){
-        const {state:{size,border,radius},parent:{current:parent}} = this
+        const {state:{size,radius},parent:{current:parent}} = this
 
         const ctx = parent.getContext('2d')
         ctx.beginPath()

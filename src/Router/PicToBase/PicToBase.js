@@ -17,8 +17,6 @@ class PicToBase extends Component{
         history: PropTypes.object.isRequired
     }
 
-    // static
-    static contextTypes = { theme: PropTypes.object }
 
     constructor(props){
         super(props)
@@ -74,7 +72,6 @@ class PicToBase extends Component{
     }
 
     render(){
-        const {theme} = this.context
         const Preview = this.preview.bind(this)
         return (
             <Layout>

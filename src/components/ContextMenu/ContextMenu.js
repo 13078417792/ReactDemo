@@ -1,10 +1,7 @@
-import React,{Component,Fragment,createRef,cloneElement} from 'react'
-import ReactDom from 'react-dom'
+import React,{Component,createRef} from 'react'
 import cs from 'classnames'
-import {isEmpty,isFunction,isNumber} from 'lodash'
 import PropTypes from 'prop-types'
 import './ContextMenuStyle.less'
-import {Icon} from 'antd'
 import ContextMenuItem from './ContextMenuItem'
 const width = 130
 export default class ContextMenu extends Component{

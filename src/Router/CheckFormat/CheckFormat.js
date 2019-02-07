@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import {withRouter} from 'react-router'
 import './CheckFormatStyle.less'
 import Layout from '../../components/Layout/Layout'
-import cs from 'classnames'
 import FileHelper from '../../util/File'
 import filesize from 'filesize'
 import http from '../../util/http'
@@ -16,8 +15,6 @@ export default withRouter(class CheckFormat extends Component{
         location: PropTypes.object.isRequired,
         history: PropTypes.object.isRequired
     }
-
-    static contextTypes = { theme: PropTypes.object }
 
     constructor(props){
         super(props)
@@ -91,7 +88,7 @@ export default withRouter(class CheckFormat extends Component{
             if (data.length !== target.length) return false
             for(let i in data){
                 // console.log(data[i],target[i])
-                if(data[i]!=target[i]){
+                if(data[i]!==target[i]){
                     return false
                 }
             }

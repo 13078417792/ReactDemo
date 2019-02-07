@@ -50,7 +50,7 @@ export default class ContextMenuItem extends Component {
             height:(function(style){
                 let heightUnit = ''
                 if(!isNumber(style.height)){
-                    heightUnit = style.height.replace(/^[\d\.]*/,'')
+                    heightUnit = style.height.replace(/^[\d.]*/,'')
                 }
                 return `${parseFloat(style.height)*props.menu.length}${heightUnit}`
             })(styleValue),

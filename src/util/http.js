@@ -1,12 +1,6 @@
 import axios from 'axios'
 import Auth from './Auth'
 import ResponseCode from './ResponseCode'
-const queryString = require('query-string')
-const Cookie = require('js-cookie')
-
-// let AUTH_TOKEN = ''
-// Auth.getAuthID()
-
 
 function toFormData(form,data,parentKey=''){
     for(let key in data){
@@ -59,7 +53,7 @@ http.interceptors.request.use(async function (config) {
 
     // console.log(config)
 
-    let formdata = new FormData
+    let formdata = new FormData()
     toFormData(formdata,config.data)
     config.data = formdata
     return Promise.resolve(config);

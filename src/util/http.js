@@ -29,14 +29,13 @@ const URL =  {
 
 const http = axios.create({
     baseURL: URL[process.env.NODE_ENV],
-    // headers:{
-    //     common:{
-    //         Authorization:Cookie.get('SessionUID') || '',
-    //         "X-TokenID":Cookie.get('TokenID') || '',
-    //     }
-    // }
 });
 http.interceptors.request.use(async function (config) {
+
+    if(config.baseURL.indexOf(URL.production)===0 && config.url.indexOf('/tool')===0){
+        config.url = config.url.replace(/^\/tool/,'')
+    }
+
     // Do something with response data
     let TokenID = Auth.getCommonToken()
     if(!TokenID){

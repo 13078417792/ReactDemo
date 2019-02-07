@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import {withRouter} from 'react-router'
 import cs from 'classnames'
 import Layout from '../../components/Layout/Layout'
-import FileHelper from '../../util/File'
 
 import '../../css/iconfont.less'
 import './EditPictureStyle.less'
@@ -227,7 +226,7 @@ export default withRouter(class EditPicture extends Component{
             recording = false
         }else{
             throw new Error('无效数据')
-            return;
+            // return;
         }
 
         const ctx = this.getContext()
@@ -275,7 +274,7 @@ export default withRouter(class EditPicture extends Component{
 
 
     async fullScreen(){
-        const el = this.refs.editor
+        // const el = this.refs.editor
     }
 
     resizeEditCanvasContainer(){
@@ -333,7 +332,7 @@ export default withRouter(class EditPicture extends Component{
     // 处理缩放
     handleEditWrapperWheel(e){
         console.log(e)
-        const {nativeEvent,deltaY} = e
+        const {deltaY} = e
         console.log(deltaY)
         if(deltaY<0){
             this.setState(({scale})=>{

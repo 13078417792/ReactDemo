@@ -1,24 +1,17 @@
 import React,{Component} from 'react'
 import NetDiskSide from './NetDiskSide'
 import './MainLayoutStyle.less'
-import {Button,Icon,Dropdown,Menu,Modal,Drawer,message} from 'antd'
+import {Button,Dropdown,Menu,Modal,Drawer,message} from 'antd'
 import ToolBar from './ToolBar'
 import FileBread from './FileBread'
 import PropTypes from 'prop-types'
 import {isFunction} from 'lodash'
 import cs from 'classnames'
-import http from '@util/http'
-import Url from '@util/Url'
 import Auth from '@util/Auth'
-import DragLayer from '@components/DragLayer/DragLayer'
 import {isBoolean,isObject} from 'lodash'
 import ModifyPassword from '@drawer/ModifyPassword/ModifyPassword'
 import {withRouter} from 'react-router'
 import {inject} from 'mobx-react'
-
-
-
-const {Item:{MenuItem}} = Menu
 
 @inject('stores')
 class NetDiskLayout extends Component{

@@ -76,7 +76,6 @@ export default {
     saveAuthID(id,expires=86400){
         if(!id){
             throw new Error('保存登录信息失败：没有登录信息')
-            return
         }
         Cookie.set(this.AuthIDTag,id,{expires:expires/3600/24})
         this.setAuthIDAsync(id)

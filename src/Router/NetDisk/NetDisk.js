@@ -1,12 +1,12 @@
-import React,{Component,createRef,createClass} from 'react'
+import React,{Component,createRef} from 'react'
 import {findDOMNode} from 'react-dom'
 import PropTypes from 'prop-types'
 import NetDiskLayout from '../../components/NetDiskLayout/NetDiskLayout'
 import {withRouter} from 'react-router'
 import './NetDiskStyle.less'
 import {observer,inject} from 'mobx-react'
-import {isNumber,isBoolean,isEmpty} from 'lodash'
-import {message,Icon,Input,Button,Form,Modal,Checkbox} from 'antd'
+import {isBoolean,isEmpty} from 'lodash'
+import {message,Icon,Button,Modal,Checkbox} from 'antd'
 import MineIcon from '@components/MineIcon'
 import cs from 'classnames'
 import filesize from 'filesize'
@@ -16,7 +16,7 @@ import Url from '@util/Url'
 import CreateFolderForm from '../../components/NetDiskLayout/CreateFolderForm'
 import ContextMenuWrapper from '@components/ContextMenu/ContextMenuWrapper'
 import DragLayer from '@components/DragLayer/DragLayer'
-import Move from '../../components/NetDiskLayout/Move/Move'
+import MoveCopy from '@components/NetDiskLayout/MoveCopy/MoveCopy'
 import NameForm from '@components/NetDiskLayout/NameForm/NameForm'
 
 
@@ -145,7 +145,7 @@ class NetDisk extends Component{
     constructor(props) {
         super(props)
         // this.currentFolderID = this.props.stores.DiskStore.folderId
-        const {stores: {DiskStore}, match, location} = props
+        const {stores: {DiskStore}, match} = props
 
         if (match.params.folder_id && !isNaN(match.params.folder_id)) {
             DiskStore.setFolder(match.params.folder_id)
@@ -170,7 +170,7 @@ class NetDisk extends Component{
             fileRename[el.id] = false
         })
         const folderRename = {}
-        folders.map(el=>{
+        folders.forEach(el=>{
             folderRename[el.id] = false
         })
         this.setState({
@@ -246,7 +246,7 @@ class NetDisk extends Component{
         if(result.has_child || result.has_child_file){
             await (()=>{
                 return new Promise((resolve,reject)=>{
-                    const modal = Modal.confirm({
+                    Modal.confirm({
                         title:'确认',
                         content:'文件夹不为空，继续删除将同步删除文件夹内所有数据',
                         onOk:()=>{
@@ -663,14 +663,14 @@ class NetDisk extends Component{
                 </div>
 
                 {
-                    state.openMove?<DragLayer width="600px" height="410px" title={"移动到"} onClose={() => {
+                    state.openMove?<DragLayer width="400px" height="410px" title={"移动到"} onClose={() => {
                         this.setState({
                             openMove: false
                         })
                     }}>
 
-                        <Move
-                            id={state.moveLayerId}
+                        <MoveCopy
+                            target={state.moveLayerId}
                             isFile={state.moveLayerIsFile}
                             onClose={()=>{
                                 this.setState({

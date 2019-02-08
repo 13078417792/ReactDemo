@@ -1,0 +1,12 @@
+.tool-bar {
+  width: 100%;
+  height: 33px;
+}
+.tool-bar button {
+  margin-right: 0.5em;
+  position: relative;
+}
+.tool-bar button:last-child {
+  margin-right: 0;
+}
+/*# sourceMappingURL=ToolBarStyle.css.map */

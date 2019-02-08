@@ -1,0 +1,47 @@
+@bottom-height:3em;
+.move-copy{
+  width:100%;
+  height:100%;
+  padding-bottom:@bottom-height;
+  box-sizing:border-box;
+
+  .folder-wrap{
+    overflow-y:auto;
+    overflow-x:hidden;
+    width:100%;
+    height:100%;
+  }
+
+
+  .bottom{
+    position:absolute;
+    bottom:0;
+    left:0;
+    width:100%;
+    height:@bottom-height;
+    display:flex;
+    justify-content:flex-start;
+    align-items:center;
+
+    .left,.right{
+      width:50%;
+      overflow:hidden;
+    }
+
+    .left{
+
+      button{
+        margin-left:10px;
+      }
+    }
+
+    .right{
+      display:flex;
+      justify-content:flex-end;
+
+      button{
+        margin-right:10px;
+      }
+    }
+  }
+}

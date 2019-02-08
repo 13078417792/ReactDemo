@@ -1,0 +1,65 @@
+@import './theme.less';
+
+.network-disk-side{
+  width:100%;
+  padding-top:@normalPadding;
+  box-sizing:border-box;
+  background-color:@layoutBackgroundColor;
+  color:@layoutFontColor;
+  overflow:hidden;
+
+  @ul-pad-left:1em;
+  ul{
+    list-style:none;
+    //padding-left:@ul-pad-left;
+    padding:0;
+    background-color:transparent;
+
+
+
+    @padding-left:2.5em;
+    @padding-top:1em;
+
+    .on{
+      background-color:rgba(0,0,0,.1);
+
+    }
+
+    .on a{
+      color:@activeColor;
+    }
+
+
+
+    li{
+      width:100%;
+      position:relative;
+      background-color:transparent;
+      white-space:nowrap;
+      overflow:hidden;
+
+      a{
+        width:100%;
+        display:inline-block;
+        padding:@padding-top 0 @padding-top @padding-left;
+        position:relative;
+        color:#333;
+        background-color:transparent;
+        z-index:2;
+
+        .layout-side-item-icon{
+          position:absolute;
+          top:0;
+          left:0;
+          margin-top:@padding-top;
+          margin-left:@padding-left/2;
+          transform:translateX(-50%) scale(1.5);
+        }
+      }
+
+      &:hover{
+        .on;
+      }
+    }
+  }
+}

@@ -1,19 +1,16 @@
 import React,{Component} from 'react'
 import {Button,Icon,message,Modal} from 'antd'
-import cs from 'classnames'
 import './ToolBarStyle.less'
 import MineIcon from '../MineIcon'
 import DragLayer from '../DragLayer/DragLayer'
 import UploaderWorker from '@workers/Uploader/Disk.worker'
-import CodeStatus from '@util/CodeStatus'
-import FileHelper from '@util/File'
 import http from '@util/http'
 import Url from '@util/Url'
 import Cookie from 'js-cookie'
 import filesize from 'filesize'
 import Uploader from '@router/NetDisk/UploaderDialog/UploaderDialog'
 import PropTypes from 'prop-types'
-import {inject,observer} from 'mobx-react'
+import {inject} from 'mobx-react'
 import FileChunk from '@util/FileChunk'
 import {isEmpty} from 'lodash'
 import {toJS} from 'mobx'
@@ -232,7 +229,7 @@ class ToolBar extends Component{
     }
 
     async handleFile(file) {
-        const {state,state:{maxSize}} = this
+        const {state:{maxSize}} = this
         const {stores:{DiskStore}} = this.props
         if(file.size>maxSize){
             message.error(`文件太大，限制最大${filesize(maxSize)}`)
@@ -370,7 +367,7 @@ class ToolBar extends Component{
             })
         }
 
-        const {count,chunks,md5} = result
+        const {chunks,md5} = result
 
         // 调用web-worker上传文件
         useWorkerUpload(chunks,uploaded,md5,prepare.upload_key)

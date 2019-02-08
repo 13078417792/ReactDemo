@@ -1,0 +1,47 @@
+.network-disk-side {
+  width: 100%;
+  padding-top: 10px;
+  box-sizing: border-box;
+  background-color: #eff4f8;
+  color: #424E67;
+  overflow: hidden;
+}
+.network-disk-side ul {
+  list-style: none;
+  padding: 0;
+  background-color: transparent;
+}
+.network-disk-side ul .on {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.network-disk-side ul .on a {
+  color: #3b8cff;
+}
+.network-disk-side ul li {
+  width: 100%;
+  position: relative;
+  background-color: transparent;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.network-disk-side ul li a {
+  width: 100%;
+  display: inline-block;
+  padding: 1em 0 1em 2.5em;
+  position: relative;
+  color: #333;
+  background-color: transparent;
+  z-index: 2;
+}
+.network-disk-side ul li a .layout-side-item-icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-top: 1em;
+  margin-left: 1.25em;
+  transform: translateX(-50%) scale(1.5);
+}
+.network-disk-side ul li:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+/*# sourceMappingURL=NetDiskSideStyle.css.map */

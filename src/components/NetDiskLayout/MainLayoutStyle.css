@@ -1,0 +1,79 @@
+.network-disk-wrapper {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #eff4f8;
+}
+.network-disk-wrapper .layout-header {
+  width: 100%;
+  height: 60px;
+  background-color: transparent;
+  padding-left: 194px;
+  box-sizing: border-box;
+  position: relative;
+}
+.network-disk-wrapper .layout-header .logo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 194px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2em;
+  user-select: none;
+}
+.network-disk-wrapper .layout-header .right-part {
+  float: right;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin-right: 10px;
+}
+.network-disk-wrapper .layout-header .right-part > * {
+  margin-left: 10px;
+}
+.network-disk-wrapper .layout-header .right-part > *:first-child {
+  margin-left: 0;
+}
+.network-disk-wrapper .layout-main-container {
+  height: calc(100% - 60px);
+}
+.network-disk-wrapper .layout-main-container .left-side {
+  float: left;
+  width: 194px;
+  height: 100%;
+  background-color: transparent;
+}
+.network-disk-wrapper .layout-main-container .main-wrapper {
+  overflow: hidden;
+  margin: auto;
+  width: auto;
+  height: 100%;
+}
+.network-disk-wrapper .layout-main-container .main-wrapper .main {
+  box-sizing: border-box;
+  border: 1px solid #d8dfea;
+  border-radius: 5px 5px 0 0;
+  width: calc(100% - 10px);
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(255, 255, 255, 0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  background-color: #fff;
+}
+.network-disk-wrapper .layout-main-container .main-wrapper .main .action-container {
+  width: 100%;
+  padding: 11px 10px;
+}
+.network-disk-wrapper .layout-main-container .main-wrapper .main .main-area {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+/*# sourceMappingURL=MainLayoutStyle.css.map */

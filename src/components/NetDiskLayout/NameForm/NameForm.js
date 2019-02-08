@@ -1,5 +1,5 @@
-import React,{Component,Fragment} from 'react'
-import {Form,message,Icon,Button,Input} from 'antd'
+import React,{Component} from 'react'
+import {Form,Button,Input} from 'antd'
 import PropTypes from 'prop-types'
 import './NameFormStyle.less'
 import http from '@util/http'
@@ -32,9 +32,16 @@ class NameForm extends Component{
         onFail:function(){}
     }
 
+    state = {
+        handling:false
+    }
+
     submit = e => {
         e.preventDefault()
         const {props} = this
+        this.setState({
+            handling:true
+        })
         const {validateFields,getFieldValue,getFieldsError} = props.form
         validateFields((errors,values)=>{
             if(errors){
@@ -69,7 +76,7 @@ class NameForm extends Component{
     }
 
     render(){
-        const {props} = this
+        const {props,state} = this
         const {getFieldDecorator} = props.form
         return props.show?(
             <Form layout="inline" onSubmit={this.submit} size="small" className="rename-form">
@@ -89,10 +96,13 @@ class NameForm extends Component{
                 </FormItem>
 
                 <FormItem>
-                    <Button icon="check" htmlType="submit" size="small" />
+                    <Button icon="check" htmlType="submit" size="small" loading={state.handling} />
                     <Button icon="close" onClick={()=>{
+                        this.setState({
+                            handling:true
+                        })
                         props.onClose()
-                    }} size="small" />
+                    }} size="small" loading={state.handling} />
                 </FormItem>
             </Form>
         ):null

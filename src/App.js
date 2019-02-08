@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import './style.less'
-import {BrowserRouter as Router, Switch, Route} from "react-router-dom"
+import {Switch, Route} from "react-router-dom"
 import {withRouter} from 'react-router'
 import 'antd/dist/antd.css'
 import {observer,inject} from 'mobx-react'
@@ -28,7 +28,7 @@ class App extends Component {
     constructor(props){
         super(props)
 
-        const {stores:{AccountStatusStore:{isLogin,initCheckingLogin}}} = props
+        // const {stores:{AccountStatusStore:{isLogin,initCheckingLogin}}} = props
 
         this.state = {}
 
@@ -45,7 +45,7 @@ class App extends Component {
     }
 
     render() {
-        const {props:{stores:{AccountStatusStore,RouterStore}}} = this
+        const {props:{stores:{AccountStatusStore}}} = this
         return (
 
             <div className="App">

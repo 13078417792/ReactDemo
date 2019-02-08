@@ -10,10 +10,6 @@ class FileBread extends Component{
 
 
 
-    constructor(props){
-        super(props)
-    }
-
     path(){
         const {stores:{DiskStore}} = this.props
         if(DiskStore.path.length===0) return null;

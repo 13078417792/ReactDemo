@@ -25,7 +25,6 @@ class Home extends Component {
 
     constructor(props) {
         super(props)
-        const {stores} = props
         this.state = {
             ShowDragLayer: false,
             showLoginDrawer: false,
@@ -140,7 +139,7 @@ class Home extends Component {
 
         ]
 
-        const {state,ToolItem} = this
+        const {ToolItem} = this
         const {stores} = this.props
 
         const {AccountStatusStore} = stores

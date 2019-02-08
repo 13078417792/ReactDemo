@@ -35,14 +35,15 @@ export default class AccountStatus {
         try{
             var {success} = await Auth.checkCommonToken()
         }catch(err){
-            console.error(err)
+            console.warn(err)
             var {token} = await Auth.fetchCommonToken()
             this.Token = token
             return;
         }
         if(success) return;
 
-        var {token} = await Auth.fetchCommonToken()
+        var result = await Auth.fetchCommonToken()
+        token = result.token
         // console.log(success,token)
         this.Token = token
     }
@@ -80,7 +81,7 @@ export default class AccountStatus {
             this.AuthID = ''
             Auth.clearAuthID()
             this.setStatus(false)
-            console.error(err)
+            console.warn(err)
             this.checkingAuth = false
             this.initCheckingLogin = false
             if(oldStatus){

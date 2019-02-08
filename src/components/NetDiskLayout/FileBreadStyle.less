@@ -1,0 +1,57 @@
+@import './theme.less';
+
+.file-bread{
+  font-size:.8em;
+  width:100%;
+  height:@layoutFileBreadHeight;
+  line-height:@layoutFileBreadHeight;
+  margin:1em 0 0;
+  color:#666;
+  display:flex;
+  justify-content:flex-start;
+  align-items:center;
+
+  .inlb{
+    display:inline-flex;
+    justify-content:flex-start;
+    align-items:center;
+
+
+  }
+
+  .goback{
+    display:inline-block;
+    position:relative;
+    padding-right:1em;
+
+
+    &:after{
+      content:'|';
+      position:absolute;
+      top:0;
+      right:.5em;
+      color:#ccc;
+      vertical-align:top;
+    }
+  }
+
+  .path{
+    margin-left:.5em;
+
+    span,a{
+      display:inline-block;
+      position:relative;
+      padding-left:1em;
+
+
+
+      &:before{
+        content:'>';
+        position:absolute;
+        top:0;
+        left:0;
+        color:#ccc;
+      }
+    }
+  }
+}

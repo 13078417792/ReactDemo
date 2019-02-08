@@ -1,5 +1,7 @@
 import helper from './Helper'
-File.prototype.toBase64 = function(){
+import md5Worker from '@workers/File/md5.worker'
+
+Blob.prototype.toBase64 = function(){
     return new Promise((resolve,reject)=>{
         // console.log(this)
 
@@ -17,7 +19,7 @@ File.prototype.toBase64 = function(){
     })
 }
 
-File.prototype.toArrayBuffer = function(){
+Blob.prototype.toArrayBuffer = function(){
     return new Promise((resolve,reject)=>{
         // console.log(this)
 
@@ -35,7 +37,7 @@ File.prototype.toArrayBuffer = function(){
     })
 }
 
-File.prototype.toBinary = function(){
+Blob.prototype.toBinary = function(){
     return new Promise((resolve,reject)=>{
         // console.log(this)
 
@@ -156,7 +158,40 @@ let FileHelper = {
 
         }
         return result
-    }
+    },
+
+    chunk(file,size){
+        // console.log(size)
+        if(!helper.isFile(file)) throw new Error('不是文件')
+        if(file.size<size) size = file.size
+        const chunk_count = Math.ceil(file.size / size)
+        let chunks = []
+
+        for(let chunk_index=0;chunk_index<chunk_count;chunk_index++){
+            const chunk = file.slice(chunk_index*size,(chunk_index+1)*size)
+            chunks.push(chunk)
+        }
+        // console.log(chunks)
+
+        return new Promise((resolve,reject)=>{
+            const worker = new md5Worker()
+            worker.onmessage = function(data){
+                const {data:md5} = data
+                worker.terminate()
+                resolve({
+                    chunks,
+                    chunk_count,
+                    size,
+                    md5
+                })
+            }
+            worker.onerror = function(error){
+                worker.terminate()
+                reject(error)
+            }
+            worker.postMessage(chunks)
+        })
+    },
 }
 
 export default FileHelper

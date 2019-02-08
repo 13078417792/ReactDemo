@@ -1,0 +1,16 @@
+.user-login-drawer {
+  width: 100%;
+}
+.user-login-drawer .login-form {
+  width: 80%;
+  max-width: 250px;
+  margin: 0 auto;
+}
+.user-login-drawer .login-form .login-form-button {
+  width: 100%;
+}
+.user-login-drawer .login-form .account-register-link {
+  float: right;
+  user-select: none;
+}
+/*# sourceMappingURL=UserLoginStyle.css.map */

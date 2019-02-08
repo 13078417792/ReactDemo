@@ -1,0 +1,60 @@
+@import '../theme.less';
+
+.file-list{
+  background-color:#fff;
+  //display:flex;
+  width:100%;
+  height:100%;
+  position:relative;
+
+  .file-list-column{
+    width:100%;
+    position:absolute;
+    z-index:10;
+    top:0;
+    left:0;
+    display:flex;
+    justify-content:flex-start;
+
+    .column-item{
+      //float:left;
+      font-size:.8em;
+      padding:@normalPadding 0;
+      text-indent:1em;
+      color:#666;
+      white-space:nowrap;
+      overflow:hidden;
+
+      &:hover{
+        background-color:@fileItemHoverColor;
+      }
+
+      &:first-child{
+        width:100%;
+        min-width:600px;
+      }
+    }
+
+  }
+
+
+  .file-list-table-wrapper{
+    position:absolute;
+    z-index:5;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    padding-top:.8*3em;
+
+
+    .file-list-table{
+      width:100%;
+      height:100%;
+      overflow-x:hidden;
+      overflow-y:auto;
+    }
+  }
+
+
+}

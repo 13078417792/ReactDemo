@@ -26,12 +26,12 @@ export default class Layout extends Component{
     }
 
     render(){
-        const buttonStyle = {
-            height:'3em',
-            width:'3em',
-            lineHeight:'3em',
-            fontSize:'1em'
-        }
+        // const buttonStyle = {
+        //     height:'3em',
+        //     width:'3em',
+        //     lineHeight:'3em',
+        //     fontSize:'1em'
+        // }
         return (
             <div className="Layout">
 

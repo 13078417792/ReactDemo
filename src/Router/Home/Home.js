@@ -106,24 +106,24 @@ class Home extends Component {
                 tag: 'pic-to-base64',
                 url: '/pic-to-base64'
             },
-            {
-                pic: '/pic/uwp-bg-2.jpg',
-                name: 'MD5加密',
-                tag: 'md5',
-                url: '/md5'
-            },
-            {
-                pic: '/pic/uwp-bg-2.jpg',
-                name: '生成微信聊天页',
-                tag: 'wechat-talk-screen',
-                url: '/wechat-talk-screen'
-            },
-            {
-                pic: '/pic/uwp-bg-2.jpg',
-                name: '生成微信朋友圈',
-                tag: 'wechat-friend-screen',
-                url: '/wechat-friend-screen'
-            },
+            // {
+            //     pic: '/pic/uwp-bg-2.jpg',
+            //     name: 'MD5加密',
+            //     tag: 'md5',
+            //     url: '/md5'
+            // },
+            // {
+            //     pic: '/pic/uwp-bg-2.jpg',
+            //     name: '生成微信聊天页',
+            //     tag: 'wechat-talk-screen',
+            //     url: '/wechat-talk-screen'
+            // },
+            // {
+            //     pic: '/pic/uwp-bg-2.jpg',
+            //     name: '生成微信朋友圈',
+            //     tag: 'wechat-friend-screen',
+            //     url: '/wechat-friend-screen'
+            // },
             {
                 pic: '/pic/uwp-bg-2.jpg',
                 name: '查看文件格式',

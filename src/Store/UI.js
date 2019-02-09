@@ -4,21 +4,22 @@ const {observable,action} = require('mobx')
 
 export default class UI{
 
+    @observable wy_toggle_button:boolean = true
 
-    @observable LiziLoadable:boolean = false
-    // @observable PageLoading:boolean = true
-
-    constructor(){
-
-
+    @action toggle(name:string){
+        if(!this.hasOwnProperty(name)) return false
+        this[name] = !this[name]
+        return true
     }
 
-    @action toggleLiziLoadable(){
-        this.LiziLoadable = !this.LiziLoadable
+    @action getStatus(name:string){
+        if(!this.hasOwnProperty(name)) return false
+        return this[name]
     }
 
-    @action setLiziLoadable(loadable:boolean){
-        this.LiziLoadable = loadable
+    @action setStatus(name:string,status:boolean){
+        if(!this.hasOwnProperty(name)) return false
+        this[name] = status
+        return true
     }
-
 }

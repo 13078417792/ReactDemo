@@ -4,6 +4,7 @@ import AccountStatus from './AccountStatus'
 import Disk from './Disk'
 import Router from './Router'
 import IP from './IP'
+import UI from './UI'
 
 class RootStore {
 
@@ -15,7 +16,7 @@ class RootStore {
         this.DiskStore = new Disk()
         this.RouterStore = new Router()
         this.IpStore = new IP()
-        // this.UIStore = new UI()
+        this.UIStore = new UI()
     }
 
 

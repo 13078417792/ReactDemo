@@ -1,6 +1,6 @@
 // flow
 import AsyncComponent from '@components/AsyncComponent'
-import {isObject,isArray,isEmpty} from 'lodash'
+import {isArray} from 'lodash'
 import MusicRecommend from '@router/Music/Recommend/Recommend'
 import MusicSongList from '@router/Music/SongList/SongList'
 const {observable,action} = require('mobx')

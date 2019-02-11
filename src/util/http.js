@@ -47,8 +47,11 @@ http.interceptors.request.use(async function (config) {
         AuthID = await Auth.getAuthIDAsync()
     }
 
-    config.headers['X-TokenID'] = TokenID
-    config.headers.Authorization = AuthID
+    if(!/^http/.test(config.url)){
+        config.headers['X-TokenID'] = TokenID
+        config.headers.Authorization = AuthID
+    }
+
 
     // console.log(config)
 

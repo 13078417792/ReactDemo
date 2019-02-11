@@ -32,8 +32,7 @@ export default class Router {
         home:{
             path: '/music',
             needAuth: false,
-            redirect:'/music/discover/recommend',
-            component: this.getRouteComponent('Music/Home/MusicHome',true)
+            redirect:'/music/discover/recommend'
         }
     }
 

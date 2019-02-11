@@ -1,0 +1,67 @@
+@import "../../../var.less";
+@import "../../common.less";
+
+.wy-music-side{
+  position:fixed;
+  top:0;
+  left:0;
+  width:@wy-side-width;
+  height:100%;
+  background-color:@wy-side-color;
+  border-right:1px solid @wy-side-border-color;
+  transition:left .3s;
+  overflow-x:hidden;
+  list-style:none;
+  padding:0;
+  margin:0;
+  user-select:none;
+
+  li{
+    height:@wy-side-icon-width;
+    line-height:@wy-side-icon-width;
+    .overflow;
+    text-overflow:clip;
+
+    a{
+      color:@wy-font-color;
+      text-decoration:none;
+      cursor:default;
+      display:block;
+    }
+
+    .side-item-icon{
+      font-size:1.2em;
+      width:@wy-side-icon-width;
+      cursor:default;
+    }
+
+    &:first-child{
+      &:hover{
+        background-color:inherit;
+      }
+    }
+
+    &:hover{
+      background-color:@wy-hover-bg;
+    }
+  }
+
+  li.on{
+    background-color:@wy-active-bg;
+
+    &:first-child{
+      &:hover{
+        background-color:inherit;
+      }
+    }
+  }
+}
+
+.wy-music-side.icon{
+  width:@wy-side-icon-width;
+}
+
+.wy-music-side.hide{
+  left:-@wy-side-width;
+  transform:translateX(-1px);
+}

@@ -1,0 +1,38 @@
+@import "../../../var.less";
+
+.music-layout{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  box-sizing:border-box;
+  padding-left:@wy-side-width;
+
+  .music-zone{
+    width:100%;
+    overflow:hidden;
+    //height:100%;
+    //overflow-x:hidden;
+    //overflow-y:auto;
+    padding:2em;
+    box-sizing:border-box;
+
+    @media screen and (max-width:414px){
+      padding:1em;
+    }
+
+  }
+
+  .music-zone.height-overflow-hidden{
+    height:100%;
+    overflow-x:hidden;
+    overflow-y:auto;
+  }
+}
+
+.music-layout.icon-side-layout{
+  padding-left:@wy-side-icon-width;
+}
+
+.music-layout.lock-icon-side{
+  padding-left:@wy-side-icon-width !important;
+}

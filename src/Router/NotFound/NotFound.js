@@ -12,9 +12,13 @@ class NotFound extends Component{
         history: PropTypes.object.isRequired
     };
 
+    static defaultProps = {
+        style:{}
+    }
+
     render(){
         return (
-            <div className="not-found">
+            <div className="not-found" style={this.props.style}>
 
                 <p className="font">
                     404 Not Found

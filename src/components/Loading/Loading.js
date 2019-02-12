@@ -1,6 +1,18 @@
 import React,{Component} from 'react'
 import './LoadingStyle.less'
+import PropTypes from 'prop-types'
+
 class Loading extends Component{
+
+    static propTypes = {
+        style:PropTypes.object,
+        className:PropTypes.string
+    }
+
+    static defaultProps = {
+        style:{},
+        className:''
+    }
 
     constructor(props){
         super(props)
@@ -55,9 +67,9 @@ class Loading extends Component{
     }
 
     render(){
-        const {state:{size,border}} = this
+        const {state:{size,border},props} = this
         return (
-            <div className="loading-middleware">
+            <div className="loading-middleware" style={props.style}>
 
                 <div className="container" ref={this.container} style={{
                     width:`${size+border*2}px`,

@@ -33,7 +33,7 @@ class InnerRouter extends Component{
     render(){
         const {props,props:{stores:{RouterStore},match},state:{title}} = this
         const {params} = match
-        const link = toJS(RouterStore.musicPath[props.tag]) || []
+        const link = toJS(RouterStore.musicLayoutSecondRouter[props.tag]) || []
         // console.log(params)
         let RouterGroups = []
         const hasRouter = props.tag && title.hasOwnProperty(props.tag)

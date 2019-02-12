@@ -3,6 +3,7 @@ import AsyncComponent from '@components/AsyncComponent'
 import {isArray} from 'lodash'
 import MusicRecommend from '@router/Music/Recommend/Recommend'
 import MusicSongList from '@router/Music/SongList/SongList'
+import MusicSongListDetail from '@router/Music/SongListDetail/SongListDetail'
 const {observable,action} = require('mobx')
 
 
@@ -21,22 +22,36 @@ export default class Router {
             path: '/disk/content/:folder_id?',
             needAuth: true,
             component: this.getRouteComponent('NetDisk')
-        }, MusicDiscover:{
+        }
+        , SongListDetail:{
+            path: '/music/song-list-detail/:id',
+            needAuth: false,
+            component:this.getRouteComponent('Music/Layout/Layout',true)
+        }
+        ,MusicDiscover:{
             path:'/music/:tag?/:sub?',
             needAuth: false,
             component: this.getRouteComponent('Music/Layout/Layout',true)
         }
     };
 
-    @observable music:object = {
+    // 一级路由
+    @observable musicLayoutRouter:object = {
         home:{
             path: '/music',
             needAuth: false,
             redirect:'/music/discover/recommend'
-        }
+        },
+        songListDetail:{
+            path: '/music/song-list-detail/:id',
+            needAuth: false,
+            component:MusicSongListDetail
+        },
+
     }
 
-    @observable musicPath:object = {
+    // 二级路由
+    @observable musicLayoutSecondRouter:object = {
         discover:[
             {label:'个性推荐',url:'recommend',component:MusicRecommend,index:true},
             {label:'歌单',url:'song-list',component:MusicSongList},
@@ -52,8 +67,8 @@ export default class Router {
 
     handleMusicPath(){
         let data = {}
-        for(let side in this.musicPath){
-            const part = this.musicPath[side]
+        for(let side in this.musicLayoutSecondRouter){
+            const part = this.musicLayoutSecondRouter[side]
             if(!isArray(data[side])) data[side] = []
             part.forEach(el=>{
                 data[side].push({
@@ -64,7 +79,7 @@ export default class Router {
                 })
             })
         }
-        this.musicPath = data
+        this.musicLayoutSecondRouter = data
     }
 
     getSingle(name:string){

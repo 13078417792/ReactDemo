@@ -1,4 +1,5 @@
 import React,{Component} from 'react'
+// import {Fragment} from 'react-dom'
 import cs from 'classnames'
 import {toJS} from 'mobx'
 import {inject,observer} from 'mobx-react'
@@ -55,14 +56,36 @@ class Layout extends Component{
         })
     }
 
+    hump(name,split='-'){
+        if(!name) return ''
+        return name.split(split).map((el,index)=>{
+            if(!el) return ''
+            if(index===0) return el
+            return `${el[0].toUpperCase()}${el.slice(1)}`
+
+        }).join('')
+    }
+
+    NotFound(){
+        return (
+            <Route render={()=><NotFound style={{
+                width:'100%',height:'100%'
+            }} />} />
+        )
+    }
+
     render(){
-        const {props,state,tags} = this
+        const {props,state,tags,NotFound} = this
         const {stores:{UIStore},match} = props
         const {params} = match
-        const tag = params.tag || 'home'
-        const FirstRouter = toJS(props.stores.RouterStore.music)
-        const SecondRouter = toJS(props.stores.RouterStore.musicPath)
-        const hasSecRouter = tags.includes(tag) && SecondRouter.hasOwnProperty(tag)
+        const tag = this.hump(params.tag || '')
+
+        // 内部路由
+        const FirstRouter = toJS(props.stores.RouterStore.musicLayoutRouter)
+        const SecondRouter = toJS(props.stores.RouterStore.musicLayoutSecondRouter)
+        const hasSecRouter = tag && tags.includes(tag) && SecondRouter.hasOwnProperty(tag)
+
+
         return (
                 <div className={cs('music-layout',{
                     'icon-side-layout':UIStore.wy_music_side_only_icon,
@@ -74,17 +97,18 @@ class Layout extends Component{
                         <Switch>
 
                             {
-                                hasSecRouter ? tags.map((el,index)=>{
-                                    return <MusicInnerRouter tag={el} key={index} />
-                                }):(
-                                    FirstRouter.hasOwnProperty(tag)?(
-                                        FirstRouter[tag].redirect?<Redirect from={FirstRouter[tag].path} to={FirstRouter[tag].redirect} />:
-                                        <Route exact to={FirstRouter[tag].path} component={FirstRouter[tag].component} />
-                                    ):<Route render={()=><NotFound style={{
-                                        width:'100%',height:'100%'
-                                    }} />} />
-                                )
+                                hasSecRouter?<MusicInnerRouter tag={tag} />
+                                    :!!tag?<NotFound />:(
+                                        Object.values(FirstRouter).map((el,index)=>{
+                                            return !!el.redirect?(
+                                                <Redirect exact from={el.path} to={el.redirect} key={index} />
+                                            ):<Route strict exact to={el.path} component={el.component} key={index} />
+                                        })
+                                    )
                             }
+
+                            <NotFound />
+
 
                         </Switch>
 

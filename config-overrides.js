@@ -1,6 +1,6 @@
 const rewireLess = require('react-app-rewire-less');
 const {injectBabelPlugin} = require('react-app-rewired')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+// const babelPluginImport = require('babel-plugin-import')
 
 const path = require('path')
 
@@ -12,17 +12,11 @@ module.exports = function override(config, env) {
         legacy: true
     }], config)
 
-    if(env==='production'){
-        config.plugins.push(new UglifyJsPlugin({
-            uglifyOptions: {
-                compress: {
-                    warnings: false,
-                    drop_debugger: true,
-                    drop_console: true
-                }
-            }
-        }))
-    }
+    config = injectBabelPlugin(['babel-plugin-import', {
+        "libraryName": "antd",
+        "libraryDirectory": "es",
+        "style": "css",   // or 'css'
+    }], config)
 
 
     process.env.HOST = '0.0.0.0'
@@ -44,7 +38,7 @@ module.exports = function override(config, env) {
         }
         return rule
     })
-    // config.output.globalObject = 'this'
+    config.output.globalObject = 'this'
 
     config.resolve.alias['@src'] = path.resolve('src')
     config.resolve.alias['@components'] = path.resolve('src/components')

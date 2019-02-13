@@ -9,11 +9,13 @@ export default class HeaderSearch extends Component{
     static propTypes = {
         onSearch:PropTypes.func.isRequired,
         onClear:PropTypes.func.isRequired,
+        placeholder:PropTypes.string
     }
 
     static defaultProps = {
         onSearch:function(){},
-        onClear:function(){}
+        onClear:function(){},
+        placeholder:'搜索'
     }
 
     timeIndex = null
@@ -22,7 +24,7 @@ export default class HeaderSearch extends Component{
         return (
             <div className="header-search">
 
-                <Input allowClear onChange={e=>{
+                <Input placeholder={this.props.placeholder} allowClear onChange={e=>{
                     const value = e.target.value
                     if(!value){
                         this.props.onClear()

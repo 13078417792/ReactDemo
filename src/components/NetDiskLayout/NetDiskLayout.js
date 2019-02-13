@@ -11,9 +11,10 @@ import Auth from '@util/Auth'
 import {isBoolean,isObject} from 'lodash'
 import ModifyPassword from '@drawer/ModifyPassword/ModifyPassword'
 import {withRouter} from 'react-router'
-import {inject} from 'mobx-react'
+import {inject,observer} from 'mobx-react'
+import MineIcon from '@components/MineIcon'
 
-@inject('stores')
+@inject('stores') @observer
 class NetDiskLayout extends Component{
 
     static propTypes = {
@@ -124,14 +125,30 @@ class NetDiskLayout extends Component{
 
 
     render(){
-        const {props,state} = this
+        const {props,state,props:{stores:{UIStore}}} = this
         return (
-            <div className={cs('network-disk-wrapper',props.className)}>
+            <div className={cs('network-disk-wrapper',props.className,{'side-mask-close':UIStore.net_disk_layout_side_mobile_show})}
+                onMouseDown={e=>{
+                    e.preventDefault()
+                    e.stopPropagation()
+                    if(UIStore.net_disk_layout_side_mobile_show){
+                        UIStore.toggleNetDiskLayoutSideMobileStatus()
+                    }
+                }}
+            >
 
                 <div className="layout-header">
 
                     <div className="logo">
                         网盘
+                    </div>
+
+                    <div className="mobile-left-part">
+                        <Button size={"small"} onClick={()=>{
+                            UIStore.toggleNetDiskLayoutSideMobileStatus()
+                        }}>
+                            <MineIcon type={"icon-menu"} />
+                        </Button>
                     </div>
 
                     <div className="right-part">
@@ -146,10 +163,8 @@ class NetDiskLayout extends Component{
                 </div>
 
                 <div className="layout-main-container">
-                    <div className="left-side">
-                        <NetDiskSide>
-
-                        </NetDiskSide>
+                    <div className={cs('left-side',{'mobile-show':UIStore.net_disk_layout_side_mobile_show})}>
+                        <NetDiskSide />
                     </div>
 
                     <div className="main-wrapper">

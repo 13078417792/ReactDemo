@@ -1,17 +1,50 @@
 import React,{Component} from 'react'
 import './HeaderSearchStyle.less'
-import { Input } from 'antd'
-const Search = Input.Search
+import { Input ,Button,Icon} from 'antd'
+import PropTypes from 'prop-types'
 
 
 export default class HeaderSearch extends Component{
 
+    static propTypes = {
+        onSearch:PropTypes.func.isRequired,
+        onClear:PropTypes.func.isRequired,
+    }
+
+    static defaultProps = {
+        onSearch:function(){},
+        onClear:function(){}
+    }
+
+    timeIndex = null
+
     render(){
-        // console.log(TextBox)
         return (
             <div className="header-search">
 
-                <Search />
+                <Input allowClear onChange={e=>{
+                    const value = e.target.value
+                    if(!value){
+                        this.props.onClear()
+                        if(this.timeIndex){
+                            clearTimeout(this.timeIndex)
+                            this.timeIndex = null
+                        }
+                        return;
+                    }
+                    if(this.timeIndex){
+                        clearTimeout(this.timeIndex)
+                        this.timeIndex = null
+                        return;
+                    }
+                    this.timeIndex = setTimeout(()=>{
+                        this.props.onSearch(value)
+                        this.timeIndex = null
+                    },300)
+
+                }} onPressEnter={e=>{
+                    this.props.onSearch(e.target.value)
+                }}/>
             </div>
         )
     }

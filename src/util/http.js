@@ -47,7 +47,11 @@ http.interceptors.request.use(async function (config) {
         AuthID = await Auth.getAuthIDAsync()
     }
 
-    if(!/^http/.test(config.url)){
+    // if(!/^http/.test(config.url)){
+    //     config.headers['X-TokenID'] = TokenID
+    //     config.headers.Authorization = AuthID
+    // }
+    if(!/^http:\/\/apimusic\.presstime\.cn/.test(config.url)){
         config.headers['X-TokenID'] = TokenID
         config.headers.Authorization = AuthID
     }

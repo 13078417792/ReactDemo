@@ -1,6 +1,6 @@
 import React,{Component} from 'react'
 import './HeaderSearchStyle.less'
-import { Input ,Button,Icon} from 'antd'
+import { Input} from 'antd'
 import PropTypes from 'prop-types'
 
 

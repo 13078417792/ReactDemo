@@ -43,6 +43,11 @@ export default class UI{
 
     @observable wy_music_side:boolean = false
     @observable wy_music_side_only_icon = false
+    @observable net_disk_layout_side_mobile_show = false
+
+    @action toggleNetDiskLayoutSideMobileStatus(){
+        this.net_disk_layout_side_mobile_show = !this.net_disk_layout_side_mobile_show
+    }
 
     @action toggle(name:string){
         if(!this.hasOwnProperty(name)) return false

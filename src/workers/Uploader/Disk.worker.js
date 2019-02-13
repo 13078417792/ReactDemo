@@ -7,12 +7,19 @@ let chunks = [],
     md5 = '',
     upload_key = '',
     fail_chunks = [],
-    uploaded = [];
+    uploaded = [],
+    uploaded_ip = '',
+    uploaded_port = 8099;
 
 self.addEventListener('message',({data})=>{
     const {ip,port} = data
-    console.log(data)
-    // const {chunks,md5,upload_key} = data
+    if(ip){
+        uploaded_ip = ip
+    }
+    if(port){
+        uploaded_port = port
+    }
+
     if(Array.isArray(data.chunks) && data.chunks.length>0){
         chunks = data.chunks
     }
@@ -28,7 +35,6 @@ self.addEventListener('message',({data})=>{
         stop = data.stop
     }
     uploaded = [...new Set(uploaded.concat(data.uploaded || []))]
-    // console.log(stop)
     if(uploaded.length===chunks.length){
 
         self.postMessage({
@@ -39,23 +45,19 @@ self.addEventListener('message',({data})=>{
         return;
     }
 
-    upload(chunks,md5,upload_key,ip,port);
+    upload(chunks,md5,upload_key,ip || uploaded_ip,port || uploaded_port);
 
 
 })
 
 
 const upload = async (chunks,md5,upload_key,ip,port) => {
-    // console.log(0)
-    // console.log(chunks.length,stop,part)
     if(chunks.length===0 || stop || (part!==0 && part>=chunks.length)) return;
-    // console.log(1)
     if(uploaded.includes(part)){
         part++;
         upload(chunks,md5,upload_key,ip,port)
         return;
     }
-    // console.log(2)
     let result
     try{
         result = await http.post(`http://${ip}:${port}${Url.NetDiskFileUpload}`,{

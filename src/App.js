@@ -5,11 +5,16 @@ import {withRouter} from 'react-router'
 import 'antd/dist/antd.css'
 import {observer,inject} from 'mobx-react'
 import {toJS,computed} from 'mobx'
-import Lizi from './components/Lizi/Lizi'
+// import Lizi from './components/Lizi/Lizi'
 import Loading from '@components/Loading/Loading'
 import AsyncComponent from './components/AsyncComponent'
 import PropTypes from "prop-types"
-
+import MineIcon from '@components/MineIcon'
+import cs from 'classnames'
+import MusicSide from '@components/wy-music/Side/WyMusicSide'
+import MusicLayout from '@router/Music/Layout/Layout'
+import MusicInnerRouter from '@router/Music/InnerRouter/InnerRouter'
+// import AsyncComponent from '@components/AsyncComponent'
 
 // 路由组件
 const Home = AsyncComponent(() => import('./Router/Home/Home'))
@@ -34,6 +39,22 @@ class App extends Component {
 
     }
 
+    layout = {
+        music:{
+            component:MusicLayout,
+            tag:['discover'],
+            children:props=>{
+                const tags = this.layout.music.tag
+                if(!props.tag || !tags.includes(props.tag)) throw new Error('音乐布局组件tag属性不存在')
+                return (
+                    <MusicInnerRouter tag={props.tag} >
+                        {props.children}
+                    </MusicInnerRouter>
+                )
+            }
+        }
+    }
+
     @computed get router(){
         const {RouterStore} = this.props.stores
         return Object.values(toJS(RouterStore.list))
@@ -44,17 +65,24 @@ class App extends Component {
         return !/^\/disk.*$/.test(this.props.location.pathname)
     }
 
+    hideWyMusicButton = () => {
+        this.props.stores.UIStore.toggle('wy_music_side')
+    }
+
     render() {
-        const {props:{stores:{AccountStatusStore}}} = this
+        const {props:{stores:{AccountStatusStore,UIStore},location}} = this
+        // console.log(location)
         return (
 
             <div className="App">
-                {
-                    this.isLoadLizi()?<Lizi count={80} color={"#b1b1b1"} />:null
-                }
+                {/*{*/}
+                    {/*this.isLoadLizi()?<Lizi count={300} color={"#01AAEDB3"} />:null*/}
+                {/*}*/}
 
                 <Switch>
                     <Route exact path="/" component={Home} />
+
+
                     {
                         this.router.map((el,key)=>{
                             if(!!el.needAuth===false){
@@ -71,6 +99,12 @@ class App extends Component {
 
                     <Route component={NotFound} />
                 </Switch>
+
+                <button className={cs('wy-music',{hide:/^\/music/.test(location.pathname)})} onClick={this.hideWyMusicButton}>
+                    <MineIcon type="icon-musiccloud" />
+                </button>
+
+                <MusicSide isOuter={!/^\/music/.test(location.pathname)} />
 
             </div>
 

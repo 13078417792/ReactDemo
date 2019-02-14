@@ -23,37 +23,43 @@
     .tools-list-wrap{
       margin-right:-2em;
 
-      @media screen and (max-width:1024px){
+      @media screen and (max-width:768px){
+
+        .tool-item{
+          width:calc( (100% / 3) - 2em);
+        }
+      }
+
+      @media screen and (max-width:512px){
 
         .tool-item{
           width:calc( 50% - 2em);
         }
       }
 
-      @media screen and (min-width:1025px){
+      @media screen and (min-width:769px){
 
         .tool-item{
           width:calc( (100% / 5) - 2em);
-          //width:13em;
         }
       }
 
       .tool-item{
         text-decoration:none;
-        color:inherit;
-
+        color:#fff;
+        border-radius:5px;
         display:inline-block;
         margin-right:2em;
         margin-bottom:2em;
         float:left;
+        text-align:center;
+        transition:box-shadow .3s;
+
 
         .pic{
           width:100%;
           padding-bottom:100%;
-          //padding-bottom:100% / (1920 / 1080);
-          //padding-top:2em;
           position:relative;
-          //overflow:hidden;
 
           img{
             position:absolute;
@@ -69,13 +75,29 @@
           }
         }
 
+        @icon-size:5em;
+        .anticon{
+          max-width:100%;
+          font-size:@icon-size;
+          margin:1/@icon-size 0;
+          transform:rotate(0);
+          transition:all .3s;
+        }
+
         .tool-name{
-          //margin:0 0 0 50%;
-          //transform:translateX(-50%);
           margin:0 0 1em 0;
           width:100%;
           text-align:center;
 
+        }
+
+        &:hover{
+          box-shadow:0 0 10px 5px #ccc;
+
+          .anticon{
+            transform:rotate(360deg);
+
+          }
         }
       }
     }

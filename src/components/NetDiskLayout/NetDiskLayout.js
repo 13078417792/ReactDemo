@@ -133,9 +133,9 @@ class NetDiskLayout extends Component{
 
                 <div className={cs('network-disk-wrapper',props.className,{'side-mask-close':UIStore.net_disk_layout_side_mobile_show})}
                     onMouseDown={e=>{
-                        e.preventDefault()
-                        e.stopPropagation()
                         if(UIStore.net_disk_layout_side_mobile_show){
+                            e.preventDefault()
+                            e.stopPropagation()
                             UIStore.toggleNetDiskLayoutSideMobileStatus()
                         }
                     }}

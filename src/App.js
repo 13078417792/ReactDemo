@@ -14,6 +14,7 @@ import cs from 'classnames'
 import MusicSide from '@components/wy-music/Side/WyMusicSide'
 import MusicLayout from '@router/Music/Layout/Layout'
 import MusicInnerRouter from '@router/Music/InnerRouter/InnerRouter'
+import WyPlayer from '@components/wy-music/Player/Player'
 // import AsyncComponent from '@components/AsyncComponent'
 
 // 路由组件
@@ -33,9 +34,12 @@ class App extends Component {
     constructor(props){
         super(props)
 
-        // const {stores:{AccountStatusStore:{isLogin,initCheckingLogin}}} = props
+        // const {UIStore} = props.stores
+        // UIStore.setStatus('wy_music_player',false)
 
         this.state = {}
+
+
 
     }
 
@@ -71,40 +75,46 @@ class App extends Component {
 
     render() {
         const {props:{stores:{AccountStatusStore,UIStore},location}} = this
+        // const {state} = this
         // console.log(location)
         return (
 
-            <div className="App">
-                {/*{*/}
-                    {/*this.isLoadLizi()?<Lizi count={300} color={"#01AAEDB3"} />:null*/}
-                {/*}*/}
-
-                <Switch>
-                    <Route exact path="/" component={Home} />
+            <div className={cs('App',{'player-show':UIStore.wy_music_player})}>
+                <div className="App-container">
 
 
-                    {
-                        this.router.map((el,key)=>{
-                            if(!!el.needAuth===false){
-                                return <Route exact path={el.path} component={el.component} key={key} />
-                            }
-                            if(AccountStatusStore.initCheckingLogin){
-                                return <Loading key={key}/>
-                            }
-                            return AccountStatusStore.isLogin?<Route exact path={el.path} component={el.component} key={key} />:null
-                        })
-                    }
+                    <Switch>
+                        <Route exact path="/" component={Home} />
+
+
+                        {
+                            this.router.map((el,key)=>{
+                                if(!!el.needAuth===false){
+                                    return <Route exact path={el.path} component={el.component} key={key} />
+                                }
+                                if(AccountStatusStore.initCheckingLogin){
+                                    return <Loading key={key}/>
+                                }
+                                return AccountStatusStore.isLogin?<Route exact path={el.path} component={el.component} key={key} />:null
+                            })
+                        }
 
 
 
-                    <Route component={NotFound} />
-                </Switch>
+                        <Route component={NotFound} />
+                    </Switch>
 
-                <button className={cs('wy-music',{hide:/^\/music/.test(location.pathname)})} onClick={this.hideWyMusicButton}>
-                    <MineIcon type="icon-musiccloud" />
-                </button>
+                    <button className={cs('wy-music',{hide:/^\/music/.test(location.pathname)})} onClick={this.hideWyMusicButton}>
+                        <MineIcon type="icon-musiccloud" />
+                    </button>
 
-                <MusicSide isOuter={!/^\/music/.test(location.pathname)} />
+                    <MusicSide isOuter={!/^\/music/.test(location.pathname)} />
+
+                    <WyPlayer show={UIStore.wy_music_player} style={{
+                        zIndex:60
+                    }} />
+
+                </div>
 
             </div>
 

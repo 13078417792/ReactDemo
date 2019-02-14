@@ -13,6 +13,7 @@ import ModifyPassword from '@drawer/ModifyPassword/ModifyPassword'
 import {withRouter} from 'react-router'
 import {inject,observer} from 'mobx-react'
 import MineIcon from '@components/MineIcon'
+import DocumentTitle from 'react-document-title'
 
 @inject('stores') @observer
 class NetDiskLayout extends Component{
@@ -127,90 +128,94 @@ class NetDiskLayout extends Component{
     render(){
         const {props,state,props:{stores:{UIStore}}} = this
         return (
-            <div className={cs('network-disk-wrapper',props.className,{'side-mask-close':UIStore.net_disk_layout_side_mobile_show})}
-                onMouseDown={e=>{
-                    e.preventDefault()
-                    e.stopPropagation()
-                    if(UIStore.net_disk_layout_side_mobile_show){
-                        UIStore.toggleNetDiskLayoutSideMobileStatus()
-                    }
-                }}
-            >
+            <DocumentTitle title='简易网盘'>
 
-                <div className="layout-header">
 
-                    <div className="logo">
-                        网盘
-                    </div>
-
-                    <div className="mobile-left-part">
-                        <Button size={"small"} onClick={()=>{
+                <div className={cs('network-disk-wrapper',props.className,{'side-mask-close':UIStore.net_disk_layout_side_mobile_show})}
+                    onMouseDown={e=>{
+                        e.preventDefault()
+                        e.stopPropagation()
+                        if(UIStore.net_disk_layout_side_mobile_show){
                             UIStore.toggleNetDiskLayoutSideMobileStatus()
-                        }}>
-                            <MineIcon type={"icon-menu"} />
-                        </Button>
-                    </div>
+                        }
+                    }}
+                >
 
-                    <div className="right-part">
-                        <Dropdown overlay={this.menu} trigger={['hover']}>
-                            <Button shape="circle" type="primary" icon="setting" >
+                    <div className="layout-header">
 
+                        <div className="logo">
+                            网盘
+                        </div>
+
+                        <div className="mobile-left-part">
+                            <Button size={"small"} onClick={()=>{
+                                UIStore.toggleNetDiskLayoutSideMobileStatus()
+                            }}>
+                                <MineIcon type={"icon-menu"} />
                             </Button>
-                        </Dropdown>
+                        </div>
 
-                    </div>
+                        <div className="right-part">
+                            <Dropdown overlay={this.menu} trigger={['hover']}>
+                                <Button shape="circle" type="primary" icon="setting" >
 
-                </div>
-
-                <div className="layout-main-container">
-                    <div className={cs('left-side',{'mobile-show':UIStore.net_disk_layout_side_mobile_show})}>
-                        <NetDiskSide />
-                    </div>
-
-                    <div className="main-wrapper">
-
-                        <div className="main">
-
-                            <div className="action-container">
-                                <ToolBar
-                                    onToggleCreateFolderInput={this.handleToggleCreateFolderInput.bind(this)}
-                                    onDelete={props.onDelete}
-                                    del={props.showDel}
-                                />
-
-                                <FileBread />
-                            </div>
-
-                            <div className="main-area">
-                                {props.children}
-                            </div>
+                                </Button>
+                            </Dropdown>
 
                         </div>
+
                     </div>
+
+                    <div className="layout-main-container">
+                        <div className={cs('left-side',{'mobile-show':UIStore.net_disk_layout_side_mobile_show})}>
+                            <NetDiskSide />
+                        </div>
+
+                        <div className="main-wrapper">
+
+                            <div className="main">
+
+                                <div className="action-container">
+                                    <ToolBar
+                                        onToggleCreateFolderInput={this.handleToggleCreateFolderInput.bind(this)}
+                                        onDelete={props.onDelete}
+                                        del={props.showDel}
+                                    />
+
+                                    <FileBread />
+                                </div>
+
+                                <div className="main-area">
+                                    {props.children}
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                    <Drawer
+                        title="修改密码"
+                        width="500px"
+                        visible={state.showPasswordModifyForm}
+                        closable={true}
+                        maskClosable={true}
+                        onClose={this.togglePasswordModifyForm.bind(null,false)}
+                    >
+                        {
+                            state.showPasswordModifyForm?(
+                                <ModifyPassword onSuccess={()=>{
+                                    this.togglePasswordModifyForm()
+                                }} />
+                            ):null
+                        }
+                    </Drawer>
+
                 </div>
-
-
-
-
-
-                <Drawer
-                    title="修改密码"
-                    width="500px"
-                    visible={state.showPasswordModifyForm}
-                    closable={true}
-                    maskClosable={true}
-                    onClose={this.togglePasswordModifyForm.bind(null,false)}
-                >
-                    {
-                        state.showPasswordModifyForm?(
-                            <ModifyPassword onSuccess={()=>{
-                                this.togglePasswordModifyForm()
-                            }} />
-                        ):null
-                    }
-                </Drawer>
-
-            </div>
+            </DocumentTitle>
         )
     }
 }

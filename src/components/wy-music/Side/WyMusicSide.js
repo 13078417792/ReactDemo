@@ -8,6 +8,7 @@ import {isFunction} from 'lodash'
 import {inject,observer} from 'mobx-react'
 import {Link} from 'react-router-dom'
 import {withRouter} from 'react-router-dom'
+import {Icon} from 'antd'
 
 @inject("stores") @observer
 class Side extends Component {
@@ -89,6 +90,18 @@ class Side extends Component {
 
                     <li>
                         <MineIcon  className="side-item-icon" type={'icon-menu'}  onClick={this.handleClickMenu} />
+                    </li>
+
+                    <li>
+                        <Link to="/" onClick={()=>{
+                            UIStore.setStatus('wy_music_side',false)
+                        }} >
+                            <MineIcon type="icon-home" className="side-item-icon"/>
+                                <span>
+                                返回首页
+                            </span>
+                        </Link>
+
                     </li>
 
                     {

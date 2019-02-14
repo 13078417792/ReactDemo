@@ -171,6 +171,54 @@
 
     }
 
+  }
+
+
+
+
+  @media screen and (max-width:768px){
+
+    .field-column{
+      .column-item{
+        display:none;
+
+        &:first-child{
+          width:100% !important;
+          display:block;
+        }
+      }
+    }
+
+    .dir-file{
+
+      .item{
+        height:auto;
+        display:block;
+
+        .part-1{
+          display:flex;
+          width:100% !important;
+          height:4em;
+
+          .name{
+            display:inline-block;
+          }
+        }
+
+        .part-size,.part-time{
+          margin:.5em 0 .5em 2em;
+          width:120px !important;
+
+          &.empty{
+            display:none;
+          }
+
+        }
+
+
+      }
+    }
+
 
   }
 }

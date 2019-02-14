@@ -41,7 +41,7 @@ class NetDisk extends Component{
         mkdiring:false,
         column:{
             folder:{
-                label:'文件夹',
+                label:'文件',
                 width:'60%'
             },
             size:{
@@ -389,7 +389,7 @@ class NetDisk extends Component{
     FolderFileSize(props){
         const {state:{column}} = this
         return (
-            <div className={cs('part','part-size')} style={{
+            <div className={cs('part','part-size',{empty:!props.children})} style={{
                 width:column.size.width
             }}>
                 {props.children?props.children:'-'}
@@ -400,7 +400,7 @@ class NetDisk extends Component{
     FolderFileUpdateTime(props){
         const {state:{column}} = this
         return (
-            <div className={cs('part','part-time')} style={{
+            <div className={cs('part','part-time',{empty:!props.children})} style={{
                 width:column.time.width
             }}>
                 {props.children?props.children:'-'}
@@ -539,12 +539,12 @@ class NetDisk extends Component{
                         {
                             Object.values(column).map((el,index)=>{
                                 return (
-                                    <div className="column-item" key={index} style={{
+                                    <div className={cs('column-item')} key={index} style={{
                                         width:el.width
                                     }}>
                                         {
                                             index===0?(
-                                                <Checkbox checked={checkAll} className={'toggle-check-all'} onChange={e=>{
+                                                <Checkbox checked={checkAll} className={cs('toggle-check-all')} onChange={e=>{
                                                     const {DiskStore} = this.props.stores
                                                     this.setState(({checkAll})=>{
                                                         const disk = toJS(DiskStore)

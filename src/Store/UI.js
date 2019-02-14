@@ -1,7 +1,7 @@
 // @flow
 import {isBoolean} from 'lodash'
 
-const {observable,action} = require('mobx')
+const {observable,action,toJS} = require('mobx')
 
 export default class UI{
 
@@ -45,24 +45,26 @@ export default class UI{
     @observable wy_music_side:boolean = false
     @observable wy_music_side_only_icon = false
     @observable net_disk_layout_side_mobile_show = false
+    @observable wy_music_player = true
 
     @action toggleNetDiskLayoutSideMobileStatus(status:boolean){
         this.net_disk_layout_side_mobile_show = isBoolean(status)?status:!this.net_disk_layout_side_mobile_show
     }
 
     @action toggle(name:string){
-        if(!this.hasOwnProperty(name)) return false
+        if(!toJS(this).hasOwnProperty(name)) return false
         this[name] = !this[name]
         return true
     }
 
     @action getStatus(name:string){
-        if(!this.hasOwnProperty(name)) return false
+        if(!toJS(this).hasOwnProperty(name)) return false
         return this[name]
     }
 
     @action setStatus(name:string,status:boolean){
-        if(!this.hasOwnProperty(name)) return false
+        // console.log('ui',name,toJS(this),toJS(this).hasOwnProperty(name))
+        if(!toJS(this).hasOwnProperty(name)) return false
         this[name] = status
         return true
     }

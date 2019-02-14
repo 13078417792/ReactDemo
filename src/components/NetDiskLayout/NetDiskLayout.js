@@ -97,11 +97,11 @@ class NetDiskLayout extends Component{
     }
 
     menu = () => {
+        // this.handleMenuClick.bind(this)}
         return (
-
             <Menu onClick={this.handleMenuClick.bind(this)}>
                 {
-                   this.menuList.map((el,index)=><Menu.Item key={index}>{el.label}</Menu.Item>)
+                    this.menuList.map((el,index)=><Menu.Item key={index}>{el.label}</Menu.Item>)
                 }
             </Menu>
         )
@@ -112,6 +112,7 @@ class NetDiskLayout extends Component{
     }
 
     togglePasswordModifyForm = show => {
+        console.log(123)
         if(!isBoolean(show)){
             this.setState(({showPasswordModifyForm})=>({
                 showPasswordModifyForm:!showPasswordModifyForm
@@ -156,10 +157,8 @@ class NetDiskLayout extends Component{
                         </div>
 
                         <div className="right-part">
-                            <Dropdown overlay={this.menu} trigger={['hover']}>
-                                <Button shape="circle" type="primary" icon="setting" >
-
-                                </Button>
+                            <Dropdown overlay={this.menu} trigger={['click']}>
+                                <Button shape="circle" type="primary" icon="setting" />
                             </Dropdown>
 
                         </div>
@@ -199,7 +198,7 @@ class NetDiskLayout extends Component{
 
                     <Drawer
                         title="修改密码"
-                        width="500px"
+                        width={document.body.clientWidth>1024?'500px':`${document.body.clientWidth*.8}px`}
                         visible={state.showPasswordModifyForm}
                         closable={true}
                         maskClosable={true}

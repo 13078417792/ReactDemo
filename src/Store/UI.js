@@ -1,4 +1,5 @@
 // @flow
+import {isBoolean} from 'lodash'
 
 const {observable,action} = require('mobx')
 
@@ -45,8 +46,8 @@ export default class UI{
     @observable wy_music_side_only_icon = false
     @observable net_disk_layout_side_mobile_show = false
 
-    @action toggleNetDiskLayoutSideMobileStatus(){
-        this.net_disk_layout_side_mobile_show = !this.net_disk_layout_side_mobile_show
+    @action toggleNetDiskLayoutSideMobileStatus(status:boolean){
+        this.net_disk_layout_side_mobile_show = isBoolean(status)?status:!this.net_disk_layout_side_mobile_show
     }
 
     @action toggle(name:string){

@@ -5,6 +5,7 @@ import NetDiskLayout from '../../components/NetDiskLayout/NetDiskLayout'
 import {withRouter} from 'react-router'
 import './NetDiskStyle.less'
 import {observer,inject} from 'mobx-react'
+import {toJS} from 'mobx'
 import {isBoolean,isEmpty} from 'lodash'
 import {message,Icon,Button,Modal,Checkbox} from 'antd'
 import MineIcon from '@components/MineIcon'
@@ -139,7 +140,8 @@ class NetDisk extends Component{
         moveLayerId:0,
         moveLayerIsFile:false,
         fileCheckbox:[],
-        folderCheckbox:[]
+        folderCheckbox:[],
+        checkAll:false
     }
 
     constructor(props) {
@@ -160,6 +162,9 @@ class NetDisk extends Component{
             message.error('初始化网盘列表失败',err)
             console.timeEnd('初始化网盘列表')
         })
+
+
+
     }
 
 
@@ -180,24 +185,26 @@ class NetDisk extends Component{
     }
 
     componentWillReceiveProps(props){
-        // console.log(props)
         const {stores:{DiskStore},match:{params:{folder_id}}} = props
 
-        if(folder_id && !isNaN(folder_id)){
-            DiskStore.setFolder(folder_id)
-        }else{
-            DiskStore.setFolder(0)
+        if(props.match.params.folder_id!==this.props.match.params.folder_id){
+            if(folder_id && !isNaN(folder_id)){
+                DiskStore.setFolder(folder_id)
+            }else{
+                DiskStore.setFolder(0)
+            }
+            // console.log(234)
+            this.updateCurrentFolderContent(DiskStore.folderId).then(content=>{
+                this.setState({
+                    folderCheckbox:[],
+                    fileCheckbox:[]
+                })
+                this.updateRenameData(content.files,content.folders)
+            }).catch(err=>{
+                message.error(err)
+            })
         }
 
-        this.updateCurrentFolderContent(DiskStore.folderId).then(content=>{
-            this.setState({
-                folderCheckbox:[],
-                fileCheckbox:[]
-            })
-            this.updateRenameData(content.files,content.folders)
-        }).catch(err=>{
-            message.error(err)
-        })
     }
 
     async deleteFile(id){
@@ -280,13 +287,22 @@ class NetDisk extends Component{
         hide()
         const {props:{stores:{DiskStore}}} = this
         DiskStore.getContent(DiskStore.folderId,true)
+        this.setState({
+            checkAll:false,
+            fileCheckbox:[],
+            folderCheckbox:[]
+        })
         message.success('删除成功')
     }
 
     updateCurrentFolderContent = id => {
+        const {stores:{DiskStore}} = this.props
+        return NetDisk.updateCurrentFolderContent(id,DiskStore)
+    }
+
+    static updateCurrentFolderContent(id,DiskStore){
         if([null,undefined,'',NaN].includes(id) || isNaN(id) || id<0 ) return Promise.reject('非法数据')
         const hide = message.loading('正在加载数据...',0)
-        const {stores:{DiskStore}} = this.props
         // return DiskStore.de
         return DiskStore.getDetail(id).then(async detail=>{
             DiskStore.updatePath(detail.path || [])
@@ -311,7 +327,7 @@ class NetDisk extends Component{
     FolderFileName(props){
         const {state:{column,folderCheckbox,fileCheckbox}} = this
         const buttons = props.button || []
-        const {id,isFolder} = props
+        const {id,isFolder, showCheckBox} = props
         const checked = isFolder?folderCheckbox.includes(id):fileCheckbox.includes(id)
         return (
             <div className={cs("part",'part-1','part-folder',props.className || '')} style={{
@@ -321,7 +337,22 @@ class NetDisk extends Component{
                     e.stopPropagation()
                     this.toggleContent(id,isFolder)
                 }} >
-                    <Checkbox checked={checked}/>
+                    {
+                        !!showCheckBox?(
+                            <Checkbox checked={checked} onChange={()=>{
+                                const disk = toJS(this.props.stores.DiskStore)
+                                this.setState(({folderCheckbox,fileCheckbox})=>{
+                                    return {
+                                        checkAll:
+                                        disk.files.length===fileCheckbox.length &&
+                                        disk.folders.length===folderCheckbox.length
+                                    }
+
+                                })
+                            }}/>
+                        ):null
+                    }
+
                 </div>
 
                 <span className="type-icon">
@@ -391,7 +422,8 @@ class NetDisk extends Component{
         message.success(result.msg)
         DiskStore.getContent(DiskStore.folderId,true)
         this.setState({
-            mkdiring:false
+            mkdiring:false,
+            checkAll:false
         })
         this.handleToggleCreateFolderInput.call(this,false)
     }
@@ -415,11 +447,6 @@ class NetDisk extends Component{
         if(state.opening) return;
         const {history} = this.props
         history.push(`/disk/content/${id}`)
-        // this.setState({
-        //     folderCheckbox:[],
-        //     fileCheckbox:[]
-        // })
-        // this.updateCurrentFolderContent(id)
     }
 
     updateContent = () => {
@@ -453,7 +480,6 @@ class NetDisk extends Component{
     }
 
     toggleContent = (id,isFolder) => {
-        // if()
         this.setState(({folderCheckbox,fileCheckbox})=>{
             let checkbox = isFolder?folderCheckbox:fileCheckbox
             if(checkbox.includes(id)){
@@ -475,9 +501,13 @@ class NetDisk extends Component{
             message.error('操作失败，没有选择任何文件/文件夹')
             return;
         }
+
+
+
         Modal.confirm({
             title:'批量删除',
-            content:'是否确认删除当前选中的文件夹/文件,不可恢复',
+            content:'批量删除功能未完成',
+            // content:'是否确认删除当前选中的文件夹/文件,不可恢复',
             onOk:()=>{
 
             }
@@ -485,7 +515,7 @@ class NetDisk extends Component{
     }
 
     render(){
-        const {state,state:{column,mkdir,fileCheckbox,folderCheckbox}} = this
+        const {state,state:{column,mkdir,fileCheckbox,folderCheckbox,checkAll}} = this
         const {props:{stores:{DiskStore:{folders,files,folderId}}}} = this
         const {props:{stores}} = this
 
@@ -514,7 +544,22 @@ class NetDisk extends Component{
                                     }}>
                                         {
                                             index===0?(
-                                                <Checkbox className={'toggle-check-all'} />
+                                                <Checkbox checked={checkAll} className={'toggle-check-all'} onChange={e=>{
+                                                    const {DiskStore} = this.props.stores
+                                                    this.setState(({checkAll})=>{
+                                                        const disk = toJS(DiskStore)
+                                                        let fileCheckbox = [],
+                                                            folderCheckbox = []
+                                                        if(!checkAll){
+                                                            fileCheckbox = disk.files.map(el=>el.id)
+                                                            folderCheckbox = disk.folders.map(el=>el.id)
+                                                        }
+                                                        return {
+                                                            checkAll:!checkAll,
+                                                            fileCheckbox,folderCheckbox
+                                                        }
+                                                    })
+                                                }} />
                                             ):null
                                         }
                                         <span>
@@ -530,17 +575,32 @@ class NetDisk extends Component{
                         {
                             mkdir?(
                                 <li className="item">
-                                    <FolderFileName mine={true} type="icon-folder" >
+                                    <FolderFileName mine={true} type="icon-folder" showCheckBox={false} >
 
 
-                                        <CreateFolderForm
+                                        {/*<CreateFolderForm*/}
+                                            {/*api={Url.NetDiskCreateFolder}*/}
+                                            {/*params={{*/}
+                                                {/*parent:stores.DiskStore.folderId*/}
+                                            {/*}}*/}
+                                            {/*onSubmit={this.onCreateFolderSuccess.bind(this)}*/}
+                                            {/*onClose={this.onCloseCreateFolderForm.bind(this)}*/}
+                                            {/*onFail={this.onCreateFolderFail.bind(this)}/>*/}
+
+                                        <NameForm
+                                            show={true}
                                             api={Url.NetDiskCreateFolder}
                                             params={{
                                                 parent:stores.DiskStore.folderId
                                             }}
                                             onSubmit={this.onCreateFolderSuccess.bind(this)}
                                             onClose={this.onCloseCreateFolderForm.bind(this)}
-                                            onFail={this.onCreateFolderFail.bind(this)}/>
+                                            onFail={this.onCreateFolderFail.bind(this)}
+                                            onSuccess={()=>{
+                                                this.updateCurrentFolderContent(folderId)
+                                                this.onCloseCreateFolderForm()
+                                            }}
+                                        />
 
 
                                     </FolderFileName>
@@ -569,7 +629,7 @@ class NetDisk extends Component{
                                             }
                                             this.openFolder.call(this,el.id)
                                         }}>
-                                            <FolderFileName isFolder={true} mine={true} type="icon-folder" id={el.id}>
+                                            <FolderFileName isFolder={true} mine={true} type="icon-folder" id={el.id} showCheckBox={true}>
 
 
                                                 {
@@ -621,7 +681,9 @@ class NetDisk extends Component{
                                                         },
                                                         args:[el.id]
                                                     }
-                                                ]}>
+                                                ]}
+                                                                showCheckBox={true}
+                                                >
                                                     {
                                                         state.fileRename[el.id]?(
                                                             <NameForm

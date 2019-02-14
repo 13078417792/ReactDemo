@@ -1,4 +1,4 @@
-import React,{Component} from 'react'
+import React,{Component,Fragment} from 'react'
 import {createPortal} from 'react-dom'
 import cs from 'classnames'
 import PropTypes from 'prop-types'
@@ -59,47 +59,68 @@ class Side extends Component {
         const {props:{stores:{UIStore}}} = this
         UIStore.toggle('wy_music_side_only_icon')
         this.forceUpdate()
-        // console.log(UIStore.wy_music_side_only_icon)
+    }
+
+    mask = props => {
+        const {UIStore} = this.props.stores
+        return (
+            <div className={cs('wy-music-side-mask',{'show-mask':UIStore.wy_music_side})} onMouseDown={e=>{
+                e.preventDefault()
+                e.stopPropagation()
+                if(UIStore.wy_music_side){
+                    UIStore.toggle('wy_music_side')
+                }
+            }}>
+
+            </div>
+        )
     }
 
     render(){
-        const {props,props:{stores:{UIStore},location},list} = this
+        const {props,props:{stores:{UIStore},location},list,mask:Mask} = this
         return (
-            <ul className={cs('wy-music-side',{hide:!props.show && props.isOuter,icon:UIStore.wy_music_side_only_icon})}>
-
-                <li>
-                    <MineIcon  className="side-item-icon" type={'icon-menu'}  onClick={this.handleClickMenu} />
-                </li>
+            <Fragment>
 
                 {
-                    list.map((el,index)=>{
-                        const shortUrlArr = el.url.split('/').filter(el=>!!el)
-                        const shortUrl = shortUrlArr.length>=2?`/${shortUrlArr[0]}/${shortUrlArr[1] || ''}`:''
-                        return (
-                            <li key={index} className={cs({
-                                on:shortUrl && location.pathname.indexOf(shortUrl)!==-1
-                            })} onClick={()=>{
-                                const nameArr = el.icon.split('-')
-                                nameArr.shift()
-                                const name = nameArr.map(el=>el.length?`${el[0].toLocaleUpperCase()}${el.slice(1)}`:'').join('')
-                                const functionName = `handleClick${name}`
-                                if(name && this.hasOwnProperty(functionName) && isFunction(this[functionName]) ){
-                                    this[functionName].call(this)
-                                }
-                            }}>
-                                <Link to={el.url}>
-                                    <MineIcon  className="side-item-icon" type={el.icon} />
-                                    <span>
-                                    {el.label}
-                                </span>
-                                </Link>
-
-                            </li>
-                        )
-                    })
+                    props.isOuter?<Mask show={UIStore.wy_music_side} />:null
                 }
 
-            </ul>
+                <ul className={cs('wy-music-side',{hide:!UIStore.wy_music_side && props.isOuter,icon:UIStore.wy_music_side_only_icon})}>
+
+                    <li>
+                        <MineIcon  className="side-item-icon" type={'icon-menu'}  onClick={this.handleClickMenu} />
+                    </li>
+
+                    {
+                        list.map((el,index)=>{
+                            const shortUrlArr = el.url.split('/').filter(el=>!!el)
+                            const shortUrl = shortUrlArr.length>=2?`/${shortUrlArr[0]}/${shortUrlArr[1] || ''}`:''
+                            return (
+                                <li key={index} className={cs({
+                                    on:shortUrl && location.pathname.indexOf(shortUrl)!==-1
+                                })} onClick={()=>{
+                                    const nameArr = el.icon.split('-')
+                                    nameArr.shift()
+                                    const name = nameArr.map(el=>el.length?`${el[0].toLocaleUpperCase()}${el.slice(1)}`:'').join('')
+                                    const functionName = `handleClick${name}`
+                                    if(name && this.hasOwnProperty(functionName) && isFunction(this[functionName]) ){
+                                        this[functionName].call(this)
+                                    }
+                                }}>
+                                    <Link to={el.url}>
+                                        <MineIcon  className="side-item-icon" type={el.icon} />
+                                        <span>
+                                        {el.label}
+                                    </span>
+                                    </Link>
+
+                                </li>
+                            )
+                        })
+                    }
+
+                </ul>
+            </Fragment>
         )
     }
 }
@@ -115,9 +136,9 @@ class WyMusicSide extends Component {
     }
 
 
-render(){
-    return this.props.isOuter?createPortal(<Side {...this.props} />,document.body):<Side {...this.props} />
-}
+    render(){
+        return this.props.isOuter?createPortal(<Side {...this.props} />,document.body):<Side {...this.props} />
+    }
 
 }
 

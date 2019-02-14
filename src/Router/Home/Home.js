@@ -14,6 +14,7 @@ import UserSignUp from '../../Drawer/UserSignUp/UserSignUp'
 import Auth from '@util/Auth'
 import MineIcon from '@components/MineIcon'
 
+
 @inject("stores")
 @observer
 class Home extends Component {
@@ -33,35 +34,35 @@ class Home extends Component {
             drawerWidth: 0,
             delaySetDrawerWidthTimeoutIndex: null,
             handlingPath: null,
-            tools:[{
+            tools: [{
                 pic: '/pic/uwp-bg-2.jpg',
-                icon:'icon-imgtobase',
+                icon: 'icon-imgtobase',
                 name: '图片转Base64',
                 tag: 'pic-to-base64',
                 url: '/pic-to-base64'
             }, {
                 pic: '/pic/uwp-bg-2.jpg',
-                icon:'icon-file-format',
+                icon: 'icon-file-format',
                 name: '查看文件格式',
                 tag: 'check-format',
                 url: '/check-format'
             }, {
                 pic: '/pic/uwp-bg-2.jpg',
-                icon:'icon-net-disk',
+                icon: 'icon-net-disk',
                 name: '简易网盘',
                 tag: 'network-disk',
                 url: '/disk/content',
                 needAuth: true
             }, {
                 pic: '/pic/uwp-bg-2.jpg',
-                icon:'icon-music-2',
+                icon: 'icon-music-2',
                 name: '音乐播放器',
                 tag: 'music',
                 url: '/music',
                 needAuth: false
             }],
-            search:false,
-            searchResult:[]
+            search: false,
+            searchResult: []
         }
     }
 
@@ -185,7 +186,7 @@ class Home extends Component {
         let color = Object.values(bgColor)
         color.pop()
         return (
-            <div className="Home">
+            <div className="Home" >
                 <HeaderSearch placeholder="搜索DEMO" onClear={()=>{
                     this.setState({
                         search:false,
@@ -227,28 +228,6 @@ class Home extends Component {
                 <div className="tools-list">
 
                     <div className='tools-list-wrap cl'>
-                        {/*{*/}
-                            {/*tools.map((el, key) => {*/}
-                                {/*return !el.needAuth ? (*/}
-
-                                    {/*<Link style={{*/}
-                                        {/*backgroundColor:color[key%color.length]*/}
-                                    {/*}} to={{*/}
-                                        {/*pathname: el.url*/}
-                                    {/*}} className={cs('tool-item', el.tag)} key={key}>*/}
-                                        {/*<ToolItem data={el} pic={el.pic} name={el.name} />*/}
-                                    {/*</Link>*/}
-                                {/*) : (*/}
-                                    {/*<AuthLink style={{*/}
-                                        {/*backgroundColor:color[key%color.length]*/}
-                                    {/*}} to={{*/}
-                                        {/*pathname: el.url*/}
-                                    {/*}} className={cs('tool-item', el.tag)}  key={key}>*/}
-                                        {/*<ToolItem data={el} pic={el.pic} name={el.name} />*/}
-                                    {/*</AuthLink>*/}
-                                {/*)*/}
-                            {/*})*/}
-                        {/*}*/}
 
                         {
                             search?(
@@ -280,13 +259,11 @@ class Home extends Component {
                     }}
 
                                onSuccess={() => {
-                                   // let handlingPath = this.state.handlingPath
                                    this.setState({
                                        showSignUpDrawer: false,
                                        showLoginDrawer: false,
                                        handlingPath: null
                                    })
-                                   // this.props.history.push(handlingPath)
 
                                }}
                     />

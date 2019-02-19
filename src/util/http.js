@@ -29,7 +29,11 @@ const URL =  {
 
 const http = axios.create({
     baseURL: URL[process.env.NODE_ENV],
+    // transformResponse:[function(data){
+    //     return data
+    // }]
 });
+
 http.interceptors.request.use(async function (config) {
 
     if(config.baseURL.indexOf(URL.production)===0 && config.url.indexOf('/tool')===0){
@@ -51,7 +55,10 @@ http.interceptors.request.use(async function (config) {
     //     config.headers['X-TokenID'] = TokenID
     //     config.headers.Authorization = AuthID
     // }
-    if(!/^http:\/\/apimusic\.presstime\.cn/.test(config.url)){
+    // if(!/^http:\/\/apimusic\.presstime\.cn/.test(config.url) && config.url.indexOf('http://m10.music.126.net')!==0){
+    // if(!/^http:\/\/apimusic\.presstime\.cn/.test(config.url) || /^http:\/\/192\./.test(config.url)){
+    const regexp = [/^http:\/\/api\.tool\.presstime\.cn/,/^http:\/\/192\.168\.1\.7/]
+    if(regexp.every(el=>el.test(config.url))){
         config.headers['X-TokenID'] = TokenID
         config.headers.Authorization = AuthID
     }
@@ -76,8 +83,10 @@ http.interceptors.response.use(function (response) {
     }
     return data;
 }, function (error) {
-    // Do something with response error
-    return Promise.reject(error);
+    // console.error(error)
+    const {response} = error
+
+    return Promise.reject(response && response.hasOwnProperty('data') && response.data?response.data:error);
 });
 
 

@@ -57,8 +57,16 @@ http.interceptors.request.use(async function (config) {
     // }
     // if(!/^http:\/\/apimusic\.presstime\.cn/.test(config.url) && config.url.indexOf('http://m10.music.126.net')!==0){
     // if(!/^http:\/\/apimusic\.presstime\.cn/.test(config.url) || /^http:\/\/192\./.test(config.url)){
-    const regexp = [/^http:\/\/api\.tool\.presstime\.cn/,/^http:\/\/192\.168\.1\.7/]
-    if(regexp.every(el=>el.test(config.url))){
+    const regexp = [/^http:\/\/api\.tool\.presstime\.cn/,/^http:\/\/192\.168\.1\.7/,/^(^http).*/]
+    const api_prefix = ['http://api.presstime.cn','http://192.168.1.7']
+    // console.log(config.baseURL)
+    // if(regexp.some(el=>el.test(config.baseURL))){
+    //     console.log('ee')
+    //     config.headers['X-TokenID'] = TokenID
+    //     config.headers.Authorization = AuthID
+    // }
+    if(api_prefix.some(el=>config.baseURL.indexOf(el)===0)){
+        console.log('ee')
         config.headers['X-TokenID'] = TokenID
         config.headers.Authorization = AuthID
     }

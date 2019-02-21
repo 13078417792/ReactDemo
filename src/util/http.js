@@ -66,7 +66,6 @@ http.interceptors.request.use(async function (config) {
     //     config.headers.Authorization = AuthID
     // }
     if(api_prefix.some(el=>config.baseURL.indexOf(el)===0)){
-        console.log('ee')
         config.headers['X-TokenID'] = TokenID
         config.headers.Authorization = AuthID
     }

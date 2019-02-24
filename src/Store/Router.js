@@ -4,30 +4,49 @@ import {isArray} from 'lodash'
 import MusicRecommend from '@router/Music/Recommend/Recommend'
 import MusicSongList from '@router/Music/SongList/SongList'
 import MusicSongListDetail from '@router/Music/SongListDetail/SongListDetail'
+import CommentPlayList from '@router/Music/Comment/PlayList/PlayList'
 const {observable,action} = require('mobx')
 
 
 export default class Router {
 
+    musicLayout = this.getRouteComponent('Music/Layout/Layout',true)
+
     @observable list:object = {
         PicToBase: {
             path: '/pic-to-base64',
             needAuth: false,
+            exact:true,
+            strict:false,
             component: this.getRouteComponent('PicToBase')
         }, CheckFormat: {
             path: '/check-format',
             needAuth: false,
+            exact:true,
+            strict:false,
             component: this.getRouteComponent('CheckFormat')
         }, NetDisk: {
             path: '/disk/content/:folder_id?',
             needAuth: true,
+            exact:true,
+            strict:false,
             component: this.getRouteComponent('NetDisk')
+        }
+        ,CommentPlayList:{
+            path: '/music/comment/playlist/:id',
+            needAuth: false,
+            exact:true,
+            strict:true,
+            component:this.musicLayout
         }
         , SongListDetail:{
             path: '/music/song-list-detail/:id',
             needAuth: false,
-            component:this.getRouteComponent('Music/Layout/Layout',true)
+            exact:true,
+            strict:true,
+            component:this.musicLayout
         }
+
         ,MusicDiscover:{
             path:'/music/:tag?/:sub?',
             needAuth: false,
@@ -42,11 +61,20 @@ export default class Router {
             needAuth: false,
             redirect:'/music/discover/recommend'
         },
+        commentPlayList:{
+            path: '/music/comment/playlist/:id',
+            needAuth: false,
+            exact:true,
+            strict:false,
+            component:CommentPlayList
+        },
         songListDetail:{
             path: '/music/song-list-detail/:id',
             needAuth: false,
+            exact:true,
+            strict:false,
             component:MusicSongListDetail
-        },
+        }
 
     }
 

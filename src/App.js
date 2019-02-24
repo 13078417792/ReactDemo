@@ -75,13 +75,10 @@ class App extends Component {
 
     render() {
         const {props:{stores:{AccountStatusStore,UIStore},location}} = this
-        // const {state} = this
-        // console.log(location)
         return (
 
             <div className={cs('App',{'player-show':UIStore.wy_music_player})}>
                 <div className="App-container">
-
 
                     <Switch>
                         <Route exact path="/" component={Home} />
@@ -95,7 +92,7 @@ class App extends Component {
                                 if(AccountStatusStore.initCheckingLogin){
                                     return <Loading key={key}/>
                                 }
-                                return AccountStatusStore.isLogin?<Route exact path={el.path} component={el.component} key={key} />:null
+                                return AccountStatusStore.isLogin?<Route exact={!!el.exact} strict={!!el.strict} path={el.path} component={el.component} key={key} />:null
                             })
                         }
 

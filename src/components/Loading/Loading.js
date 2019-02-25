@@ -18,7 +18,7 @@ class Loading extends Component{
         size:50,
         border:3,
         color:'#e2e2e2',
-        activeColor:'#b0b0b0'
+        sec_color:'#b0b0b0'
     }
 
     constructor(props){
@@ -63,10 +63,10 @@ class Loading extends Component{
 
     // 内圆圆弧
     drawInnerCircle(){
-        const {state:{radius},props:{size,border,activeColor},child:{current:child}} = this
+        const {state:{radius},props:{size,border,sec_color},child:{current:child}} = this
         const ctx = child.getContext('2d')
         ctx.beginPath()
-        ctx.strokeStyle = activeColor
+        ctx.strokeStyle = sec_color
         ctx.lineWidth = border
         ctx.arc(radius,radius,size/2,Math.PI/180*-20,Math.PI/180*-90,true)
         ctx.stroke()

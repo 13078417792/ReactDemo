@@ -6,12 +6,19 @@ class Loading extends Component{
 
     static propTypes = {
         style:PropTypes.object,
-        className:PropTypes.string
+        className:PropTypes.string,
+        size:PropTypes.number,
+        border:PropTypes.number,
+        color:PropTypes.string
     }
 
     static defaultProps = {
         style:{},
-        className:''
+        className:'',
+        size:50,
+        border:3,
+        color:'#e2e2e2',
+        activeColor:'#b0b0b0'
     }
 
     constructor(props){
@@ -19,14 +26,14 @@ class Loading extends Component{
         this.container = React.createRef()
         this.parent = React.createRef()
         this.child = React.createRef()
-        const size = 50
-        const border = 3
+        // const size = 50
+        // const border = 3
         this.state = {
             width:0,
             height:0,
-            size,
-            border,
-            radius:(size+border*2)/2
+            // size,
+            // border,
+            radius:(props.size+props.border*2)/2
         }
     }
 
@@ -43,12 +50,12 @@ class Loading extends Component{
 
     // 外圆
     drawOuterCircle(){
-        const {state:{size,radius},parent:{current:parent}} = this
+        const {state:{radius},props:{size,border,color},parent:{current:parent}} = this
 
         const ctx = parent.getContext('2d')
         ctx.beginPath()
-        ctx.strokeStyle = '#e2e2e2'
-        ctx.lineWidth = 5
+        ctx.strokeStyle = color
+        ctx.lineWidth = border
         ctx.arc(radius,radius,size/2,0,Math.PI * 2)
         ctx.stroke()
         ctx.closePath()
@@ -56,10 +63,10 @@ class Loading extends Component{
 
     // 内圆圆弧
     drawInnerCircle(){
-        const {state:{size,border,radius},child:{current:child}} = this
+        const {state:{radius},props:{size,border,activeColor},child:{current:child}} = this
         const ctx = child.getContext('2d')
         ctx.beginPath()
-        ctx.strokeStyle = '#b0b0b0'
+        ctx.strokeStyle = activeColor
         ctx.lineWidth = border
         ctx.arc(radius,radius,size/2,Math.PI/180*-20,Math.PI/180*-90,true)
         ctx.stroke()
@@ -67,7 +74,7 @@ class Loading extends Component{
     }
 
     render(){
-        const {state:{size,border},props} = this
+        const {props,props:{size,border}} = this
         return (
             <div className="loading-middleware" style={props.style}>
 

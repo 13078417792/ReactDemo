@@ -95,6 +95,11 @@ let Helper = {
             throw new Error(`${name}链接无效`)
         }
         return OuterUrl[name]
+    },
+
+    handleErrorMsg(err,defaultMessage='操作失败'){
+        if(!isString(defaultMessage)) defaultMessage = '操作失败'
+        return err.message || (isString(err)?err:defaultMessage)
     }
 }
 

@@ -57,11 +57,12 @@ class PlayList extends Component {
     }
 
     @computed get avatar() {
-        const {type} = this.props
+        const {type,id} = this.props
         const {info} = this.state
+        console.log(id,info)
         if (isEmpty(info)) return ''
         if(type==='playlist') return info.playlist.coverImgUrl
-        if(type==='music') return info.songs[0].al.picUrl
+        if(type==='music') return info.al.picUrl
         return '';
     }
 
@@ -70,8 +71,12 @@ class PlayList extends Component {
         const {info} = this.state
         if (isEmpty(info)) return ''
         if(type==='playlist') return info.playlist.name
-        if(type==='music') return info.songs[0].name
+        if(type==='music') return info.name
         return '';
+    }
+
+    componentDidCatch(err){
+        message.error(Helper.handleErrorMsg(err))
     }
 
     // 获取歌单/歌曲/mv详情
@@ -90,7 +95,14 @@ class PlayList extends Component {
             }
             this.setState(()=>{
                 return {
-                    info:result
+                    info:(function(data){
+                        if(type==='music'){
+                            if(data.songs.length===0) throw new Error('歌曲不存在')
+                            return data.songs[0]
+                        }
+                        if(type==='playlist') return data
+                        return {}
+                    })(result)
                 }
             },()=>{
                 return Promise.resolve(this.state.info)
@@ -108,6 +120,23 @@ class PlayList extends Component {
 
                 <p className="by desc">
                     by <span>{isEmpty(state.info)?'':state.info.playlist.creator.nickname}</span>
+                </p>
+            </Info>
+        )
+    }
+
+    MusicFrom = props => {
+        const {Info,state:{info}} = this
+        // const song = info.songs[0]
+        return (
+            <Info className="playlist-info-from">
+
+                <p className="desc album">
+                    专辑：{info.al.name}
+                </p>
+
+                <p className="desc singer">
+                    歌手：{info.ar.map(el=>el.name).join('/')}
                 </p>
             </Info>
         )
@@ -132,7 +161,7 @@ class PlayList extends Component {
     }
 
     render(){
-        const {props,avatar,PlayListFrom,state} = this
+        const {props,avatar,PlayListFrom,MusicFrom,state} = this
         const {type} = props
         return (
             <div className={cs('comment',`${type}-comment`)}>
@@ -164,7 +193,9 @@ class PlayList extends Component {
                                 <div className="right">
 
                                     {
-                                        type==='playlist'?<PlayListFrom/>:null
+                                        type==='playlist'?<PlayListFrom/>:(
+                                            type==='music'?<MusicFrom/>:null
+                                        )
                                     }
 
                                 </div>

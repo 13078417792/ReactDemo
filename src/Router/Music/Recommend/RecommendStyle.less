@@ -1,0 +1,403 @@
+@import "../../../var.less";
+
+.list(@count){
+  @margin:2em;
+  .wrap{
+    margin-right:-@margin;
+    margin-bottom:-@margin*1.5;
+
+    .item{
+      float:left;
+      width:100%/@count;
+      padding-bottom:100%/@count;
+      padding-right:@margin;
+      position:relative;
+      margin-bottom:@margin*1.5;
+
+      .block{
+        position:absolute;
+        top:0;
+        left:0;
+        width:calc(100% - @margin);
+        height:100%;
+
+        img{
+          width:100%;
+          border:1px solid @wy-side-border-color;
+          box-sizing:border-box;
+        }
+
+        p{
+          margin:0;
+          height:@margin;
+          line-height:@margin;
+        }
+
+      }
+
+    }
+  }
+}
+
+.list-media(@count,@width){
+
+  @media screen and (max-width:@width){
+    .item{
+      width:100%/@count;
+      padding-bottom:100%/@count;
+    }
+  }
+}
+
+@margin:2em;
+.recommend{
+  max-width:100%;
+  color:@wy-font-color;
+
+  a{
+    color:@wy-font-color;
+  }
+
+  .mrg{
+    margin-top:5em;
+  }
+
+  .section-recommend-song{
+
+
+    .person-song-list{
+      overflow:hidden;
+      width:100%;
+
+
+      .wrap{
+        margin-right:-@margin;
+        margin-bottom:-@margin*1.5;
+
+        .item{
+          float:left;
+          width:20%;
+          padding-bottom:20%;
+          padding-right:@margin;
+          position:relative;
+          margin-bottom:@margin*1.5;
+
+          .block{
+            position:absolute;
+            top:0;
+            left:0;
+            width:calc(100% - @margin);
+            height:100%;
+
+            img{
+              width:100%;
+              border:1px solid @wy-side-border-color;
+              box-sizing:border-box;
+            }
+
+            p{
+              margin:0;
+              height:@margin;
+              line-height:@margin;
+            }
+
+          }
+
+        }
+
+
+        @media screen and (max-width:819px){
+          .item{
+            width:25%;
+            padding-bottom:25%;
+          }
+        }
+
+
+        @media screen and (max-width:650px){
+          .item{
+            width:100%/3;
+            padding-bottom:100%/3;
+          }
+        }
+
+        @media screen and (max-width:414px){
+          .item{
+            width:50%;
+            padding-bottom:50%;
+          }
+        }
+
+      }
+
+
+    }
+  }
+
+
+  .private-content{
+
+    .wrap{
+      margin-right:-@margin;
+      margin-bottom:-@margin*1.5;
+
+      .item{
+        float:left;
+        width:100%/3;
+        //padding-bottom:100%/3;
+        padding-right:@margin;
+        position:relative;
+        margin-bottom:@margin*1.5;
+
+        img{
+          width:100%;
+          border:1px solid @wy-side-border-color;
+          box-sizing:border-box;
+        }
+
+        p{
+          margin:0;
+          height:@margin;
+          line-height:@margin;
+        }
+
+      }
+
+
+      @media screen and (max-width:768px){
+        .item{
+          width:50%;
+        }
+      }
+
+
+    }
+  }
+
+  .section-newest{
+
+    .newest{
+
+
+      @height:4em;
+      .song-item{
+        display:block;
+        float:left;
+        height:@height;
+        line-height:@height;
+        background-color:#F4F4F6;
+        margin:0;
+
+        @media screen and (min-width:1025px){
+          width:50%;
+
+          &:nth-child(2n-1){
+            border-right:1px solid @wy-side-border-color;
+          }
+
+          &:nth-child(4n),&:nth-child(4n-1){
+            background-color:#FAFAFC;
+          }
+        }
+
+        @media screen and (max-width:1024px){
+          width:100%;
+
+          &:nth-child(2n){
+            background-color:#FAFAFC;
+          }
+        }
+
+        &:hover{
+          background-color:#ECECED;
+        }
+
+
+        .index{
+          margin:0 10px;
+          float:left;
+          font-size:.9em;
+        }
+
+        .right{
+          width:auto;
+          height:100%;
+          margin:auto;
+          overflow:hidden;
+          line-height:@height;
+          display:flex;
+          align-items:center;
+
+          img{
+            max-width:@height - 0.5em;
+            display:inline;
+            margin-right:10px;
+          }
+
+          .info{
+            width:100%;
+            height:100%;
+            padding-right:1em;
+            box-sizing:border-box;
+
+            .name,.singer{
+              height:50%;
+              line-height:2;
+              margin:0;
+            }
+
+            .name{
+              font-size:1.1em;
+              color:@wy-font-color;
+
+              .alias{
+                margin-left:10px;
+                color:@wy-description-font-color;
+              }
+            }
+
+            .singer{
+              font-size:.9em;
+            }
+          }
+
+
+        }
+      }
+    }
+  }
+
+
+  .mv{
+    width:100%;
+    overflow:hidden;
+
+    .wrap{
+      margin-right:-@margin;
+      white-space:nowrap;
+
+      .item{
+        width:100%/3;
+        padding-right:@margin;
+        display:inline-block;
+        margin-bottom:2em;
+
+        img{
+          max-width:100%;
+          border:1px solid @wy-side-border-color;
+        }
+      }
+
+      .name,.singer{
+        height:2em;
+        line-height:2em;
+        margin:0;
+        //padding:2.5px 0;
+      }
+
+
+      .name{
+        font-size:1.1em;
+      }
+
+      .singer{
+        font-size:.9em;
+        color:@wy-description-font-color;
+      }
+    }
+
+    @media screen and (max-width:900px){
+
+      .wrap{
+        white-space:unset;
+
+        .item{
+          width:50%;
+        }
+      }
+    }
+  }
+
+
+  .dj-program{
+    margin-top:-1em;
+
+
+    .dj-item{
+      width:50%;
+      border-bottom:1px solid @wy-side-border-color;
+      padding:10px 0;
+      float:left;
+
+      @media screen and (max-width:770px){
+        width:100%;
+      }
+
+      @img-size:70px;
+      .img{
+        width:@img-size;
+        margin-right:5px;
+        float:left;
+        position:relative;
+
+        img{
+          max-width:100%;
+          border:1px solid @wy-side-border-color;
+        }
+
+        @size:.9em;
+        .play{
+          display:none;
+
+          width:@size;
+          height:@size;
+          //display:flex;
+          justify-content:center;
+          align-items:center;
+          position:absolute;
+          right:3px;
+          bottom:3px;
+          border-radius:@size/2;
+          text-align:center;
+          background-color:rgba(0,0,0,.5);
+          color:#fff;
+          border:1px solid #fff;
+
+          i{
+            font-size:.6em;
+          }
+        }
+
+      }
+
+      .info{
+        height:@img-size;
+        margin:auto;
+        width:auto;
+        overflow:hidden;
+
+        .name,.singer{
+
+          height:@img-size/2;
+          line-height:@img-size/2;
+          margin:0;
+        }
+
+        .name{
+          font-size:1.1em;
+        }
+
+        .singer{
+          font-size:.9em;
+          line-height:2/.9em;
+          color:@wy-description-font-color;
+        }
+
+      }
+    }
+
+
+
+  }
+
+}

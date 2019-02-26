@@ -87,7 +87,6 @@ class Layout extends Component{
         const SecondRouter = toJS(props.stores.RouterStore.musicLayoutSecondRouter)
         const hasSecRouter = tag && tags.includes(tag) && SecondRouter.hasOwnProperty(tag)
 
-        console.log(location.pathname)
         return (
                 <div className={cs('music-layout',{
                     'icon-side-layout':UIStore.wy_music_side_only_icon,

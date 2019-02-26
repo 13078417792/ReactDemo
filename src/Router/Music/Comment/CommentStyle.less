@@ -1,0 +1,76 @@
+@import "../../../var.less";
+
+.comment{
+  padding:1em;
+  width:100%;
+  position:relative;
+
+  .total{
+    margin-bottom:2em;
+
+    .num{
+      vertical-align: text-top;
+      margin-left:5px;
+      font-size:.9em;
+      color:#C3C3C4;
+    }
+  }
+
+  @info-height:72px;
+  .info{
+    width:100%;
+    height:@info-height;
+    position:relative;
+
+    .avatar{
+      width:@info-height;
+      height:@info-height;
+      background-color:@wy-side-border-color;
+      float:left;
+      margin-right:17px;
+      //margin-right:3em;
+
+      img{
+        width:@info-height;
+        height:@info-height;
+      }
+    }
+
+    .right{
+      overflow:hidden;
+      margin:auto;
+      height:100%;
+
+      .info-from{
+        width:100%;
+
+        p{
+          margin:0;
+        }
+
+        .desc{
+          font-size:.85em;
+          color:@wy-description-font-color;
+        }
+
+        @name-height:@info-height*.7;
+        .name{
+          font-size:20px;
+          font-weight:500;
+          line-height:@name-height;
+          height:@name-height;
+          margin:0;
+        }
+      }
+
+      .playlist-info-from{
+
+      }
+    }
+  }
+
+
+  .comment-list{
+    margin:1em 0;
+  }
+}

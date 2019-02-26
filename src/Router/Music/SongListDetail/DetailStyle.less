@@ -1,0 +1,369 @@
+@import '../common.less';
+
+.song-list-detail{
+
+  p{
+    margin:0;
+  }
+
+  .loading{
+    width:100%;
+    height:500px;
+  }
+
+  .button-group{
+    width:100%;
+
+    a{
+      color:inherit;
+      text-decoration:none;
+
+      &:hover{
+        color:inherit;
+      }
+
+    }
+
+    .wy-music-playlist-detail-page-btn{
+      margin-right:.4em;
+      margin-top:-1em;
+      margin-bottom:1em;
+    }
+  }
+
+  .song{
+    padding:1em .5em 1em 8px;
+    background-color:#F4F4F6;
+    color:@wy-font-color;
+
+
+
+    .anticon{
+      font-size:1.5em;
+      color:@wy-description-font-color;
+    }
+
+    .anticon.checked{
+      color:@wy-music-color;
+    }
+
+    &:nth-child(2n){
+      background-color:#FAFAFC;
+    }
+
+    &:hover{
+      background-color:#F2F2F3;
+    }
+
+    .index{
+      width:30px;
+      text-align:right;
+      margin-right:.5em;
+      float:left;
+    }
+
+    @height:1.5em;
+    .song-info{
+      overflow:hidden;
+      margin:auto;
+      width:auto;
+      height:@height;
+      padding-right:30px;
+      position:relative;
+
+      span,a{
+        height:@height;
+        line-height:@height;
+      }
+
+      .ovfw{
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+      }
+
+      >span{
+        display:inline-block;
+        padding-right:15px;
+        box-sizing:border-box;
+        .ovfw;
+      }
+
+      .song-title{
+        width:45%;
+
+        .alia{
+          margin-left:.5em;
+          color:@wy-description-font-color;
+        }
+      }
+
+      .singer,.album,.duration{
+        font-size:.9em;
+        color:@wy-description-font-color;
+
+        a{
+          color:inherit;
+        }
+      }
+
+      .singer{
+        width:24.5%;
+
+        a{
+          margin:0 2px;
+
+          &:last-child{
+            margin-right:0;
+          }
+
+          &:first-child{
+            margin-left:0;
+          }
+        }
+      }
+
+      .album{
+        width:24.5%;
+      }
+
+      .duration{
+        width:6%;
+      }
+
+      .bt{
+        position:absolute;
+        right:0;
+        padding:0;
+
+        .anticon{
+          font-size:1.2em;
+        }
+      }
+
+      @media screen and (max-width:630px){
+        .album,.duration{
+          display:none;
+        }
+
+        .song-title{
+          width:65%;
+        }
+
+        .singer{
+          width:100-65%;
+        }
+
+        .bt{
+          top:1px;
+        }
+      }
+
+    }
+
+
+  }
+
+  @bar-height:3em;
+  .tool-bar{
+    width:100%;
+    height:@bar-height;
+    color:@wy-font-color;
+    //font-size:.9em;
+    position:relative;
+
+    .button {
+      height:100%;
+      float:left;
+
+      .tool-item {
+        height: 100%;
+        background-color: transparent;
+        border: 0;
+        outline: 0;
+        border-right: 1px solid @wy-side-border-color;
+        display: inline-block;
+
+        padding: 0;
+
+        &:last-child {
+          border-right: 0;
+        }
+
+        .cc {
+          height: 100%;
+          padding: 0 1em;
+          border: 0;
+          line-height: 1;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          transition: transform .3s;
+          transform: scale(1);
+          position: relative;
+          &:active {
+            transform: scale(.9);
+          }
+
+          .anticon {
+            font-size: 1.5em;
+            margin-right: 2px;
+          }
+        }
+      }
+    }
+
+    .search{
+      height:100%;
+      width:auto;
+      margin:auto;
+      overflow:hidden;
+      transition:all .3s;
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+
+
+
+      input[type="text"] {
+        width:170px;
+        border-radius: @bar-height/2;
+        border: 1px solid @wy-side-border-color;
+        padding: @bar-height/6 @bar-height/4;
+        outline: none;
+        line-height: 1em;
+      }
+
+      @media screen and (max-width:500px){
+        justify-content:flex-start;
+
+        input[type="text"]{
+          width: 100%;
+
+          &:focus{
+            position:absolute;
+            right:0;
+            top:0;
+            width:100%;
+            margin-top:(@bar-height - (@bar-height/3 + 1em))/4;
+          }
+        }
+      }
+
+
+
+    }
+  }
+
+  @intro-height:200px;
+  @intro-min-height:100px;
+  .intro{
+
+    .img{
+      width:30%;
+      max-width:@intro-height;
+      min-width:@intro-min-height;
+      //height:@img-size;
+      margin-right:15px;
+      float:left;
+
+      img{
+        max-width:100%;
+      }
+    }
+
+    .right{
+      overflow:hidden;
+      margin:auto;
+      width:auto;
+      min-height:@intro-min-height + 30px;
+
+      .name{
+        height:2em;
+        line-height:2em;
+      }
+
+      .creator{
+        margin:1em 0;
+
+        .avatar{
+          margin-right:10px;
+        }
+
+        .nickname,.time{
+          display:inline-block;
+          font-size:.9em;
+          color:@wy-description-font-color;
+          margin-right:10px;
+
+          &:last-child{
+            margin-right:0;
+          }
+        }
+      }
+
+      .info{
+        margin-bottom:10px;
+        color:@wy-font-color;
+        font-size:.9em;
+
+        p{
+          line-height:2em;
+          position:relative;
+
+
+          .expand-hide{
+            cursor:pointer;
+            position:absolute;
+            right:0;
+            bottom:0;
+          }
+
+
+        }
+
+        p.height{
+          height:4em;
+          overflow:hidden;
+        }
+
+        .desc{
+          color:@wy-description-font-color;
+          user-select:none;
+          white-space:pre;
+        }
+
+
+      }
+
+      @media screen and (max-width:660px){
+        .head-part-button-group{
+          display:none;
+        }
+
+        .info{
+          display:none;
+        }
+      }
+
+    }
+  }
+
+  .middle-part-button-group{
+    margin-top:1em;
+    display:none;
+
+    @media screen and (max-width:470px){
+      margin-top:0;
+    }
+
+    @media screen and (max-width:660px){
+      display:block;
+    }
+  }
+
+  .list{
+    margin-top:1em;
+    position:relative;
+  }
+}

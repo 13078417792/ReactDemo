@@ -5,6 +5,7 @@ import MusicRecommend from '@router/Music/Recommend/Recommend'
 import MusicSongList from '@router/Music/SongList/SongList'
 import MusicSongListDetail from '@router/Music/SongListDetail/SongListDetail'
 import CommentPlayList from '@router/Music/Comment/PlayList/PlayList'
+import CommentMusic from '@router/Music/Comment/Music/Music'
 const {observable,action} = require('mobx')
 
 
@@ -39,6 +40,13 @@ export default class Router {
             strict:true,
             component:this.musicLayout
         }
+        ,CommentMusic:{
+            path: '/music/comment/music/:id',
+            needAuth: false,
+            exact:true,
+            strict:true,
+            component:this.musicLayout
+        }
         , SongListDetail:{
             path: '/music/song-list-detail/:id',
             needAuth: false,
@@ -67,6 +75,13 @@ export default class Router {
             exact:true,
             strict:false,
             component:CommentPlayList
+        },
+        commentMusic:{
+            path: '/music/comment/music/:id',
+            needAuth: false,
+            exact:true,
+            strict:false,
+            component:CommentMusic
         },
         songListDetail:{
             path: '/music/song-list-detail/:id',

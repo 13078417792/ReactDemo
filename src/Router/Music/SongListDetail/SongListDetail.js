@@ -349,7 +349,8 @@ class SongListDetail extends Component {
             },{
                 name:'评论',
                 handler:()=>{
-                    this.props.history.push(`/music/comment/playlist/${this.props.match.params.id}`)
+                    // console.log(data)
+                    this.props.history.push(`/music/comment/music/${data.id}`)
                 }
             },{
                 name:'下载',

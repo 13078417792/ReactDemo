@@ -9,8 +9,8 @@ import PropTypes from "prop-types"
 import MusicInnerRouter from '@router/Music/InnerRouter/InnerRouter'
 // import AsyncComponent from '@components/AsyncComponent'
 import NotFound from '@router/NotFound/NotFound'
-import MusicSongListDetail from '@router/Music/SongListDetail/SongListDetail'
-import CommentPlayList from '@router/Music/Comment/PlayList/PlayList'
+// import MusicSongListDetail from '@router/Music/SongListDetail/SongListDetail'
+// import CommentPlayList from '@router/Music/Comment/PlayList/PlayList'
 
 // const NotFound = AsyncComponent(() => import('@router/NotFound/NotFound'))
 @inject("stores") @observer
@@ -77,7 +77,7 @@ class Layout extends Component{
 
     render(){
         const {props,state,tags,NotFound} = this
-        const {stores:{UIStore},match,location} = props
+        const {stores:{UIStore},match} = props
         const {params} = match
         const tag = this.hump(params.tag || '')
 

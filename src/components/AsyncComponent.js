@@ -28,7 +28,7 @@ export default function AsyncComponent(importComponent) {
         render() {
             const C = this.state.component;
 
-            return C ? <C {...this.props} /> : <Loading></Loading>;
+            return C ? <C {...this.props} /> : <Loading size={35} border={2} color={"#85BEE980"} sec_color={"#1E9FFF"}/>;
         }
     }
 

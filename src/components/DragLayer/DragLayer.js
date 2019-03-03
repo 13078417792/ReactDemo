@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import cs from 'classnames'
@@ -17,9 +17,9 @@ export default class DragLayer extends Component {
         onClose: PropTypes.func,
         width: PropTypes.string,
         height: PropTypes.string,
-        title:PropTypes.string,
-        disableScrollX:PropTypes.bool,
-        disableScrollY:PropTypes.bool,
+        title: PropTypes.string,
+        disableScrollX: PropTypes.bool,
+        disableScrollY: PropTypes.bool,
         // zIndex:PropTypes.number,
     }
 
@@ -29,11 +29,11 @@ export default class DragLayer extends Component {
         maskOpacity: .3,
         width: '250px',
         height: '130px',
-        title:'新建窗口',
+        title: '新建窗口',
         onClose: function () {
         },
-        disableScrollX:true,
-        disableScrollY:true,
+        disableScrollX: true,
+        disableScrollY: true,
         // zIndex:CommonData.dialog.get_zIndex()
     }
 
@@ -51,7 +51,7 @@ export default class DragLayer extends Component {
         event.stopPropagation()
     }
 
-    constructor(props) {
+    constructor (props) {
         super(props)
         this.state = {
             initPosition: {
@@ -70,12 +70,12 @@ export default class DragLayer extends Component {
                 left: null,
                 top: null
             },
-            dialogEl:null,
-            mask_zIndex:CommonData.dialog.add_zIndex(),
-            dialog_zIndex:CommonData.dialog.add_zIndex(),
+            dialogEl: null,
+            mask_zIndex: CommonData.dialog.add_zIndex(),
+            dialog_zIndex: CommonData.dialog.add_zIndex(),
             // mask_zIndex:props.zIndex,
             // dialog_zIndex:props.zIndex+1,
-            closeAnimation:false
+            closeAnimation: false
         }
         // CommonData.dialog.setCurrentZIndex(this.state.dialog_zIndex)
 
@@ -108,7 +108,7 @@ export default class DragLayer extends Component {
                 left: null,
                 top: null
             },
-            dialogEl:null
+            dialogEl: null
         })
     }
 
@@ -122,18 +122,18 @@ export default class DragLayer extends Component {
         const opacity = parentProps.maskOpacity > 1 ? defaultOpacity : (parentProps.maskOpacity < 0 ? defaultOpacity : parentProps.maskOpacity)
 
         return (
-            <div className={cs("dialog--drag-layer--mask",{"close-animation":this.state.closeAnimation})} style={{
+            <div className={cs("dialog--drag-layer--mask", { "close-animation": this.state.closeAnimation })} style={{
                 backgroundColor: `rgba(0,0,0,${opacity})`,
-                zIndex:this.state.mask_zIndex
+                zIndex: this.state.mask_zIndex
             }}
-                 onWheel={stop}
-                 onMouseDown={stop}
-                 onMouseMove={stop}
-                 onMouseUp={stop}
-                 onTouchStart={stop}
-                 onTouchMove={stop}
-                 onTouchEnd={stop}
-                 onClick={stop}
+                onWheel={stop}
+                onMouseDown={stop}
+                onMouseMove={stop}
+                onMouseUp={stop}
+                onTouchStart={stop}
+                onTouchMove={stop}
+                onTouchEnd={stop}
+                onClick={stop}
             >
                 {props.children}
             </div>
@@ -143,7 +143,7 @@ export default class DragLayer extends Component {
 
     // 拖动
     move(clientX, clientY, event) {
-        this.setState(({initPosition, position, oldPosition,dialogEl}) => {
+        this.setState(({ initPosition, position, oldPosition, dialogEl }) => {
 
             let result = {
                 position: {
@@ -154,11 +154,14 @@ export default class DragLayer extends Component {
 
             const target = dialogEl
 
-            const {clientWidth: targetWidth, clientHeight: targetHeight} = target
-            const {clientWidth, clientHeight} = document.body
+            const { clientWidth: targetWidth, clientHeight: targetHeight } = target
+            const { clientWidth, clientHeight } = document.documentElement
+
+            console.log(targetWidth, targetHeight)
+            // return;
             const maxOffsetLeft = (clientWidth - targetWidth) / 2
             const maxOffsetTop = (clientHeight - targetHeight) / 2
-
+            console.log(maxOffsetLeft, maxOffsetTop)
             // console.log(target)
 
             if (Math.abs(result.position.x) > maxOffsetLeft) {
@@ -188,7 +191,7 @@ export default class DragLayer extends Component {
     // 拖动完成
     moveEnd() {
         document.onselect = null
-        this.setState(({position}) => ({
+        this.setState(({ position }) => ({
             initPosition: {
                 x: null,
                 y: null
@@ -202,19 +205,20 @@ export default class DragLayer extends Component {
 
     // PC端
     onMouseDown = event => {
-        event.stopPropagation()
+        // event.stopPropagation()
         this.handle_zIndexAdd()
         document.addEventListener('mousemove', this.onMouseMove)
         document.addEventListener('mouseup', this.onMouseUp)
-        const {clientX, clientY,nativeEvent} = event
+        const { clientX, clientY, currentTarget } = event
+        // console.log(event, currentTarget.parentElement)
         this.setState({
-            dialogEl:nativeEvent.path[1]
-        },this.moveStart.bind(this, clientX, clientY))
+            dialogEl: currentTarget.parentElement
+        }, this.moveStart.bind(this, clientX, clientY))
     }
 
     onMouseMove = event => {
         event.stopPropagation()
-        const { clientX, clientY} = event
+        const { clientX, clientY } = event
         this.move.call(this, clientX, clientY, event)
     }
 
@@ -231,21 +235,21 @@ export default class DragLayer extends Component {
         this.handle_zIndexAdd()
         document.addEventListener('touchmove', this.handleDragTouchMove)
         document.addEventListener('touchend', this.handleDragTouchEnd)
-        const {touches,nativeEvent} = event
+        const { touches, currentTarget } = event
         if (touches.length !== 1) return;
         const touch = touches[0]
-        const {clientX, clientY} = touch
+        const { clientX, clientY } = touch
         this.setState({
-            dialogEl:nativeEvent.path[1]
-        },this.moveStart.bind(this,clientX, clientY))
+            dialogEl: currentTarget.parentElement
+        }, this.moveStart.bind(this, clientX, clientY))
 
     }
 
     handleDragTouchMove = event => {
         event.stopPropagation()
-        const {touches} = event
+        const { touches } = event
         const touch = touches[0]
-        const {clientX, clientY} = touch
+        const { clientX, clientY } = touch
         this.move(clientX, clientY, event)
     }
 
@@ -257,39 +261,41 @@ export default class DragLayer extends Component {
     }
 
     dialog = () => {
-        const {props} = this
+        const { props } = this
         // console.log(this.state.closeAnimation,props)
         let style = {
             border: `1px solid ${secColor}`,
             borderTop: 0,
-            transform: `translate(${this.state.position.x}px,${this.state.position.y}px)`,
-            zIndex:this.state.dialog_zIndex
+            // transform: `translate(${this.state.position.x}px,${this.state.position.y}px)`,
+            left: `${this.state.position.x}px`,
+            top: `${this.state.position.y}px`,
+            zIndex: this.state.dialog_zIndex
         }
 
         return (
-            <dialog className={cs('dialog--drag-layer',{"close-animation":this.state.closeAnimation && !props.mask})} style={style}
+            <dialog className={cs('dialog--drag-layer', { "close-animation": this.state.closeAnimation && !props.mask })} style={style}
 
-                    onMouseDown={this.handle_zIndexAdd}
+                onMouseDown={this.handle_zIndexAdd}
             >
 
 
                 <div className="dialog-layer-title" style={{
                     backgroundColor: secColor
                 }}
-                     onMouseDown={this.onMouseDown}
-                     onTouchStart={this.handleDragTouchStart}
+                    onMouseDown={this.onMouseDown}
+                    onTouchStart={this.handleDragTouchStart}
                 >
                     <span>{props.title}</span>
                     <div className="button">
                         <span className="layui-icon layui-icon-close"
-                              onClick={this.stopButtonEvent}
-                              onTouchStart={this.stopButtonEvent}
-                              onTouchMove={this.stopButtonEvent}
-                              onTouchEnd={this.stopButtonEvent}
-                              onMouseDown={this.emitClose}
-                              // onMouseDown={this.stopButtonEvent}
-                              onMouseMove={this.stopButtonEvent}
-                              onMouseUp={this.stopButtonEvent}
+                            onClick={this.stopButtonEvent}
+                            onTouchStart={this.stopButtonEvent}
+                            onTouchMove={this.stopButtonEvent}
+                            onTouchEnd={this.stopButtonEvent}
+                            onMouseDown={this.emitClose}
+                            // onMouseDown={this.stopButtonEvent}
+                            onMouseMove={this.stopButtonEvent}
+                            onMouseUp={this.stopButtonEvent}
                         >
 
                         </span>
@@ -298,8 +304,8 @@ export default class DragLayer extends Component {
                 <div className="dialog-layer-content" style={{
                     width: props.width,
                     height: props.height,
-                    overflowX:props.disableScrollX?'hidden':'auto',
-                    overflowY:props.disableScrollY?'hidden':'auto'
+                    overflowX: props.disableScrollX ? 'hidden' : 'auto',
+                    overflowY: props.disableScrollY ? 'hidden' : 'auto'
                 }}>
                     {props.children}
                 </div>
@@ -308,20 +314,20 @@ export default class DragLayer extends Component {
     }
 
     handle_zIndexAdd = event => {
-        if(event instanceof Event){
+        if (event instanceof Event) {
             event.stopPropagation()
         }
         // console.log('add zindex')
-        if(CommonData.dialog.gt_zIndex(this.state.dialog_zIndex)){
+        if (CommonData.dialog.gt_zIndex(this.state.dialog_zIndex)) {
             this.setState({
-                mask_zIndex:CommonData.dialog.add_zIndex(),
-                dialog_zIndex:CommonData.dialog.add_zIndex()
+                mask_zIndex: CommonData.dialog.add_zIndex(),
+                dialog_zIndex: CommonData.dialog.add_zIndex()
             })
         }
     }
 
     render() {
-        const {props} = this
+        const { props } = this
         // if (!props.open) return null
         const Dialog = this.dialog
 

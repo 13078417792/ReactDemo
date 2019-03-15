@@ -1,7 +1,7 @@
 
 ## 基于React的个人练习Demo集
 
-#### [预览地址](http://tool.presstime.cn/)
+#### <a href="http://tool.presstime.cn/" target="_blank">预览地址</a>
 
 ### 用到的JS库
 1. js-spark-md5 计算文件MD5

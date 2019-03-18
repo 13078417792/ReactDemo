@@ -43,7 +43,7 @@ export default class Lizi extends Component{
 
         let maxCount = 150
         if(document.body.clientWidth<768){
-            maxCount = 150
+            maxCount = 50
         }else if(document.body.clientWidth<1024){
             maxCount = 80
         }

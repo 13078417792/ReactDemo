@@ -12,7 +12,7 @@ import Uploader from '@router/NetDisk/UploaderDialog/UploaderDialog'
 import PropTypes from 'prop-types'
 import {inject} from 'mobx-react'
 import FileChunk from '@util/FileChunk'
-import {isEmpty} from 'lodash'
+import {isEmpty,mapValues} from 'lodash'
 import {toJS} from 'mobx'
 
 @inject("stores")
@@ -189,9 +189,9 @@ class ToolBar extends Component{
 
         if (!files.length) return;
         this.reMountUploadInput()
-        for(let file of files){
+        mapValues(files,file=>{
             this.handleFile(file)
-        }
+        })
 
 
     }

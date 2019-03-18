@@ -17,7 +17,7 @@
 9. filesize
 10. mobx
 11. chance 生成随机数
-    > [Github](https://github.com/chancejs/chancejs)
+    > <a href="https://github.com/chancejs/chancejs" target="_blank">Github</a>
 
 ### 可正常使用的Demo：
 - 音乐播放器

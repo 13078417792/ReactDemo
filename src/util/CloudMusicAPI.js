@@ -30,9 +30,6 @@ export default {
         // 歌曲播放链接
         SONG_URL:'/song/url',
 
-        // 搜索
-        SEARCH:'/search',
-
         // 热搜
         HOT_SEARCH:'/search/hot',
 
@@ -43,7 +40,14 @@ export default {
         COMMENT_MUSIC:'/comment/music',
 
         // 歌曲详情
-        SONG_DETAIL:'/song/detail'
+        SONG_DETAIL:'/song/detail',
+
+        // 搜索建议
+        SEARCH_SUGGEST:'/search/suggest',
+
+        // 搜索
+        SEARCH:'/search'
+
     },
     order:{ORDER_LIST,ORDER_SINGLE,ORDER_RANDOM,ORDER_LOOP},
     order_label:{ORDER_LIST:'顺序播放',ORDER_SINGLE:'单曲循环',ORDER_RANDOM:'随机播放',ORDER_LOOP:'循环播放'},

@@ -5,7 +5,7 @@ import {withRouter} from 'react-router'
 import 'antd/dist/antd.css'
 import {observer,inject} from 'mobx-react'
 import {toJS,computed} from 'mobx'
-// import Lizi from './components/Lizi/Lizi'
+import Lizi from './components/Lizi/Lizi'
 import Loading from '@components/Loading/Loading'
 import AsyncComponent from './components/AsyncComponent'
 import PropTypes from "prop-types"
@@ -74,11 +74,15 @@ class App extends Component {
     }
 
     render() {
-        const {props:{stores:{AccountStatusStore,UIStore},location}} = this
+        const {props:{stores:{AccountStatusStore,UIStore},location},isLoadLizi} = this
         return (
 
             <div className={cs('App',{'player-show':UIStore.wy_music_player})}>
                 <div className="App-container">
+
+                    {
+                        isLoadLizi?<Lizi color={"rgb(245, 108, 108)"} count={100}/>:null
+                    }
 
                     <Switch>
                         <Route exact path="/" component={Home} />

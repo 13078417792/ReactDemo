@@ -35,7 +35,7 @@ export default class Lizi extends Component{
         super(props)
         this.canvas = React.createRef()
 
-        let maxCount = 80
+        let maxCount = 150
         if(document.body.clientWidth<1024){
             maxCount = 20
         }
@@ -169,10 +169,17 @@ export default class Lizi extends Component{
                 const diffY = Math.abs(itemEl.positionY - el.positionY)
                 const distance = Math.sqrt(Math.pow(diffX,2) + Math.pow(diffY,2))
                 if(distance<maxLinkDistance){
-                    ctx.lineWidth = 1
+                    ctx.lineWidth = 0.3
                     ctx.strokeStyle = color
-                    ctx.globalAlpha = (maxLinkDistance-distance)/distance
-                    // console.log(ctx.globalAlpha)
+                    // ctx.globalAlpha = (maxLinkDistance-distance)/distance
+                    let globalAlpha = (maxLinkDistance-distance)/distance
+                    if(globalAlpha>1){
+                        globalAlpha = 1
+                    }else if(globalAlpha<0){
+                        globalAlpha = 0
+                    }
+                    ctx.globalAlpha = globalAlpha
+                    // console.log(globalAlpha)
                     ctx.beginPath()
                     ctx.moveTo(el.positionX,el.positionY)
                     ctx.lineTo(itemEl.positionX,itemEl.positionY)

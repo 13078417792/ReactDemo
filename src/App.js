@@ -111,9 +111,9 @@ class App extends Component {
 
                     <MusicSide isOuter={!/^\/music/.test(location.pathname)} />
 
-                    {/*<WyPlayer show={UIStore.wy_music_player} className={cs('bottom-music-player')} style={{*/}
-                        {/*zIndex:60*/}
-                    {/*}} />*/}
+                    <WyPlayer show={UIStore.wy_music_player} className={cs('bottom-music-player')} style={{
+                        zIndex:60
+                    }} />
 
                 </div>
 

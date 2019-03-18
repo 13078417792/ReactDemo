@@ -17,6 +17,24 @@ function ucfirst(str) {
     return rtStr
 }
 
+export const get_type = function(data){
+    let type = typeof data
+    if(type!=='object') return ucfirst(type)
+    type = toString.call(data).replace(/\[object ([\da-z]+)\]/ig,'$1')
+    return type
+}
+
+export const realPixel = function(pixel,canvasContext){
+    if(get_type(pixel)!=='Number' || !(canvasContext instanceof CanvasRenderingContext2D)) return 0
+    const devicePixelRatio = window.devicePixelRatio || 1
+    const backingStoreRatio = canvasContext.webkitBackingStorePixelRatio ||
+        canvasContext.mozBackingStorePixelRatio ||
+        canvasContext.msBackingStorePixelRatio ||
+        canvasContext.oBackingStorePixelRatio ||
+        canvasContext.backingStorePixelRatio || 1;
+    return devicePixelRatio / backingStoreRatio * pixel
+}
+
 let Helper = {
     isFmt,
     isFile(file) {
@@ -83,7 +101,9 @@ let Helper = {
         const regexp = /.*(android|iOS|Windows Phone|iphone|iphone os).*/i
         return regexp.test(userAgent) ||
             document.body.clientWidth <= width
-    }
+    },
+
+    realPixel,get_type,ucfirst
 }
 
 export default Helper

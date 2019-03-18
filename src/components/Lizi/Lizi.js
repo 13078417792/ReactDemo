@@ -1,8 +1,14 @@
 import React,{Component} from 'react'
 import PropTypes from 'prop-types'
 import Chance from 'chance'
+import {realPixel} from '@util/Helper'
 
 const chance = new Chance();
+let size = 2.5;
+
+if(document.body.clientWidth<768){
+    size = 4;
+}
 
 export default class Lizi extends Component{
 
@@ -36,8 +42,10 @@ export default class Lizi extends Component{
         this.canvas = React.createRef()
 
         let maxCount = 150
-        if(document.body.clientWidth<1024){
-            maxCount = 20
+        if(document.body.clientWidth<768){
+            maxCount = 150
+        }else if(document.body.clientWidth<1024){
+            maxCount = 80
         }
 
         this.state = {
@@ -45,14 +53,18 @@ export default class Lizi extends Component{
                 count:props.count>maxCount?maxCount:props.count,
                 color:props.color,
                 bgcolor:props.bgcolor,
-                size:2,
+                size,
 
                 // 两点连线的最长距离
                 maxLinkDistance:150
             },
             load:false,
-            canvasWidth:document.body.clientWidth,
-            canvasHeight:document.body.clientHeight,
+            canvasWidth:0,
+            canvasHeight:0,
+
+            // 边缘范围
+            edge:[{min:0,max:0},{min:0,max:0}],
+
             pointList:[],
             animationTime:0,
         }
@@ -62,20 +74,36 @@ export default class Lizi extends Component{
 
 
     componentDidMount(){
-        // const {canvasWidth:width,canvasHeight:height} = this.state
         this.setState({
             load:true
         })
-        window.addEventListener('resize',this.computedCanvasSize)
 
-        this.createPoint().then(()=>{
-            this.drawPoint()
-        }).catch(err=>{
-            console.error(err)
+        // 根据像素比计算canvas容器的宽高
+        let canvasWidth = document.body.clientWidth
+        let canvasHeight = document.body.clientHeight
+        const ctx = this.getContext()
+        canvasWidth = realPixel(canvasWidth,ctx)
+        canvasHeight = realPixel(canvasHeight,ctx)
+        this.setState({
+            canvasWidth,
+            canvasHeight,
+            edge:[{
+                min:size,
+                max:canvasWidth - size
+            },{
+                min:size,
+                max:canvasHeight - size
+            }],
+            size:realPixel(size,ctx)
+        },()=>{
+            // 计算canvas容器的宽高再监听页面尺寸变化，避免出错
+            window.addEventListener('resize',this.computedCanvasSize)
+            this.createPoint(true).then(()=>{
+                this.drawPoint()
+            }).catch(err=>{
+                console.error(err)
+            })
         })
-
-
-
 
     }
 
@@ -89,19 +117,28 @@ export default class Lizi extends Component{
         if(this.animationIndex) cancelAnimationFrame(this.animationIndex)
         this.animationIndex = null
         this.resizeTimeoutIndex = setTimeout(()=>{
+            const ctx = this.getContext()
             this.setState(({pointList,config:{size}})=>{
-
+                const canvasWidth = realPixel(document.body.clientWidth,ctx)
+                const canvasHeight = realPixel(document.body.clientHeight,ctx)
                 return {
-                    canvasWidth:document.body.clientWidth,
-                    canvasHeight:document.body.clientHeight,
+                    canvasWidth,
+                    canvasHeight,
+                    edge:[{
+                        min:size,
+                        max:canvasWidth - size
+                    },{
+                        min:size,
+                        max:canvasHeight - size
+                    }],
                     pointList:pointList.map(el=>{
-                        if(el.positionX>document.body.clientWidth){
-                            el.positionX = document.body.clientWidth - (size*3)
+                        if(el.positionX>canvasWidth){
+                            el.positionX = canvasWidth - (size*3)
                         }else if(el.positionX < (size*3) ){
                             el.positionX = (size*3)
                         }
-                        if(el.positionY>document.body.clientHeight){
-                            el.positionY = document.body.clientHeight - (size*3)
+                        if(el.positionY>canvasHeight){
+                            el.positionY = canvasHeight - (size*3)
                         }else if(el.positionY < (size*3) ){
                             el.positionY = (size*3)
                         }
@@ -114,6 +151,10 @@ export default class Lizi extends Component{
 
     }
 
+    /**
+     * 生成运动角度
+     * @returns {number}
+     */
     createAngle(){
         const notAllow = [0,90,180,270,360]
         let num = chance.integer({min:1,max:4})
@@ -124,16 +165,23 @@ export default class Lizi extends Component{
         return angle - 90
     }
 
+    /**
+     * 创建粒子点数据（位置坐标，运放方向/角度，横向速度，纵向速度）
+     * @returns {Promise<any>}
+     */
     createPoint(){
         return new Promise((resolve,reject)=>{
-            const speedRange = {min:8,max:10}
+            const speedRange = {min:8.5,max:10}
+            // const speedRange = {min:0.1,max:0.3}
             try{
                 let list = []
                 const {config:{count,size},canvasWidth:width,canvasHeight:height} = this.state
                 for(let i=0;i<count;i++){
+                    const positionX = chance.integer({min:size/2,max:width - (size/2)})
+                    const positionY = chance.integer({min:size/2,max:height - (size/2)})
                     list.push({
-                        positionX:chance.integer({min:size/2,max:width - (size/2)}),
-                        positionY:chance.integer({min:size/2,max:height - (size/2)}),
+                        positionX,
+                        positionY,
                         angle:this.createAngle(),
                         speedX:chance.floating(speedRange),
                         speedY:chance.floating(speedRange)
@@ -149,6 +197,9 @@ export default class Lizi extends Component{
         })
     }
 
+    /**
+     * 绘制点
+     */
     drawPoint(){
         const {pointList,config:{size,color,maxLinkDistance},canvasWidth:width,canvasHeight:height} = this.state
         const ctx = this.getContext()
@@ -159,6 +210,7 @@ export default class Lizi extends Component{
         pointList.forEach(el=>{
             ctx.beginPath()
             ctx.arc(el.positionX,el.positionY,size/2,0,(Math.PI/180)*360)
+            ctx.globalAlpha = 1
             ctx.fill()
             ctx.stroke()
             ctx.closePath()
@@ -169,9 +221,11 @@ export default class Lizi extends Component{
                 const diffY = Math.abs(itemEl.positionY - el.positionY)
                 const distance = Math.sqrt(Math.pow(diffX,2) + Math.pow(diffY,2))
                 if(distance<maxLinkDistance){
-                    ctx.lineWidth = 0.3
+                    ctx.lineWidth = realPixel(0.25,this.getContext())
                     ctx.strokeStyle = color
-                    // ctx.globalAlpha = (maxLinkDistance-distance)/distance
+
+                    ctx.beginPath()
+                    ctx.moveTo(el.positionX,el.positionY)
                     let globalAlpha = (maxLinkDistance-distance)/distance
                     if(globalAlpha>1){
                         globalAlpha = 1
@@ -179,10 +233,8 @@ export default class Lizi extends Component{
                         globalAlpha = 0
                     }
                     ctx.globalAlpha = globalAlpha
-                    // console.log(globalAlpha)
-                    ctx.beginPath()
-                    ctx.moveTo(el.positionX,el.positionY)
                     ctx.lineTo(itemEl.positionX,itemEl.positionY)
+
 
                     ctx.stroke()
                     ctx.closePath()
@@ -195,29 +247,33 @@ export default class Lizi extends Component{
 
     // 粒子运动
     run = time => {
-        // console.log('run',time)
-        this.setState(({pointList,config:{size,color},canvasWidth:width,canvasHeight:height,animationTime})=>({
+        this.setState(({pointList,config:{size,color},canvasWidth:width,canvasHeight:height,animationTime,edge})=>({
             pointList:pointList.map(el=>{
-                if(el.positionX>width || el.positionX<size/2){
+                if(el.positionX>edge[0].max){
+                    el.positionX = edge[0].max
+                    el.speedX *= -1
+                }else if(el.positionX<edge[0].min){
+                    el.positionX = edge[0].min
                     el.speedX *= -1
                 }
-                if(el.positionY>height || el.positionY<size/2){
+                if(el.positionY>edge[1].max){
+                    el.positionY = edge[1].max
+                    el.speedY *= -1
+                }else if(el.positionY<edge[1].min){
+                    el.positionY = edge[1].min
                     el.speedY *= -1
                 }
                 const t = time - animationTime
-                let changeY = Math.tan(Math.PI/180*el.angle)*el.speedY * (t/1000)
+                let changeY = el.speedY * (t/1000)
                 let changeX = el.speedX * (t/1000)
-                // console.log(t/1000*el.speed)
                 if(!(el.angle>-90 && el.angle<90)) changeX *= -1
                 el.positionX += changeX
                 el.positionY += changeY
-
                 return el
             }),
             animationTime:time
         }),this.drawPoint)
 
-        // console.log(newPointList)
     }
 
     getCanvas(){
@@ -225,18 +281,23 @@ export default class Lizi extends Component{
     }
 
     getContext(){
-        return this.getCanvas().getContext('2d')
+        const canvas = this.getCanvas()
+        return canvas?canvas.getContext('2d'):null
     }
 
     render(){
-        const {state,props} = this
+        const {state,state:{canvasWidth,canvasHeight},props} = this
         return (
-            <canvas ref={this.canvas} width={state.canvasWidth} height={state.canvasHeight} style={{
+            <canvas ref={this.canvas} width={canvasWidth} height={canvasHeight} style={{
                 position:'fixed',
                 top:0,
                 left:0,
                 zIndex:props.zIndex,
-                backgroundColor:state.config.bgcolor
+                backgroundColor:state.config.bgcolor,
+                width:`${document.body.clientWidth}px`,
+                height:`${document.body.clientHeight}px`
+                // width:'100vw',
+                // height:'100vh'
             }}>
 
             </canvas>

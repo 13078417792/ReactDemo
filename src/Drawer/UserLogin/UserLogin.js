@@ -59,6 +59,15 @@ class UserLogin extends Component{
         onRegister()
     }
 
+    getTestAccount = () => {
+        const {props} = this
+        const {form} = props
+        form.setFieldsValue({
+            username:'test_account',
+            password:'123456789'
+        })
+    }
+
     render(){
         const { getFieldDecorator } = this.props.form
         const {stores} = this.props
@@ -92,6 +101,10 @@ class UserLogin extends Component{
                     <FormItem>
                         <Button type="primary" htmlType="submit" className="login-form-button">
                             登录
+                        </Button>
+
+                        <Button type="primary" className="login-form-button" onClick={this.getTestAccount}>
+                            获取测试帐号
                         </Button>
 
                         <Link to="" className="account-register-link" onClick={this.emitRegister}>去注册</Link>
